@@ -1,0 +1,57 @@
+Starting tiktok run.py (test 5 records)...
+============================================================
+TikTok Ad Library 抓取 + 合并 + 视频下载
+关键词: Block Blast
+日期范围: 2026-04-15 ~ 2026-04-21
+当日日期（文件命名）: 2026-04-21
+汇总文件: ads_blockblast.json
+每日文件: ads_blockblast_2026-04-21.json
+模式: 固定数量模式（上限 10 条）
+浏览器: 可见浏览器
+============================================================
+[URL] https://library.tiktok.com/ads?region=all&start_time=1776182400000&end_time=1776787199000&adv_name=BLOCK%20BLAST&adv_biz_ids=&query_type=1&sort_type=last_shown_date,desc
+
+>>> 第1步：抓取列表页广告（View more 翻页） >>>
+[启动] Chrome...
+[抓取] 访问: https://library.tiktok.com/ads?region=all&start_time=1776182400000&end_time=1776787199000&adv_name=BLOCK%20BLAST&adv_biz_ids=&query_type=1&sort_type=last_shown_date,desc
+[抓取] 页面标题: Ad Library
+[抓取] 初始广告: 12 条
+[抓取] 已达固定上限 10 条，停止收集
+[保存] 第 1 批保存，12 条广告（累计）
+[抓取] 列表页抓取完成，共 12 条广告
+
+[第1步完成] 共收集 12 条广告
+
+>>> 第2步：抓取 TikTok 详情页数据 >>>
+[详情] 共 12 个广告需要抓取详情页
+[详情] 开始批量抓取 12 个详情页（每批 30 个）...
+
+[详情] 批次 1/1（12 个）...
+[详情] 批次 1 完成，有效数据 12/12
+[详情保存] 批次 1 完成，已累计 12 条详情数据
+[详情] 批量抓取完成，共 12 个详情页
+
+>>> 第3步：去重并更新汇总文件 >>>
+[去重] 本次 12 条，新增 2 条（不重复）
+[文件] 已保存每日文件: ads_blockblast_2026-04-21.json（12 条）
+[汇总] 已更新汇总文件: ads_blockblast.json（共 1713 条）
+
+>>> 第4步：下载视频 >>>
+
+==================================================
+[下载] 视频目录: C:\Users\Ivy\.openclaw\workspace\tiktok\output\videos_blockblast
+[下载] 待下载广告: 12 个
+[下载] 已有视频: 9 个，待下载: 3 个
+  [完成] 1862925767848273.mp4 (4.5MB)
+  [失败] lib=1862752116366449: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>
+  [完成] 1862720268131473.mp4 (2.3MB)
+[完成] 成功: 2 | 跳过: 9 | 失败: 1 | 大小: 6.8MB
+
+============================================================
+全部完成！
+本次抓取: 12 条
+新增记录: 2 条（不重复）
+汇总文件: ads_blockblast.json（共 1713 条）
+每日文件: ads_blockblast_2026-04-21.json
+============================================================
+Done!

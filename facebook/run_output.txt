@@ -1,0 +1,228 @@
+============================================================
+Facebook Ad Library 抓取 + 合并 + 视频下载
+关键词: Block Blast
+日期: 2026-04-15
+模式: 可见浏览器模式（弹出Chrome窗口）
+详情抓取: 开启
+============================================================
+
+>>> 第1步：抓取广告数据（列表页） >>>
+[启动] Chrome...
+  访问: https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=US&is_targeted_country=false&media_type=all&q=Block%20Blast&search_type=keyword_unordered&sort_data[mode]=total_impressions&sort_data[direction]=desc&start_date[min]=2026-04-15&start_date[max]=
+[抓取] 访问: https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=US&is_targeted_country=false&media_type=all&q=Block%20Blast&search_type=keyword_unordered&sort_data[mode]=total_impressions&sort_data[direction]=desc&start_date[min]=2026-04-15&start_date[max]=
+[抓取] 页面标题: 广告资料库
+[抓取] 滚动 #1...
+  已收集 29 条 (+29 本轮)
+[抓取] 滚动 #2...
+  已收集 29 条 (+0 本轮)
+[抓取] 滚动 #3...
+[抓取] 已到达页面底部（scrollHeight=3832，无变化）
+[抓取] HTML中找到 27 个视频URL
+[抓取] 关联到广告的视频: 27 个
+
+[第1步完成] 共收集 29 条广告
+
+>>> 第2步：抓取详情页（性别/年龄/覆盖等） >>>
+
+[1/29] 处理广告: 1199758375584524
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[2/29] 处理广告: 1519029459315068
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[3/29] 处理广告: 25212000328410905
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[4/29] 处理广告: 1242102094427110
+  正在访问详情页...[OK]
+    date: 2025年12月17日
+    gender: 不限
+    age: 21-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[5/29] 处理广告: 1156571826195867
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[6/29] 处理广告: 1730926324924288
+  正在访问详情页...[OK]
+    date: 2026年2月25日
+    gender: 不限
+    age: 21-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[7/29] 处理广告: 1240382098294171
+  正在访问详情页...[OK]
+    date: 2026年2月25日
+    gender: 不限
+    age: 21-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[8/29] 处理广告: 1265526875532879
+  正在访问详情页...[OK]
+    date: 2026年3月28日
+    gender: (empty)
+    age: (empty)
+    reach: (empty)
+    advertiser: Block Blast
+
+[9/29] 处理广告: 1395188098850156
+  正在访问详情页...[OK]
+    date: 2025年12月17日
+    gender: 不限
+    age: 21-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[10/29] 处理广告: 2836306266568119
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[11/29] 处理广告: 4354051308156151
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[12/29] 处理广告: 3049204345264260
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[13/29] 处理广告: 719463974547998
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[14/29] 处理广告: 1410749743948474
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[15/29] 处理广告: 1403962791062046
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[16/29] 处理广告: 1431700648527229
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[17/29] 处理广告: 1272831828321130
+  正在访问详情页...[OK]
+    date: 2026年3月17日
+    gender: (empty)
+    age: (empty)
+    reach: (empty)
+    advertiser: 可选择或被要求披露自身或广告相关信息，也可能还需要披露其他信息。
+
+[18/29] 处理广告: 911186961477817
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[19/29] 处理广告: 25763115839960996
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[20/29] 处理广告: 866192795962636
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[21/29] 处理广告: 900995132418436
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[22/29] 处理广告: 846737868457570
+  正在访问详情页...[OK]
+    date: 2026年2月25日
+    gender: 不限
+    age: 21-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[23/29] 处理广告: 1361209988233302
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[24/29] 处理广告: 2319962258428863
+  正在访问详情页...[OK]
+    date: 2025年12月4日
+    gender: 不限
+    age: 13-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[25/29] 处理广告: 4202606646624663
+  正在访问详情页...[OK]
+    date: 2026年2月25日
+    gender: 不限
+    age: 21-65+岁
+    reach: (empty)
+    advertiser: 可以根据特定受众所在的国家、地区、邮编或城市向他们投放广告。
+
+[26/29] 处理广告: 1092466056023884
+  正在访问详情页...

@@ -205,3 +205,33 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# 忽略所有视频文件
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.flv
+*.wmv
+*.mpeg
+*.mpg
+
+# 忽略音频
+*.mp3
+*.wav
+*.flac
+
+# 忽略压缩包
+*.zip
+*.rar
+*.7z
+*.tar.gz
+
+# 忽略安装包
+*.exe
+*.dmg
+*.iso
+
+# 忽略系统垃圾文件
+.DS_Store
+Thumbs.db

@@ -1,12 +1,19 @@
 """
-Facebook Ad Library 抓取工具 v3
+Facebook Ad Library 抓取 + 去重合并 + 视频下载
 ============================================
 
 【功能说明】
-  1. 根据给定 URL 抓取广告数据
-  2. 每日数据单独存储（按关键词+日期）
-  3. 每日数据与汇总文件去重合并（按 library_id + 关键词）
-  4. 下载每日文件中不重复广告的视频
+  1. 抓取列表页广告（通过滚动页面加载）
+  2. 从页面 HTML JSON 数据中提取广告信息（ad_archive_id、video_url、start_date）
+  3. 去重后合并到每日文件和汇总文件
+  4. 下载视频（支持断点续传，已下载跳过，命名：library_id.mp4）
+  5. 可选：抓取详情页4个展开块信息（耗时长，默认关闭）
+
+【与 TikTok 版的差异】
+  - URL 参数用日期字符串（不是毫秒时间戳）
+  - 翻页方式：滚动页面（不是点击 View more）
+  - 广告ID：从 ad_archive_id 字段提取（不是从 URL 参数提取）
+  - 视频 URL：从页面 HTML JSON 正则提取（不是 <video currentSrc>）
 
 【使用方法】
   python run.py
@@ -25,6 +32,7 @@ import warnings
 from pathlib import Path
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from playwright.sync_api import sync_playwright
 
 # 忽略 undetected_chromedriver 析构器警告
 warnings.filterwarnings('ignore', category=DeprecationWarning, module='undetected_chromedriver')
@@ -38,42 +46,68 @@ urllib.request.install_opener(opener)
 
 # ============================================================
 #                    【配置区】
+#                   （修改这里即可）
 # ============================================================
 
-# 关键词列表（后续由文件或表格提供）
+# ----- 搜索条件 -----
 KEYWORDS = [
-    "Block Blast"
+    "Block Blast",
+    # 添加更多关键词，如：
+    # "Coin Master",
+    # "Royal Match",
 ]
 
-# 国家代码（Facebook Ad Library 国家筛选）
+# ----- 国家设置 -----
+# Facebook Ad Library 国家筛选
 # 可选：US, CN, GB, JP, KR, DE, FR, TW, HK, SG 等
 COUNTRY = "US"
 
-# 日期设置：抓取 start_date[min] = 今天 - DAYS_BACK 天
-DAYS_BACK = 6
+# ----- 日期设置 -----
+# AUTO_DATE = True  -> 自动模式：抓最近7天（END_DATE=今日，START_DATE=今日-6天）
+# AUTO_DATE = False -> 手动模式：使用下方指定的 START_DATE 和 END_DATE
+AUTO_DATE = True
 
-# 浏览器模式
+START_DATE = "2026-04-17"    # 手动模式时的开始日期（格式：YYYY-MM-DD）
+END_DATE = "2026-04-23"      # 手动模式时的结束日期，留空 "" 表示今天
+
+# ----- 抓取模式 -----
+#   MODE = "fixed"  -> 只抓固定数量（由 MAX_ADS 控制）
+#   MODE = "all"   -> 抓取全部数据（直到页面底部才停止）
+MODE = "fixed"                # ★ 重要：选 "fixed" 或 "all"
+MAX_ADS = 10                  # MODE="fixed" 时生效，表示最多抓多少条
+
+# ----- 浏览器模式 -----
+#   True  = 无头模式（不弹窗，后台运行，更稳定，推荐）
+#   False = 可见浏览器（弹出 Chrome 窗口）
 HEADLESS = False
 
-# 是否抓取详情页（4个展开块）- 耗时长且可能不稳定
-# True = 启用（每个广告额外5-10秒，可能导致超时）
-# False = 跳过（只抓取列表页信息）
-SCRAPE_DETAIL = False
-
-# 等待时间
+# ----- 等待时间（秒）-----
+# 每次滚动页面后等待（给页面加载时间）
+# 数据多或网速慢 → 可以调大，如 5 或 8
 WAIT_SEC = 5
 
-# 最大滚动次数
-MAX_SCROLLS = 3  # 约10条广告
+# ----- 最大滚动次数 -----
+# MODE="all" 时生效，控制最多滚动多少次
+# MODE="fixed" 时，通过 MAX_ADS 控制，滚动次数作用不大
+MAX_SCROLLS = 50
 
-# 目标广告数量（0=不限制）
-MAX_ADS = 10
+# ----- 详情页抓取 -----
+#   True  = 启用（Playwright CDP 获取详情页 HTML，正则提取完整视频 URL）
+#   False = 跳过（只抓取列表页信息，速度快）
+SCRAPE_DETAIL = True
 
-# 并发数
-MAX_DOWNLOAD_WORKERS = 3
+MAX_DETAIL_SCRAPES = 10
 
-# 视频下载等待秒数
-DETAIL_WAIT = 1
+CDP_URL = "http://127.0.0.1:18800"
+
+DETAIL_WAIT = 5
+
+# ----- 并发数 -----
+MAX_DOWNLOAD_WORKERS = 3       # 视频下载的并发线程数
+
+# ----- 视频提取 -----
+# 每个详情页打开后等待秒数（给视频元素加载时间）
+DETAIL_WAIT = 5
 
 # ============================================================
 
@@ -105,11 +139,21 @@ HEADERS = {
 # ============================================================
 
 def get_date_range():
-    """获取日期范围：今天 和 今天-DAYS_BACK天"""
+    """获取日期范围
+    - AUTO_DATE=True: 自动计算（START_DATE=今天-6天，END_DATE=今天）
+    - AUTO_DATE=False: 使用配置中的 START_DATE 和 END_DATE
+    """
     today = datetime.now()
     today_str = today.strftime('%Y-%m-%d')
-    start_date = (today - timedelta(days=DAYS_BACK)).strftime('%Y-%m-%d')
-    return start_date, today_str
+    
+    if AUTO_DATE:
+        start_date = (today - timedelta(days=6)).strftime('%Y-%m-%d')
+        end_date = today_str
+    else:
+        start_date = START_DATE if START_DATE else (today - timedelta(days=6)).strftime('%Y-%m-%d')
+        end_date = END_DATE if END_DATE else today_str
+    
+    return start_date, end_date
 
 
 def build_url(keyword, start_date, end_date):
@@ -141,9 +185,12 @@ def keyword_to_folder(keyword):
 
 def get_output_paths(keyword, date_str):
     """获取某个关键词在某天的所有文件路径"""
-    folder = OUTPUT_DIR / keyword_to_folder(keyword)
-    daily_file = folder / f"{date_str}.json"
-    agg_file = folder / "all_ads.json"
+    folder_name = keyword_to_folder(keyword)
+    folder = OUTPUT_DIR / folder_name
+    # 每日文件: ads_blockblast_2026-04-23.json
+    daily_file = folder / f"ads_{folder_name}_{date_str}.json"
+    # 汇总文件: ads_blockblast.json
+    agg_file = folder / f"ads_{folder_name}.json"
     video_dir = folder / "videos"
     return folder, daily_file, agg_file, video_dir
 
@@ -313,6 +360,236 @@ def extract_ad_details(page_source, ad_id):
             pass
     
     return video_url, start_date
+
+
+def extract_video_from_detail_html(html):
+    pattern = r'"videos":\[\{"video_hd_url":"([^"]+)"'
+    m = re.search(pattern, html)
+    if m:
+        return m.group(1).replace('\\/', '/')
+    return ''
+
+
+def extract_video_from_detail_html(html):
+    pattern = r'"videos":\[\{"video_hd_url":"([^"]+)"'
+    m = re.search(pattern, html)
+    if m:
+        return m.group(1).replace('\\/', '/')
+    return ''
+
+
+def find_ad_data_in_json(obj, ad_id, depth=0):
+    """在 JSON 对象树中递归查找指定 ad_archive_id 的广告数据"""
+    if depth > 30:
+        return None
+    if isinstance(obj, dict):
+        if obj.get('ad_archive_id') and str(obj.get('ad_archive_id')) == str(ad_id):
+            return obj
+        for v in obj.values():
+            r = find_ad_data_in_json(v, ad_id, depth+1)
+            if r:
+                return r
+    elif isinstance(obj, list):
+        for item in obj:
+            r = find_ad_data_in_json(item, ad_id, depth+1)
+            if r:
+                return r
+    return None
+
+
+def extract_all_fields_from_html(html, ad_id):
+    """
+    从 Facebook 详情页 HTML 中提取所有广告字段。
+    返回完整 dict，包含所有需求字段。
+    """
+    result = {
+        'library_id': ad_id,
+        'page_name': '',
+        'title': '',
+        'body_text': '',
+        'start_date': '',
+        'end_date': '',
+        'video_url': '',
+        'video_sd_url': '',
+        'video_preview_image_url': '',
+        'link_url': '',
+        'cta_type': '',
+        'display_format': '',
+        'publisher_platform': [],
+        'ad_disclosure_regions': [],
+        'reach_count': '',
+        'spend': '',
+        'currency': '',
+        'age_range': '',
+        'gender': '',
+        'advertiser_name': '',
+        'advertiser_description': '',
+        'payer_name': '',
+    }
+
+    # 1. 视频 URL
+    m = re.search(r'"videos":\[\{"video_hd_url":"([^"]+)"', html)
+    if m:
+        result['video_url'] = m.group(1).replace('\/', '/')
+
+    # 2. 在所有 JSON script 标签中找这个广告的数据
+    scripts = re.findall(r'<script type="application/json"[^>]*>(.*?)</script>', html, re.DOTALL)
+    for sc in scripts:
+        if 'ad_archive_id' not in sc:
+            continue
+        try:
+            data = json.loads(sc)
+        except:
+            continue
+        ad_data = find_ad_data_in_json(data, ad_id)
+        if not ad_data:
+            continue
+
+        snapshot = ad_data.get('snapshot', {})
+        result['page_name'] = snapshot.get('page_name', '')
+        result['title'] = snapshot.get('title', '')
+
+        body = snapshot.get('body', {})
+        if isinstance(body, dict):
+            result['body_text'] = body.get('text', '')
+        elif body:
+            result['body_text'] = str(body)
+
+        result['link_url'] = snapshot.get('link_url', '')
+        result['cta_type'] = snapshot.get('cta_type', '')
+        result['display_format'] = snapshot.get('display_format', '')
+        result['publisher_platform'] = snapshot.get('publisher_platform', [])
+
+        # 日期
+        sd = snapshot.get('start_date')
+        if sd:
+            try:
+                result['start_date'] = datetime.fromtimestamp(int(sd)).strftime('%Y-%m-%d')
+            except:
+                pass
+        ed = snapshot.get('end_date')
+        if ed:
+            try:
+                result['end_date'] = datetime.fromtimestamp(int(ed)).strftime('%Y-%m-%d')
+            except:
+                pass
+
+        # 地区披露（免责声明标签）
+        disp = snapshot.get('disclaimer_label')
+        if disp:
+            result['ad_disclosure_regions'] = [disp]
+
+        # 覆盖人数
+        imp = snapshot.get('impressions_with_index') or {}
+        if isinstance(imp, dict):
+            result['reach_count'] = imp.get('impressions_text', '')
+
+        # spend
+        result['spend'] = snapshot.get('spend', '')
+        result['currency'] = snapshot.get('currency', '')
+
+        # 年龄
+        gated = snapshot.get('gated_type', '')
+        if gated == 'ALL_AGES':
+            result['age_range'] = 'All ages'
+        elif gated == 'MULTI_AGE_RANGE':
+            result['age_range'] = 'Multi-age'
+        elif gated:
+            result['age_range'] = gated
+
+        # 性别
+        gender = snapshot.get('gender', '')
+        if gender == 'ALL':
+            result['gender'] = '不限'
+        elif gender:
+            result['gender'] = gender
+
+        # 广告主名称
+        result['advertiser_name'] = result['page_name']
+
+        # 付费方
+        payer = snapshot.get('payer_name', '')
+        if payer:
+            result['payer_name'] = payer
+
+        break
+
+    # 3. 全局搜索补充（JSON script 中没有的情况）
+    if not result['advertiser_name']:
+        m = re.search(r'"page_name":"((?:[^"\]|\.)*)"', html)
+        if m:
+            try:
+                result['advertiser_name'] = m.group(1).encode().decode('unicode_escape')
+            except:
+                result['advertiser_name'] = m.group(1)
+
+    if not result['body_text']:
+        m = re.search(r'"body":\{"text":"((?:[^"\]|\.)*)"\}', html)
+        if m:
+            try:
+                result['body_text'] = m.group(1).encode().decode('unicode_escape')
+            except:
+                result['body_text'] = m.group(1)
+
+    if not result['reach_count']:
+        m = re.search(r'"impressions_text":"([^"]+)"', html)
+        if m:
+            result['reach_count'] = m.group(1)
+
+    if not result['age_range']:
+        m = re.search(r'"gated_type":"([^"]+)"', html)
+        if m:
+            gt = m.group(1)
+            if gt == 'ALL_AGES':
+                result['age_range'] = 'All ages'
+            elif gt == 'MULTI_AGE_RANGE':
+                result['age_range'] = 'Multi-age'
+            else:
+                result['age_range'] = gt
+
+    if not result['gender']:
+        m = re.search(r'"gender":"([^"]+)"', html)
+        if m:
+            g = m.group(1)
+            result['gender'] = '不限' if g == 'ALL' else g
+
+    if not result['ad_disclosure_regions']:
+        m = re.search(r'"disclaimer_label":"([^"]+)"', html)
+        if m:
+            result['ad_disclosure_regions'] = [m.group(1)]
+
+    if not result['payer_name']:
+        m = re.search(r'"payer_name":"((?:[^"\]|\.)*)"', html)
+        if m:
+            try:
+                result['payer_name'] = m.group(1).encode().decode('unicode_escape')
+            except:
+                result['payer_name'] = m.group(1)
+
+    return result
+
+
+
+def fetch_detail_page_via_cdp(library_id, cdp_url, wait_sec=5):
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.connect_over_cdp(cdp_url)
+            contexts = browser.contexts
+            if not contexts:
+                browser.close()
+                return '', ''
+            ctx = contexts[0]
+            page = ctx.pages[0] if ctx.pages else ctx.new_page()
+            url = "https://www.facebook.com/ads/library/?id=" + library_id + "&active_status=active&ad_type=all&country=US&is_targeted_country=false&media_type=all&search_type=page"
+            page.goto(url, wait_until="networkidle", timeout=30000)
+            time.sleep(wait_sec)
+            html = page.content()
+            video_url = extract_video_from_detail_html(html)
+            browser.close()
+            return html, video_url
+    except Exception as e:
+        print("[CDP] 抓取失败 " + library_id + ": " + str(e))
+        return '', '' 
 
 
 # ============================================================
@@ -591,13 +868,160 @@ def scroll_and_collect(driver, url, keyword, max_scrolls, wait_sec):
 
 
 # ============================================================
+# ============================================================
 # 【详情页抓取】
 # ============================================================
 
+def _click_element(driver, element):
+    """使用原生 Selenium click 点击元素，失败时降级到 JS click"""
+    try:
+        element.click()
+        return True
+    except Exception:
+        try:
+            driver.execute_script("arguments[0].click();", element)
+            return True
+        except Exception:
+            return False
+
+def _wait_and_get_expanded_content(driver, block_name, block_xpath):
+    """点击展开块并等待内容加载，然后提取"""
+    try:
+        el = driver.find_element(By.XPATH, block_xpath)
+        # 滚动到可视区
+        driver.execute_script("arguments[0].scrollIntoView({block:'center'});", el)
+        time.sleep(0.5)
+        # 点击
+        _click_element(driver, el)
+        # 等待展开（aria-expanded 变为 true，或内容区域出现）
+        try:
+            WebDriverWait(driver, 5).until(
+                lambda d: el.get_attribute("aria-expanded") == "true"
+            )
+        except Exception:
+            pass
+        time.sleep(1.5)
+        # 提取内容 - 找展开后的内容区
+        # 常见结构：内容在 block 的下一个兄弟元素中
+        content_xpaths = [
+            # 找 block 最近的 expanded=true 的容器
+            "./ancestor::div[contains(@class,'x1n2onr6')]//div[@aria-expanded='true']",
+            # 找 x1dr75xp（Facebook 详情卡常用类名）
+            "./following-sibling::div[contains(@class,'x1dr75xp')]",
+            "./following-sibling::div[contains(@class,'x78zum5')]",
+            # 找展开后的 section
+            "./ancestor::section/following-sibling::div",
+        ]
+        for cx in content_xpaths:
+            try:
+                contents = driver.find_elements(By.XPATH, cx)
+                for c in contents:
+                    txt = c.text.strip()
+                    if txt and len(txt) > 10:
+                        return txt
+            except Exception:
+                pass
+        # 降权：直接取 el 的父容器文本
+        try:
+            parent = el.find_element(By.XPATH, "./..")
+            txt = parent.text.strip()
+            if len(txt) > 10:
+                return txt
+        except Exception:
+            pass
+        return el.text.strip()
+    except Exception as e:
+        return f"[点击失败: {e}]"
+
+def _click_block_isTrusted(driver, heading_text):
+    """
+    通过 isTrusted:true 触发 block 点击，展开 XHR 动态内容。
+    Facebook 事件监听器检查 isTrusted 标志，必须用完整事件序列。
+    """
+    script = f"""
+        var dialogs = document.querySelectorAll('[role="dialog"]');
+        for (var d of dialogs) {{
+            if (d.getAttribute('aria-labelledby') === 'js_104') {{
+                var headings = d.querySelectorAll('[role="heading"]');
+                for (var h of headings) {{
+                    if (h.textContent.trim() === '{heading_text}') {{
+                        var link = h.parentElement;
+                        var rect = link.getBoundingClientRect();
+                        var clientX = Math.floor(rect.left + rect.width / 2);
+                        var clientY = Math.floor(rect.top + rect.height / 2);
+                        ['mousedown', 'mouseup', 'click'].forEach(function(type) {{
+                            link.dispatchEvent(new MouseEvent(type, {{
+                                view: window, bubbles: true, cancelable: true,
+                                clientX: clientX, clientY: clientY, isTrusted: true
+                            }}));
+                        }});
+                        return 'OK: ' + clientX + ',' + clientY;
+                    }}
+                }}
+            }}
+        }}
+        return 'NOT_FOUND';
+    """
+    return driver.execute_script(script)
+
+
 def scrape_ad_detail(driver, library_id, wait_sec=8):
-    """访问详情页提取更多信息（包括4个展开块）"""
-    detail_url = f"https://www.facebook.com/ads/library/?id={library_id}"
+    # 优先用 CDP 获取详情页完整 HTML 和视频 URL
+    html, video_url = fetch_detail_page_via_cdp(library_id, CDP_URL, wait_sec=wait_sec)
+    if html:
+        fields = extract_all_fields_from_html(html, library_id)
+        if fields.get('video_url'):
+            print("[CDP] " + library_id + " 完整字段提取成功 | video=" + fields['video_url'][:50] + "...")
+            return {
+                "library_id": library_id,
+                "detail_url": "https://www.facebook.com/ads/library/?id=" + library_id,
+                "video_url": fields['video_url'],
+                "video_sd_url": fields['video_sd_url'],
+                "video_preview_image_url": fields['video_preview_image_url'],
+                "start_date": fields['start_date'],
+                "end_date": fields['end_date'],
+                "delivery_status": "",
+                "ad_disclosure_regions": fields['ad_disclosure_regions'],
+                "age_range": fields['age_range'],
+                "gender": fields['gender'],
+                "reach_count": fields['reach_count'],
+                "advertiser_name": fields['advertiser_name'],
+                "advertiser_description": fields['advertiser_description'],
+                "payer_name": fields['payer_name'],
+                "creative_data": {
+                    "video_url": fields['video_url'],
+                    "video_sd_url": fields['video_sd_url'],
+                    "video_preview_image_url": fields['video_preview_image_url'],
+                    "display_format": fields['display_format'],
+                    "cta_type": fields['cta_type'],
+                    "link_url": fields['link_url'],
+                },
+                "raw_detail_text": "",
+                "ad_text": fields['body_text'],
+                "title": fields['title'],
+                "block_ad_disclosure": "", "block_about_sponsor": "",
+                "block_about_advertiser": "", "block_advertiser_payer": "",
+            }
+        else:
+            print("[CDP] " + library_id + " 页面已加载，但无视频")
+
+
+    if html:
+        print("[CDP] " + library_id + " 无视频（页面已加载）")
+    else:
+        print("[CDP] " + library_id + " CDP失败，降级到 Selenium")
+    """
+    访问 Facebook Ad Library 详情页（Selenium 降级模式）。
     
+    关键技术：Facebook 用 isTrusted 标志过滤事件，必须传入 isTrusted:true 才能触发 XHR 加载。
+    
+    页面结构：
+      - Dialog 0：左侧导航栏（无关）
+      - Dialog 1：主模态框（600px，含广告基础信息）
+      - Dialog 2：右侧信息栏（1873px，含4个可展开块）
+      - 4个块在 Dialog 2 内，点击标题触发 XHR，展开内容追加到 innerText
+    """
+    detail_url = f"https://www.facebook.com/ads/library/?id={library_id}"
     detail_data = {
         "library_id": library_id,
         "detail_url": detail_url,
@@ -605,202 +1029,218 @@ def scrape_ad_detail(driver, library_id, wait_sec=8):
         "start_date": "",
         "end_date": "",
         "delivery_status": "",
-        "ad_disclosure_regions": [],  # 广告信息公示（按地区）
+        "ad_disclosure_regions": [],
         "age_range": "",
         "gender": "",
         "reach_count": "",
-        "advertiser_name": "",  # 关于广告主
-        "advertiser_description": "",  # 关于广告主描述
-        "payer_name": "",  # 广告主和付费方
+        "advertiser_name": "",
+        "advertiser_description": "",
+        "payer_name": "",
         "creative_data": {},
         "raw_detail_text": "",
-        # 4个展开块的详细内容
-        "block_ad_disclosure": {},  # 广告信息公示（按地区）
-        "block_about_sponsor": {},  # 关于广告赞助方
-        "block_about_advertiser": {},  # 关于广告主
-        "block_advertiser_payer": {},  # 广告主和付费方
+        "block_ad_disclosure": "",
+        "block_about_sponsor": "",
+        "block_about_advertiser": "",
+        "block_advertiser_payer": "",
     }
-    
+
+    def get_dialog2_text():
+        """获取 Dialog 2（右侧信息栏）的完整 innerText"""
+        return driver.execute_script("""
+            var dialogs = document.querySelectorAll('[role="dialog"]');
+            for (var d of dialogs) {
+                if (d.getAttribute('aria-labelledby') === 'js_104') {
+                    return d.innerText;
+                }
+            }
+            return '';
+        """)
+
+    def get_main_dialog_text():
+        """获取 Dialog 1（主模态框）的完整文本（TreeWalker）"""
+        return driver.execute_script("""
+            var dialogs = document.querySelectorAll('[role="dialog"]');
+            var mainDlg = null;
+            for (var d of dialogs) {
+                if (d.getAttribute('aria-labelledby') === 'js_zu') {
+                    mainDlg = d; break;
+                }
+            }
+            if (!mainDlg) {
+                // fallback: 找最宽的 dialog
+                var maxW = 0;
+                for (var d of dialogs) {
+                    if (d.offsetWidth > maxW) { maxW = d.offsetWidth; mainDlg = d; }
+                }
+            }
+            if (!mainDlg) return '';
+            var walker = document.createTreeWalker(mainDlg, NodeFilter.SHOW_TEXT, null, false);
+            var texts = []; var node;
+            while(node = walker.nextNode()) {
+                var t = node.textContent.trim();
+                if (t.length > 1) texts.push(t);
+            }
+            return texts.join('|TD|');
+        """)
+
     try:
         driver.get(detail_url)
         time.sleep(wait_sec)
-        
-        # 点击"查看广告详情"按钮（如果存在）
-        view_detail_selectors = [
-            "//span[contains(text(), '查看广告详情')]",
-            "//div[contains(text(), '查看广告详情')]",
-            "//a[contains(text(), '查看广告详情')]",
-            "//button[contains(text(), '查看广告详情')]",
-        ]
-        for selector in view_detail_selectors:
+
+        # 点击"查看广告详情"按钮
+        for selector in [
+            "//span[contains(text(),'查看广告详情')]",
+            "//div[contains(text(),'查看广告详情')]",
+            "//a[contains(text(),'查看广告详情')]",
+            "//button[contains(text(),'查看广告详情')]",
+        ]:
             try:
                 elements = driver.find_elements(By.XPATH, selector)
                 for el in elements:
-                    if '查看广告详情' in el.text.strip():
-                        safe_click(driver, el)
-                        time.sleep(3)
+                    if el.is_displayed() and '查看广告详情' in el.text.strip():
+                        el.click()  # Selenium native click
+                        time.sleep(5)
                         break
             except Exception:
                 continue
-        
-        # 等待页面加载完成
+
+        # 等待 Dialog 2（右侧信息栏）出现
         try:
             WebDriverWait(driver, 10).until(
-                lambda d: d.execute_script("return document.readyState") == "complete"
+                lambda d: d.execute_script(
+                    "var ds = document.querySelectorAll('[role=dialog]');"
+                    "for(var d of ds){if(d.getAttribute('aria-labelledby')==='js_104')return true;}"
+                    "return false;"
+                )
             )
         except Exception:
             pass
-        
-        time.sleep(3)
-        
-        # 查找并点击4个展开块
-        expandable_blocks = {
-            "block_ad_disclosure": [
-                "//div[contains(text(), '广告信息公示')]",
-                "//div[contains(text(), '按地区')]",
-                "//span[contains(text(), '广告信息公示')]",
-            ],
-            "block_about_sponsor": [
-                "//div[contains(text(), '关于广告赞助方')]",
-                "//span[contains(text(), '关于广告赞助方')]",
-            ],
-            "block_about_advertiser": [
-                "//div[contains(text(), '关于广告主')]",
-                "//span[contains(text(), '关于广告主')]",
-            ],
-            "block_advertiser_payer": [
-                "//div[contains(text(), '广告主和付费方')]",
-                "//span[contains(text(), '广告主和付费方')]",
-            ],
-        }
-        
-        # 依次点击每个块并提取内容
-        for block_name, selectors in expandable_blocks.items():
-            for selector in selectors:
-                try:
-                    elements = driver.find_elements(By.XPATH, selector)
-                    for el in elements:
-                        try:
-                            safe_click(driver, el)
-                            time.sleep(2)
-                        except Exception:
-                            pass
-                        
-                        try:
-                            parent = el.find_element(By.XPATH, "..")
-                            expanded_content = None
-                            try:
-                                expanded_content = parent.find_element(By.XPATH, "following-sibling::*[contains(@class, 'expand') or contains(@class, 'content')]")
-                            except Exception:
-                                pass
-                            
-                            if not expanded_content:
-                                try:
-                                    expanded_content = parent.find_element(By.XPATH, ".//div[contains(@class, 'content') or contains(@class, 'detail')]")
-                                except Exception:
-                                    pass
-                            
-                            if expanded_content:
-                                content_text = expanded_content.text
-                                if content_text:
-                                    detail_data[block_name]["content"] = content_text
-                                    print(f"[详情] {block_name}: {content_text[:100]}...", flush=True)
-                                    break
-                        except Exception:
-                            pass
-                        
-                        try:
-                            visible_text = el.text
-                            if visible_text and len(visible_text) > 10:
-                                detail_data[block_name]["visible_text"] = visible_text
-                        except Exception:
-                            pass
-                        
-                except Exception:
-                    continue
-        
-        # 获取完整页面文本
-        try:
-            body_element = driver.find_element(By.TAG_NAME, "body")
-            full_text = body_element.text
-            detail_data["raw_detail_text"] = full_text
-        except Exception:
-            pass
-        
-        # 提取通用字段
-        lines = full_text.split('\n')
-        
+        time.sleep(2)
+
+        # 获取 Dialog 1（主模态框）文本
+        full_text = get_main_dialog_text()
+        detail_data["raw_detail_text"] = full_text
+        lines = [l.strip() for l in full_text.split('|TD|') if l.strip()]
+
+        # ========== 提取通用字段 ==========
         # 性别
-        if not detail_data["gender"]:
-            for line in lines:
-                line_stripped = line.strip()
-                if any(kw in line_stripped for kw in ['性别：', '性别:', 'Gender：', 'Gender:']):
-                    for sep in ['：', ':']:
-                        if sep in line_stripped:
-                            parts = line_stripped.split(sep, 1)
-                            if len(parts) >= 2 and parts[1].strip():
-                                detail_data["gender"] = parts[1].strip()
-                                break
-                    if detail_data["gender"]:
+        for line in lines:
+            for sep in ['：', ':']:
+                if sep in line and any(kw in line for kw in ['性别', 'Gender']):
+                    val = line.split(sep, 1)[1].strip()
+                    if val and val not in ['不限', '不限']:
+                        detail_data["gender"] = val
                         break
-        
-        if not detail_data["gender"]:
-            if 'All genders' in full_text or '性别不限' in full_text:
-                detail_data["gender"] = "不限"
-        
+        if not detail_data["gender"] and 'All genders' in full_text:
+            detail_data["gender"] = "不限"
+
         # 年龄
-        if not detail_data["age_range"]:
-            for line in lines:
-                line_stripped = line.strip()
-                if any(kw in line_stripped for kw in ['年龄：', '年龄:', 'Age：', 'Age:']):
-                    for sep in ['：', ':']:
-                        if sep in line_stripped:
-                            parts = line_stripped.split(sep, 1)
-                            if len(parts) >= 2:
-                                detail_data["age_range"] = parts[1].strip()
-                                break
-                    if detail_data["age_range"]:
-                        break
-        
+        for line in lines:
+            for sep in ['：', ':']:
+                if sep in line and any(kw in line for kw in ['年龄', 'Age']):
+                    detail_data["age_range"] = line.split(sep, 1)[1].strip()
+                    break
+
         # 覆盖人数
-        if not detail_data["reach_count"]:
-            for line in lines:
-                line_stripped = line.strip()
-                if any(kw in line_stripped for kw in ['覆盖：', '覆盖:', '覆盖人数', 'Reached：', 'Reached:']):
-                    for sep in ['：', ':']:
-                        if sep in line_stripped:
-                            parts = line_stripped.split(sep, 1)
-                            if len(parts) >= 2:
-                                detail_data["reach_count"] = parts[1].strip()
-                                break
-                    if detail_data["reach_count"]:
-                        break
-        
-        # 广告文案
-        text_blocks = re.findall(r'[\u4e00-\u9fa5a-zA-Z0-9\s.,!?;:]{20,200}', full_text)
-        for block in text_blocks:
+        for line in lines:
+            for sep in ['：', ':']:
+                if sep in line and any(kw in line for kw in ['覆盖', 'Reach']):
+                    detail_data["reach_count"] = line.split(sep, 1)[1].strip()
+                    break
+
+        # 广告文案（取最长且不含字段名的文本）
+        skip_kw = ['性别', '年龄', '覆盖', '投放', '广告主', '赞助', '付费', 'Gender', 'Age', 'Reach',
+                   '编号', '平台', '投放中', '开始投放', '广告资料库', '资料库', '广告链接', '关闭',
+                   '欧盟', '国家', '包含', '排除', '筛选', '地区类型', '广告受众', '广告信息公示',
+                   '关于广告赞助方', '关于广告主', '广告主和付费方', '详细了解', '赞助内容', '资料库编号']
+        for block in lines:
             block = block.strip()
-            if any(kw in block for kw in ['性别', '年龄', '覆盖', '投放', '广告主', '赞助', '付费', 'Gender', 'Age', 'Reach']):
+            if len(block) < 15:
+                continue
+            if any(kw in block for kw in skip_kw):
                 continue
             if len(block) > len(detail_data["ad_text"]):
                 detail_data["ad_text"] = block
-        
+
         # 日期
-        date_patterns = [
-            r'(?:首次投放|First shown|开始投放)\s*[:：]?\s*(\d{4}[-/]\d{2}[-/]\d{2})',
-            r'(?:结束日期|Ended|Ends)\s*[:：]?\s*(\d{4}[-/]\d{2}[-/]\d{2})',
-        ]
-        for pattern in date_patterns:
+        for pattern in [
+            r'(?:首次投放|开始投放)\s*[:：]?\s*(\d{4}[-/]\d{2}[-/]\d{2})',
+            r'(\d{4}[-/]\d{2}[-/]\d{2})(?:开始投放|投放)',
+        ]:
             m = re.search(pattern, full_text)
-            if m:
-                if not detail_data["start_date"]:
-                    detail_data["start_date"] = m.group(1)
-                else:
-                    detail_data["end_date"] = m.group(1)
-        
+            if m and not detail_data["start_date"]:
+                detail_data["start_date"] = m.group(1)
+                break
+
+        # ========== 抓取4个展开块（isTrusted:true 触发 XHR） ==========
+        # 关键技术：isTrusted:true 必须传入 MouseEvent，Facebook 才触发 XHR 加载
+        blocks_to_scrape = [
+            ("block_ad_disclosure", "广告信息公示（按地区）"),
+            ("block_about_sponsor", "关于广告赞助方"),
+            ("block_about_advertiser", "关于广告主"),
+            ("block_advertiser_payer", "广告主和付费方"),
+        ]
+
+        prev_text = ""
+        for block_key, heading_text in blocks_to_scrape:
+            # 点击 block 标题（用 isTrusted:true）
+            click_result = _click_block_isTrusted(driver, heading_text)
+            if click_result == 'NOT_FOUND':
+                # fallback：尝试关键词的部分匹配
+                click_result = driver.execute_script(f"""
+                    var dialogs = document.querySelectorAll('[role="dialog"]');
+                    for (var d of dialogs) {{
+                        if (d.getAttribute('aria-labelledby') === 'js_104') {{
+                            var headings = d.querySelectorAll('[role="heading"]');
+                            for (var h of headings) {{
+                                if (h.textContent.includes('{heading_text}')) {{
+                                    var link = h.parentElement;
+                                    var rect = link.getBoundingClientRect();
+                                    var clientX = Math.floor(rect.left + rect.width/2);
+                                    var clientY = Math.floor(rect.top + rect.height/2);
+                                    ['mousedown','mouseup','click'].forEach(function(t){{
+                                        link.dispatchEvent(new MouseEvent(t,{{view:window,bubbles:true,cancelable:true,clientX:clientX,clientY:clientY,isTrusted:true}}));
+                                    }});
+                                    return 'OK:'+clientX+','+clientY;
+                                }}
+                            }}
+                        }}
+                    }}
+                    return 'NOT_FOUND';
+                """)
+
+            time.sleep(3)  # 等待 XHR 响应
+
+            # 获取 Dialog 2 的完整文本
+            dlg2_text = get_dialog2_text()
+
+            # 提取这个 block 的内容（从标题到下一个 block 之间）
+            block_start = dlg2_text.find(heading_text)
+            if block_start < 0:
+                detail_data[block_key] = ""
+                continue
+
+            # 找下一个 block 的起始位置
+            next_pos = len(dlg2_text)
+            for _, next_heading in blocks_to_scrape:
+                if next_heading == heading_text:
+                    continue
+                npos = dlg2_text.find(next_heading, block_start + 1)
+                if npos > block_start and npos < next_pos:
+                    next_pos = npos
+
+            block_content = dlg2_text[block_start:next_pos].strip()
+            detail_data[block_key] = block_content
+
+            if block_content:
+                preview = block_content[:100].replace('\n', ' | ')
+                print(f"[详情] {block_key}: {preview}...", flush=True)
+            else:
+                print(f"[详情] {block_key}: (空)", flush=True)
+
     except Exception as e:
         print(f"[详情] 解析异常: {e}", flush=True)
-    
+
     return detail_data
 
 # ============================================================
@@ -886,16 +1326,24 @@ def download_videos(ads, video_dir, keyword):
         print("[视频] 没有广告数据，跳过", flush=True)
         return
     
-    # 收集视频 URL
+    # 收集视频 URL（从 creative_data.video_url 或 video_urls 获取）
     video_tasks = []
     for ad in ads:
-        for vurl in ad.get("video_urls", []):
-            if vurl:
-                video_tasks.append({
-                    "url": vurl,
-                    "library_id": ad.get("library_id", "unknown"),
-                    "keyword": keyword,
-                })
+        # 优先从 creative_data.video_url 获取
+        video_url = ad.get("creative_data", {}).get("video_url", "")
+        if not video_url:
+            # 备选：从 video_urls 列表获取
+            for vurl in ad.get("video_urls", []):
+                if vurl:
+                    video_url = vurl
+                    break
+        
+        if video_url:
+            video_tasks.append({
+                "url": video_url,
+                "library_id": ad.get("library_id", "unknown"),
+                "keyword": keyword,
+            })
     
     if not video_tasks:
         print("[视频] 没有找到视频 URL", flush=True)
@@ -994,9 +1442,11 @@ def scrape_keyword(keyword):
     if SCRAPE_DETAIL:
         print("\n>>> 第2步：抓取详情页（4个展开块信息）>>>", flush=True)
         detail_count = 0
-        for i, ad in enumerate(ads):
+        # 限制抓取数量，防止ChromeDriver断开
+        detail_ads = ads[:MAX_DETAIL_SCRAPES] if MAX_DETAIL_SCRAPES > 0 else ads
+        for i, ad in enumerate(detail_ads):
             try:
-                print(f"[详情] 正在抓取 {i+1}/{len(ads)}: {ad['library_id']}", flush=True)
+                print(f"[详情] 正在抓取 {i+1}/{len(detail_ads)}: {ad['library_id']}", flush=True)
                 detail_data = scrape_ad_detail(driver, ad['library_id'], wait_sec=5)
                 ad.update(detail_data)
                 detail_count += 1
@@ -1004,7 +1454,7 @@ def scrape_keyword(keyword):
             except Exception as e:
                 print(f"[详情] 抓取失败 {ad['library_id']}: {e}", flush=True)
                 continue
-        print(f"[详情] 完成，成功抓取 {detail_count}/{len(ads)} 条详情")
+        print(f"[详情] 完成，成功抓取 {detail_count}/{len(detail_ads)} 条详情", flush=True)
     else:
         print("\n>>> 第2步：跳过详情页抓取（SCRAPE_DETAIL=False）>>>", flush=True)
         print("[提示] 开启详情页抓取：修改 run.py 中 SCRAPE_DETAIL = True", flush=True)
@@ -1013,9 +1463,9 @@ def scrape_keyword(keyword):
     print("\n>>> 第3步：去重并更新文件 >>>", flush=True)
     new_ads = process_and_deduplicate(daily_file, agg_file, ads, keyword)
     
-    # 步骤4：下载视频（只下载不重复的广告）
-    print("\n>>> 第4步：下载新增广告的视频 >>>", flush=True)
-    download_videos(new_ads, video_dir, keyword)
+    # 步骤4：下载视频（下载本次抓取的所有广告视频，已存在则跳过）
+    print("\n>>> 第4步：下载广告视频 >>>", flush=True)
+    download_videos(ads, video_dir, keyword)
     
     # 关闭浏览器
     if driver:
@@ -1036,7 +1486,10 @@ def main():
     print("=" * 60, flush=True)
     print("Facebook Ad Library 抓取工具 v3", flush=True)
     print(f"执行日期: {end_date}", flush=True)
-    print(f"抓取范围: {start_date} ~ {end_date} (最近{DAYS_BACK}天)", flush=True)
+    if AUTO_DATE:
+        print(f"抓取范围: {start_date} ~ {end_date} (最近7天，自动)", flush=True)
+    else:
+        print(f"抓取范围: {start_date} ~ {end_date} (手动指定)", flush=True)
     print(f"关键词数量: {len(KEYWORDS)}", flush=True)
     print("=" * 60, flush=True)
     

@@ -58,7 +58,7 @@ END_DATE = "2026-04-22"      # 手动模式时的结束日期，留空 "" 表示
 # ----- 抓取模式 -----
 #   MODE = "fixed"  -> 只抓固定数量（由 MAX_ADS 控制）
 #   MODE = "all"    -> 抓取全部数据（直到页面底部才停止）
-MODE = "all"                  # ★ 重要：选 "fixed" 或 "all"
+MODE = "fixed"                  # ★ 重要：选 "fixed" 或 "all"
 MAX_ADS = 10                  # MODE="fixed" 时生效，表示最多抓多少条
 
 # ----- 浏览器模式 -----

@@ -1,9 +1,13 @@
 {
+  "scrape_time": "2026-04-23T15:50:35.122233",
+  "url": "https://library.tiktok.com/ads?region=all&start_time=1776355200000&end_time=1776959999000&adv_name=BLOCK%20BLAST&adv_biz_ids=&query_type=1&sort_type=last_shown_date,desc",
   "keyword": "Block Blast",
-  "created_at": "2026-04-23T15:50:35.122208",
-  "updated_at": "2026-04-23T15:50:35.125006",
-  "total_ads": 12,
-  "total_with_videos": 12,
+  "start_date": "2026-04-17",
+  "end_date": "2026-04-23",
+  "today": "2026-04-23",
+  "ads_count": 12,
+  "new_ads_count": 12,
+  "total_in_summary": 12,
   "ads": [
     {
       "library_id": "1862800132132145",

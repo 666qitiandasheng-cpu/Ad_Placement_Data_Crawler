@@ -56,7 +56,7 @@ WAIT_SEC = 5
 MAX_SCROLLS = 50
 
 SCRAPE_DETAIL = True
-MAX_DETAIL_SCRAPES = 0
+MAX_DETAIL_SCRAPES = 0  # 0 = all ads (via else branch)
 CDP_URL = "http://127.0.0.1:18800"
 DETAIL_WAIT = 5
 
@@ -675,68 +675,486 @@ def scroll_and_collect_via_cdp(url, keyword, max_scrolls, wait_sec):
 
 
 # ============================================================
-# DETAIL SCRAPING
+# DETAIL SCRAPING (Modal)
 # ============================================================
+
+MODAL_TAB_NAMES = [
+    "广告信息公示（按地区）",
+    "关于广告赞助方",
+    "关于广告主",
+    "广告主和付费方",
+]
+
+
+def _click_element(page, selector, timeout=10):
+    """Click element, scrolling into view first if needed."""
+    try:
+        page.evaluate(f"""
+            el = document.querySelector('{selector}');
+            if (el) {{ el.scrollIntoView({{block:'center'}}); }}
+        """)
+        page.click(selector, timeout=timeout * 1000)
+        return True
+    except Exception:
+        return False
+
+
+def _wait_modal(page, timeout=15):
+    """Wait for the modal dialog to appear."""
+    for _ in range(timeout):
+        if page.query_selector('[role="dialog"]'):
+            return True
+        time.sleep(1)
+    return False
+
+
+def _get_text_safe(page_or_elem):
+    """Get text content safely."""
+    try:
+        return page_or_elem.inner_text().strip()
+    except Exception:
+        return ''
+
 
 def scrape_ad_detail(driver, library_id, wait_sec=8):
-    # Try CDP first
-    html, video_url = fetch_detail_page_via_cdp(library_id, CDP_URL, wait_sec=wait_sec)
-    if html:
-        fields = extract_all_fields_from_html(html, library_id)
-        if fields.get('video_url'):
-            print("[CDP] " + library_id + " full fields | video=" + fields['video_url'][:50] + "...")
-            return {
-                "library_id": library_id,
-                "detail_url": "https://www.facebook.com/ads/library/?id=" + library_id,
-                "video_url": fields['video_url'],
-                "video_sd_url": fields['video_sd_url'],
-                "video_preview_image_url": fields['video_preview_image_url'],
-                "start_date": fields['start_date'],
-                "end_date": fields['end_date'],
-                "delivery_status": "",
-                "ad_disclosure_regions": fields['ad_disclosure_regions'],
-                "age_range": fields['age_range'],
-                "gender": fields['gender'],
-                "reach_count": fields['reach_count'],
-                "advertiser_name": fields['advertiser_name'],
-                "advertiser_description": fields['advertiser_description'],
-                "payer_name": fields['payer_name'],
-                "creative_data": {
-                    "video_url": fields['video_url'],
-                    "video_sd_url": fields['video_sd_url'],
-                    "video_preview_image_url": fields['video_preview_image_url'],
-                    "display_format": fields['display_format'],
-                    "cta_type": fields['cta_type'],
-                    "link_url": fields['link_url'],
-                },
-                "raw_detail_text": "",
-                "ad_text": fields['body_text'],
-                "title": fields['title'],
-                "block_ad_disclosure": "", "block_about_sponsor": "",
-                "block_about_advertiser": "", "block_advertiser_payer": "",
-            }
-        else:
-            print("[CDP] " + library_id + " page loaded, no video")
-            return {
-                "library_id": library_id,
-                "detail_url": "https://www.facebook.com/ads/library/?id=" + library_id,
-                "video_url": "", "video_sd_url": "", "video_preview_image_url": "",
-                "start_date": "", "end_date": "", "delivery_status": "",
-                "ad_disclosure_regions": [], "age_range": "", "gender": "",
-                "reach_count": "", "advertiser_name": "", "advertiser_description": "",
-                "payer_name": "", "creative_data": {}, "raw_detail_text": "",
-                "ad_text": "", "title": "",
-                "block_ad_disclosure": "", "block_about_sponsor": "",
-                "block_about_advertiser": "", "block_advertiser_payer": "",
-            }
-    else:
-        print("[CDP] " + library_id + " CDP failed, falling back to Selenium")
-    return None
+    """Wrapper: scrape detail using Selenium modal interaction."""
+    return scrape_ad_detail_via_modal(driver, library_id, wait_sec=wait_sec)
 
 
-# ============================================================
-# DATA PROCESSING
-# ============================================================
+def scrape_ad_detail_via_modal(driver, library_id, wait_sec=8):
+    """
+    Use Selenium to open the detail page URL, click "View ad details",
+    wait for modal, expand the 4 disclosure section headers, then extract fields.
+    """
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    from selenium.common.exceptions import TimeoutException
+
+    result = {
+        "library_id": library_id,
+        "ad_disclosure_regions": [],
+        "age_range": "",
+        "gender": "",
+        "reach_count": "",
+        "about_sponsor": "",
+        "advertiser_name": "",
+        "advertiser_description": "",
+        "payer_name": "",
+        "ad_text": "",
+        "region_targeting": {},
+    }
+
+    try:
+        detail_url = "https://www.facebook.com/ads/library/?id=" + library_id
+        driver.get(detail_url)
+        time.sleep(3)
+
+        # Wait for page to load
+        try:
+            WebDriverWait(driver, 15).until(
+                lambda d: d.execute_script("return document.readyState") == "complete"
+            )
+        except Exception:
+            pass
+        time.sleep(wait_sec)
+
+        # --- Click "View ad details" button ---
+        btn_clicked = False
+        for btn_text in ["\u67e5\u770b\u5e7f\u544a\u8be6\u60c5", "View Ad Details", "view ad details"]:
+            try:
+                for btn in driver.find_elements(By.XPATH, "//*[contains(text(),'" + btn_text + "')]"):
+                    if btn.is_displayed():
+                        btn.click()
+                        btn_clicked = True
+                        print(f"[Modal] Clicked: {btn_text}")
+                        break
+            except Exception:
+                pass
+            if btn_clicked:
+                break
+
+        if not btn_clicked:
+            try:
+                for btn in driver.find_elements(By.XPATH, "//*[@aria-label='View ad details']"):
+                    if btn.is_displayed():
+                        btn.click()
+                        btn_clicked = True
+                        print("[Modal] Clicked via aria-label")
+                        break
+            except Exception:
+                pass
+
+        if not btn_clicked:
+            print(f"[Modal] Button not found: {library_id}")
+            return result
+
+        # --- Wait for modal dialog ---
+        try:
+            WebDriverWait(driver, 15).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, '[role="dialog"]'))
+            )
+        except TimeoutException:
+            print(f"[Modal] No modal appeared: {library_id}")
+            return result
+
+        print(f"[Modal] Opened: {library_id}")
+        time.sleep(3)
+
+        # --- Find the ad detail modal (last dialog, not the sidebar) ---
+        try:
+            WebDriverWait(driver, 10).until(
+                lambda d: len(d.find_elements(By.CSS_SELECTOR, '[role="dialog"]')) >= 3
+            )
+        except Exception:
+            pass
+        try:
+            dialogs = driver.find_elements(By.CSS_SELECTOR, '[role="dialog"]')
+            dialog = dialogs[-1]  # last dialog = ad detail modal (largest, visible)
+        except Exception:
+            print(f"[Modal] No modal dialog found: {library_id}")
+            return result
+
+        # Scroll modal to bottom so section headers are in view
+        driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", dialog)
+        time.sleep(1)
+
+        # --- Find and click each expandable section header inside the modal ---
+        section_labels = [
+            "\u5e7f\u544a\u4fe1\u606f\u516c\u793a",   # 广告信息公示
+            "\u5173\u4e8e\u5e7f\u544a\u8d5a\u52a9\u65b9",  # 关于广告赞助方
+            "\u5173\u4e8e\u5e7f\u544a\u4e3b",            # 关于广告主
+            "\u5e7f\u544a\u4e3b\u548c\u4ed8\u8d39\u65b9", # 广告主和付费方
+            "Ad Disclosure",
+            "About the Sponsor",
+            "About the Advertiser",
+            "Advertiser & Payer",
+        ]
+
+        expanded_count = 0
+        for _ in range(3):
+            # Re-find the last dialog each iteration (DOM may change)
+            try:
+                dialogs = driver.find_elements(By.CSS_SELECTOR, '[role="dialog"]')
+                dialog = dialogs[-1]
+            except Exception:
+                pass
+            for label in section_labels:
+                try:
+                    matching = dialog.find_elements(By.XPATH, ".//*[contains(text(),'" + label + "')]")
+                    for el in matching:
+                        if el.is_displayed():
+                            try:
+                                el.click()
+                            except Exception:
+                                # Element may be covered by other content — scroll it into view and retry
+                                driver.execute_script(
+                                    "arguments[0].scrollIntoView({block: 'center'})", el
+                                )
+                                time.sleep(0.3)
+                                try:
+                                    el.click()
+                                except Exception:
+                                    pass
+                            expanded_count += 1
+                            time.sleep(0.8)
+                            print(f"[Modal] Expanded section: {label}")
+                            break
+                except Exception:
+                    pass
+            time.sleep(1.5)
+
+        print(f"[Modal] Expanded {expanded_count} sections for {library_id}")
+
+        # Re-scroll after clicking so all expanded content is in the viewport
+        try:
+            dialogs = driver.find_elements(By.CSS_SELECTOR, '[role="dialog"]')
+            dialog = dialogs[-1]
+        except Exception:
+            pass
+        driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", dialog)
+        time.sleep(2)
+
+        # --- Per-region targeting: click each region tab in "广告信息公示" section ---
+        region_targeting = {}
+        region_labels = [
+            "\u6b27\u7f9f", "\u6b27\u6d32", "\u82f1\u56fd", "\u5fb7\u56fd",
+            "\u6cd5\u56fd", "\u610f\u5927\u5229", "\u897f\u73b0\u4e16", "\u8377\u5170",
+            "\u6ce2\u5170", "\u745e\u5179", "\u4e39\u9ea6", "\u5965\u5730\u5229",
+            "\u6bd4\u5229\u65f6",
+            "EU", "United Kingdom", "Germany", "France", "Italy", "Spain",
+            "Netherlands", "Poland", "Sweden", "Austria", "Belgium",
+            "United States", "Brazil", "India", "Japan", "Korea", "Vietnam",
+            "\u7f8e\u56fd", "\u82f1\u56fd", "\u65b0\u52a0\u5761",
+        ]
+        try:
+            # Find the disclosure section by header text
+            disc_header = None
+            for lbl in ["\u5e7f\u544a\u4fe1\u606f\u516c\u793a", "Ad Disclosure"]:
+                try:
+                    headers = dialog.find_elements(By.XPATH, ".//*[contains(text(),'" + lbl + "')]")
+                    for h in headers:
+                        if h.is_displayed():
+                            disc_header = h
+                            break
+                except Exception:
+                    pass
+
+            if disc_header is not None:
+                # Scroll to the disclosure section
+                driver.execute_script("arguments[0].scrollIntoView({block:'center'});", disc_header)
+                time.sleep(1)
+
+                # REPLACEMENT: Pure JS region extraction via country dropdown menu
+                # 1. Click the dropdown button (role=button, aria-haspopup=menu) in the disclosure section
+                # 2. Wait for menu to open
+                # 3. Click each country/region option and extract targeting data
+                region_targeting = {}
+                try:
+                    extract_js = r"""
+                        var RA = ["\u6b27\u7f9f","\u6b27\u6d32","\u82f1\u56fd","\u5fb7\u56fd","\u6cd5\u56fd","\u610f\u5927\u5229","\u897f\u73b0\u4e16","\u8377\u5170","\u6ce2\u5170","\u745e\u5179","\u4e39\u9ea6","\u5965\u5730\u5229","\u6bd4\u5229\u65f6","EU","United Kingdom","Germany","France","Italy","Spain","Netherlands","Poland","Sweden","Austria","Belgium","United States","Brazil","India","Japan","Korea","Vietnam","\u7f8e\u56fd","\u65b0\u52a0\u5761"];
+                        // Step 1: Find and click the dropdown button in the disclosure section
+                        var dropdownBtn = null;
+                        var allButtons = document.querySelectorAll('[role="button"]');
+                        for (var btn of allButtons) {
+                            if (btn.getAttribute('aria-haspopup') === 'menu') {
+                                var inDialog = !!btn.closest("[role='dialog']");
+                                if (inDialog) {
+                                    dropdownBtn = btn;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!dropdownBtn) {
+                            return JSON.stringify({error: 'dropdown not found'});
+                        }
+                        // Click to open the menu
+                        dropdownBtn.scrollIntoView({block: 'center'});
+                        dropdownBtn.click();
+                        // Wait for menu to open
+                        var waitStart = Date.now();
+                        while (Date.now() - waitStart < 2000) {
+                            if (dropdownBtn.getAttribute('aria-expanded') === 'true') break;
+                        }
+                        // Step 2: Find all menu items in the open menu
+                        var menuItems = document.querySelectorAll('[role="menuitem"]');
+                        var regionItems = [];
+                        for (var item of menuItems) {
+                            var al = (item.getAttribute('aria-label') || '').trim();
+                            var text = (item.textContent || '').trim();
+                            for (var rn of RA) {
+                                if (al === rn || text === rn) {
+                                    regionItems.push({el: item, name: rn, ariaLabel: al, text: text});
+                                    break;
+                                }
+                            }
+                        }
+                        // Step 3: Click each region and get targeting data
+                        var results = [];
+                        for (var ri of regionItems) {
+                            ri.el.scrollIntoView({block: 'center'});
+                            ri.el.click();
+                            // Wait for content to update
+                            var tStart = Date.now();
+                            while (Date.now() - tStart < 1500) {}
+                            // Get full text for this region
+                            var fullText = document.body.innerText;
+                            var age = '';
+                            var ageMatch = fullText.match(/(\d{1,2})\s*[-~]\s*(\d+\+?)\s*[\u5c81|years?]/i);
+                            if (ageMatch) {
+                                var lo = ageMatch[1], hi = ageMatch[2];
+                                age = hi === '+' ? lo + \u5c81+ : lo + '-' + hi + \u5c81;
+                            }
+                            var gender = '';
+                            if (/\u6027\u522b\s*[:\u3001]?\s*\u4e0d\u9650|Gender\s*:\s*All/i.test(fullText)) gender = \u4e0d\u9650;
+                            else if (/\u6027\u522b\s*[:\u3001]?\s*\u7537\u6027|Gender\s*:\s*Male/i.test(fullText)) gender = \u7537\u6027;
+                            else if (/\u6027\u522b\s*[:\u3001]?\s*\u5973\u6027|Gender\s*:\s*Female/i.test(fullText)) gender = \u5973\u6027;
+                            var reach = '';
+                            var reachMatch = fullText.match(/\u8986\u76d6[^\n]{0,50}?([\d,]+)\s*(?:\u4eba|people|users|impressions)/i);
+                            if (!reachMatch) reachMatch = fullText.match(/(?:Reach|Impressions)[^:]*:\s*([\d,]+)/i);
+                            if (!reachMatch) reachMatch = fullText.match(/\u8986\u76d6\u4eba\u6570\s*[:\u3001]?\s*([\d,]+)/i);
+                            if (reachMatch) {
+                                var raw = reachMatch[1].replace(/,/g, '').trim();
+                                if (/^\d+$/.test(raw) && raw.length >= 3) reach = raw;
+                            }
+                            results.push([ri.name, age, gender, reach]);
+                        }
+                        return JSON.stringify(results);
+                    """
+                    for attempt in range(2):
+                        try:
+                            js_result = driver.execute_script(extract_js)
+                            if js_result:
+                                import json as _json
+                                all_regions = _json.loads(js_result)
+                                if isinstance(all_regions, dict) and 'error' in all_regions:
+                                    print(f"[Modal] JS error: {all_regions['error']}")
+                                    break
+                                for r_data in all_regions:
+                                    if len(r_data) == 4:
+                                        rn, age, gender, reach = r_data
+                                        if rn and len(rn) <= 40 and (age or gender or reach):
+                                            region_targeting[rn] = {
+                                                'age_range': age,
+                                                'gender': gender,
+                                                'reach_count': reach,
+                                            }
+                                            print(f"[Modal] Region '{rn}': age={age}, gender={gender}, reach={reach}")
+                                if region_targeting:
+                                    break
+                        except Exception as e:
+                            print(f"[Modal] JS region extraction attempt {attempt+1} error: {e}")
+                            time.sleep(2)
+                except Exception as e:
+                    print(f"[Modal] JS region extraction error: {e}")
+
+        except Exception as e:
+            print(f"[Modal] Region extraction error: {e}")
+
+        # Store per-region targeting in result
+        if region_targeting:
+            result["region_targeting"] = region_targeting
+
+        # --- Get full text from ad detail modal (last dialog) ---
+        try:
+            dialogs = driver.find_elements(By.CSS_SELECTOR, '[role="dialog"]')
+            dialog = dialogs[-1]
+            # Use innerText via JS to capture text from ALL visible expanded sections
+            full_text = driver.execute_script("return arguments[0].innerText", dialog)
+        except Exception:
+            print(f"[Modal] No dialog text: {library_id}")
+            return result
+
+        if not full_text or len(full_text) < 20:
+            print(f"[Modal] Empty dialog: {library_id}")
+            return result
+
+        print(f"[Modal] Text length: {len(full_text)} chars")
+
+        # (1) Disclosure regions
+        region_ptrn = (
+            "(?:"
+            "\u6b27\u7f9f|\u6b27\u6d32|\u5fb7\u56fd|\u6cd5\u56fd|"
+            "\u610f\u5927\u5229|\u897f\u73b0\u4e16|\u8377\u5170|"
+            "\u6ce2\u5170|\u745e\u5179|\u4e39\u9ea6|\u5965\u5730\u5229|"
+            "\u6bd4\u5229\u65f6|"
+            "EU|United Kingdom|Germany|France|Italy|Spain|Netherlands|Poland|"
+            "Sweden|Denmark|Austria|Belgium|United States|Brazil|India|Japan|"
+            "Korea|Vietnam|Thailand|"
+            "\u6b27\u7f9f\u5e7f\u544a\u6295\u653e|US\u5e7f\u544a\u6295\u653e|EU ad)"
+        )
+        regions_found = re.findall(region_ptrn, full_text)
+        # Deduplicate and filter
+        seen = set()
+        regions = []
+        for r in regions_found:
+            r = r.strip()
+            if len(r) <= 2 or r in seen:
+                continue
+            seen.add(r)
+            regions.append(r)
+        if regions:
+            result["ad_disclosure_regions"] = regions
+
+        # (2) Age range — match "21-65+岁" or "21-65岁" etc.
+        age_m = re.search(r"(\d{1,2})\s*[-~]\s*(\d+\+?)\s*\u5c81", full_text)
+        if not age_m:
+            age_m = re.search(r"\u5e74\u9f84\s*[-~]\s*(\d+\+?)", full_text)
+        if not age_m:
+            age_m = re.search(r"Age\s*:\s*(\d{1,2})\s*[-~]\s*(\d+\+?)", full_text, re.I)
+        if age_m:
+            lo, hi = age_m.group(1), age_m.group(2)
+            result["age_range"] = f"{lo}-{hi}\u5c81" if hi != "+" else f"{lo}\u5c81+"
+
+        # (3) Gender
+        if re.search(r"\u6027\u522b\s*[:\u3001]?\s*\u4e0d\u9650|Gender\s*:\s*All", full_text, re.I):
+            result["gender"] = "\u4e0d\u9650"
+        elif re.search(r"\u6027\u522b\s*[:\u3001]?\s*\u7537\u6027|Gender\s*:\s*Male", full_text, re.I):
+            result["gender"] = "\u7537\u6027"
+        elif re.search(r"\u6027\u522b\s*[:\u3001]?\s*\u5973\u6027|Gender\s*:\s*Female", full_text, re.I):
+            result["gender"] = "\u5973\u6027"
+
+        # (4) Reach count
+        reach_m = re.search(r"\u8986\u76d6[^\n]{0,50}?([\d,]+)\s*(?:\u4eba|people|users|impressions)", full_text)
+        if not reach_m:
+            reach_m = re.search(r"(?:Reach|Impressions)[^:]*:\s*([\d,]+)", full_text, re.I)
+        if not reach_m:
+            reach_m = re.search(r"\u8986\u76d6\u4eba\u6570\s*[:\u3001]?\s*([\d,]+)", full_text)
+        if reach_m:
+            raw = reach_m.group(1).replace(",", "").replace("\u3000", "").strip()
+            if raw.isdigit() and len(raw) >= 3:
+                result["reach_count"] = raw
+
+        # (5) Ad text - longest block excluding labels
+        skip_labels = [
+            "\u5e7f\u544a\u4fe1\u606f\u516c\u793a",
+            "\u5173\u4e8e\u5e7f\u544a\u8d5a\u52a9\u65b9",
+            "\u5173\u4e8e\u5e7f\u544a\u4e3b",
+            "\u5e7f\u544a\u4e3b\u548c\u4ed8\u8d39\u65b9",
+            "View ad details", "Facebook", "Meta", "Close",
+            "advertiser", "sponsor", "payer", "disclosure",
+            "Age", "Gender", "Reach", "\u6253\u5f00\u4e0b\u62c9\u83dc\u5355",
+            "Ad Disclosure", "About the Sponsor", "About the Advertiser", "Advertiser & Payer",
+        ]
+        lines_t = [l.strip() for l in full_text.split("\n") if l.strip()]
+        for line in lines_t:
+            if len(line) > 50 and not any(s in line for s in skip_labels):
+                if not result.get("ad_text") or len(line) > len(result.get("ad_text", "")):
+                    result["ad_text"] = line[:2000]
+
+                # (6) Advertiser name - match label on its own line, then first uppercase line
+        adv_m = re.search(r'\n\u5e7f\u544a\u4e3b\n([A-Z][^\n]+)', full_text)
+        if adv_m:
+            name = adv_m.group(1).strip()
+            if len(name) > 3:
+                result["advertiser_name"] = name
+
+        # Fallback: company name pattern
+        if not result.get("advertiser_name"):
+            co_kw = (
+                r'[A-Z][a-zA-Z\s]{2,40}'
+                r'(?:Ltd|L\.|Inc|Co\.|Company|Limited|LLC|DMCC|'
+                r"\u79d1\u6280|\u6709\u9650|\u96c6\u56e2|\u516c\u53f8|Co\.,|GmbH|S\.A\.|SARL|AG|SA|PL|Tech|Group)"
+            )
+            co_matches = re.findall(co_kw, full_text)
+            for name in co_matches:
+                name = name.strip()
+                if 4 < len(name) < 100 and not any(c.isdigit() for c in name[:3]):
+                    if not result.get("advertiser_name"):
+                        result["advertiser_name"] = name
+                        break
+
+        # If about_sponsor was captured but advertiser_name is still the short app name,
+        # prefer about_sponsor (it contains the full legal company name)
+        if result.get("about_sponsor") and result.get("advertiser_name"):
+            app_names = ["Block Blast", "Block Blast Adventure", "Block Blast 3D", "Block Blast Puzzle"]
+            if result["advertiser_name"] in app_names:
+                result["advertiser_name"] = result["about_sponsor"]
+
+        # (7) Payer name - match label on its own line, then first uppercase line
+        payer_m = re.search(r'\n\u4ed8\u8d39\u65b9\n([A-Z][^\n]+)', full_text)
+        if payer_m:
+            payer = payer_m.group(1).strip()
+            if len(payer) > 3:
+                result["payer_name"] = payer
+
+        # Fallback: known marketing company names
+        if not result.get("payer_name"):
+            for name in [n.strip() for n in co_matches]:
+                if any(kw in name for kw in ["MeetSocial", "Google", "Meta", "TikTok", "ByteDance", "Tencent"]):
+                    result["payer_name"] = name
+                    break
+
+        print(f"[Modal] {library_id} | regions={result['ad_disclosure_regions']} | "
+              f"age={result['age_range']} | advertiser={result['advertiser_name'][:30]}")
+        return result
+
+    except Exception as e:
+        import traceback
+        print(f"[Modal] Error {library_id}: {e}")
+        traceback.print_exc()
+        return result
+
+
 
 def load_json_file(path):
     if path.exists():
@@ -765,33 +1183,70 @@ def process_and_deduplicate(daily_file, agg_file, new_ads, keyword):
     daily_data = load_json_file(daily_file)
     agg_data = load_json_file(agg_file)
 
-    existing_in_daily = {a['library_id'] for a in daily_data.get('ads', [])}
-    existing_in_agg = {a['library_id'] for a in agg_data.get('ads', [])}
+    daily_ads = {a['library_id']: a for a in daily_data.get('ads', [])}
+    agg_ads = {a['library_id']: a for a in agg_data.get('ads', [])}
 
-    new_daily = [a for a in new_ads if a['library_id'] not in existing_in_daily]
-    new_agg = [a for a in new_ads if a['library_id'] not in existing_in_agg]
-
-    for ad in new_daily:
-        ad['keyword'] = keyword
-    for ad in new_agg:
+    for ad in new_ads:
+        lid = ad['library_id']
         ad['keyword'] = keyword
 
-    daily_data.setdefault('ads', []).extend(new_daily)
-    agg_data.setdefault('ads', []).extend(new_agg)
+        # Merge into daily: keep the more complete version
+        if lid in daily_ads:
+            daily_ads[lid] = _merge_ad(daily_ads[lid], ad)
+        else:
+            daily_ads[lid] = ad
 
+        # Merge into aggregate: same logic
+        if lid in agg_ads:
+            agg_ads[lid] = _merge_ad(agg_ads[lid], ad)
+        else:
+            agg_ads[lid] = ad
+
+    daily_data['ads'] = list(daily_ads.values())
+    agg_data['ads'] = list(agg_ads.values())
     daily_data['last_updated'] = datetime.now().isoformat()
     agg_data['last_updated'] = datetime.now().isoformat()
 
     for f, data in [(daily_file, daily_data), (agg_file, agg_data)]:
         f.parent.mkdir(parents=True, exist_ok=True)
-        # Clean empty fields from all ads before saving
         if 'ads' in data:
             data['ads'] = [clean_ad(ad) for ad in data['ads']]
         with open(f, 'w', encoding='utf-8') as fp:
             json.dump(data, fp, ensure_ascii=False, indent=2)
 
-    print(f"[Dedupe] Added {len(new_daily)} to daily, {len(new_agg)} to aggregate")
-    return new_agg
+    print(f"[Dedupe] Daily: {len(daily_data['ads'])} ads, Aggregate: {len(agg_data['ads'])} ads")
+    return list(daily_ads.values())
+
+
+def _merge_ad(existing, new_ad):
+    """
+    Merge two ad dicts. Detail-page data (new_ad) is authoritative - 
+    it always overwrites list-page data, except for creative_data which merges deep.
+    """
+    # Detail data is authoritative for these fields
+    AUTHORITATIVE_FIELDS = {
+        'age_range', 'gender', 'reach_count', 'advertiser_name',
+        'payer_name', 'about_sponsor', 'ad_disclosure_regions',
+        'body_text', 'title', 'start_date', 'region_targeting',
+    }
+    merged = dict(existing)
+    for k, v in new_ad.items():
+        if k == 'region_targeting' and isinstance(v, dict) and v:
+            # Deep merge: combine all regions from both
+            existing_rt = merged.get('region_targeting', {})
+            merged['region_targeting'] = {**existing_rt, **v}
+        elif k in AUTHORITATIVE_FIELDS and v and v != []:
+            # Detail page wins for these fields (including region_targeting if dict)
+            if k == 'region_targeting' and isinstance(v, dict):
+                existing_rt = merged.get('region_targeting', {})
+                merged['region_targeting'] = {**existing_rt, **v}
+            else:
+                merged[k] = v
+        elif k == 'creative_data' and isinstance(v, dict):
+            merged[k] = {**merged.get(k, {}), **v}
+        elif k not in merged or merged[k] == '' or merged[k] == []:
+            merged[k] = v
+    return merged
 
 
 # ============================================================
@@ -851,25 +1306,33 @@ def scrape_keyword(keyword):
     print(f"[URL] {scrape_url}", flush=True)
 
     driver = None
-    try:
-        print("\n>>> Step 1: Scrape list page >>>", flush=True)
-        driver = make_driver(headless=HEADLESS)
-        ads = scroll_and_collect(driver, scrape_url, keyword, MAX_SCROLLS, WAIT_SEC)
-        print(f"\n[Step 1 done] {len(ads)} ads scraped", flush=True)
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        print(f"[Error] Selenium failed: {e}", flush=True)
-        if driver:
-            try:
-                driver.quit()
-            except Exception:
-                pass
-        print("\n[Fallback] Switching to Playwright CDP...", flush=True)
-        ads = scroll_and_collect_via_cdp(scrape_url, keyword, MAX_SCROLLS, WAIT_SEC)
-        if not ads:
-            print("[Error] CDP also failed, skipping", flush=True)
-            return
+    # Step 1: retry up to 3 times on connection errors
+    for attempt in range(3):
+        try:
+            print("\n>>> Step 1: Scrape list page (attempt " + str(attempt + 1) + ") >>>", flush=True)
+            driver = make_driver(headless=HEADLESS)
+            ads = scroll_and_collect(driver, scrape_url, keyword, MAX_SCROLLS, WAIT_SEC)
+            print(f"\n[Step 1 done] {len(ads)} ads scraped", flush=True)
+            break
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            print(f"[Error] Selenium attempt {attempt+1} failed: {e}", flush=True)
+            if driver:
+                try:
+                    driver.quit()
+                except Exception:
+                    pass
+            driver = None
+            if attempt < 2:
+                print("[Retry] Waiting 5 seconds before retry...", flush=True)
+                time.sleep(5)
+            else:
+                print("\n[Fallback] Switching to Playwright...", flush=True)
+                ads = scroll_and_collect_via_cdp(scrape_url, keyword, MAX_SCROLLS, WAIT_SEC)
+                if not ads:
+                    print("[Error] All methods failed, skipping", flush=True)
+                    return
 
     if not ads:
         print("[Warning] No ads found, skipping", flush=True)
@@ -880,12 +1343,39 @@ def scrape_keyword(keyword):
                 pass
         return
 
-    # Step 2: detail pages
+    # Restart browser before Step 2 to avoid accumulated memory/connection issues
+    try:
+        driver.quit()
+    except Exception:
+        pass
+    time.sleep(2)
+    try:
+        driver = make_driver(headless=HEADLESS)
+        print("[Browser] Restarted for Step 2", flush=True)
+    except Exception as e:
+        print(f"[Browser] Restart failed for Step 2: {e}", flush=True)
+
+    # Step 2: detail pages (with browser restart on crash + incremental save)
     if SCRAPE_DETAIL:
         print(f"\n>>> Step 2: Scrape detail pages ({MAX_DETAIL_SCRAPES or 'all'}) >>>", flush=True)
         detail_ads = ads[:MAX_DETAIL_SCRAPES] if MAX_DETAIL_SCRAPES > 0 else ads
         detail_count = 0
+        browser_restart_interval = 3  # restart browser every N ads
+
         for i, ad in enumerate(detail_ads):
+            # Restart browser periodically to avoid Chrome crashes
+            if detail_count > 0 and detail_count % browser_restart_interval == 0:
+                print(f"[Browser] Restarting browser at ad {detail_count}...", flush=True)
+                try:
+                    driver.quit()
+                except Exception:
+                    pass
+                time.sleep(3)
+                try:
+                    driver = make_driver(headless=HEADLESS)
+                except Exception as e:
+                    print(f"[Browser] Restart failed: {e}, continuing with current driver...", flush=True)
+
             try:
                 print(f"[Detail] {i+1}/{len(detail_ads)}: {ad['library_id']}", flush=True)
                 detail_data = scrape_ad_detail(driver, ad['library_id'], wait_sec=DETAIL_WAIT)
@@ -898,9 +1388,24 @@ def scrape_keyword(keyword):
                         else:
                             ad[k] = v
                     detail_count += 1
+                    # Incremental save after each successful detail scrape
+                    process_and_deduplicate(daily_file, agg_file, [ad], keyword)
                 time.sleep(2)
             except Exception as e:
                 print(f"[Detail] Failed {ad['library_id']}: {e}", flush=True)
+                # Save what we have so far
+                process_and_deduplicate(daily_file, agg_file, ads[:i], keyword)
+                # Try to restart browser and continue
+                try:
+                    driver.quit()
+                except Exception:
+                    pass
+                time.sleep(3)
+                try:
+                    driver = make_driver(headless=HEADLESS)
+                except Exception as restart_err:
+                    print(f"[Browser] Restart after error failed: {restart_err}", flush=True)
+                    break
                 continue
         print(f"[Detail] Done: {detail_count}/{len(detail_ads)}", flush=True)
     else:

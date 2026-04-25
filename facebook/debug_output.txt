@@ -1,0 +1,88 @@
+Debug output for ad 1242102094427110
+
+[Browser] Starting Chrome...
+Error: Message: unknown error: net::ERR_CONNECTION_CLOSED
+  (Session info: chrome=147.0.7727.116)
+Stacktrace:
+	chromedriver!GetHandleVerifier [0x12ec733+10b73]
+	chromedriver!GetHandleVerifier [0x12ec864+10ca4]
+	chromedriver!(No symbol) [0x10c2100]
+	chromedriver!(No symbol) [0x10bf60e]
+	chromedriver!(No symbol) [0x10b2724]
+	chromedriver!(No symbol) [0x10b418c]
+	chromedriver!(No symbol) [0x10b2bc2]
+	chromedriver!(No symbol) [0x10b24f5]
+	chromedriver!(No symbol) [0x10b21f5]
+	chromedriver!(No symbol) [0x10b0308]
+	chromedriver!(No symbol) [0x10b0a1a]
+	chromedriver!(No symbol) [0x10c5b9e]
+	chromedriver!(No symbol) [0x114bd04]
+	chromedriver!(No symbol) [0x112dc1c]
+	chromedriver!(No symbol) [0x114b1f4]
+	chromedriver!(No symbol) [0x112d9b6]
+	chromedriver!(No symbol) [0x1100339]
+	chromedriver!(No symbol) [0x11010f4]
+	chromedriver!GetHandleVerifier [0x154fe04+274244]
+	chromedriver!GetHandleVerifier [0x154b459+26f899]
+	chromedriver!GetHandleVerifier [0x1569bd5+28e015]
+	chromedriver!GetHandleVerifier [0x1307188+2b5c8]
+	chromedriver!GetHandleVerifier [0x130f23d+3367d]
+	chromedriver!GetHandleVerifier [0x12f5138+19578]
+	chromedriver!GetHandleVerifier [0x12f5302+19742]
+	chromedriver!GetHandleVerifier [0x12de48f+28cf]
+	KERNEL32!BaseThreadInitThunk [0x74c75d49+19]
+	ntdll!RtlInitializeExceptionChain [0x771ed83b+6b]
+	ntdll!RtlGetAppContainerNamedObjectPath [0x771ed7c1+231]
+
+Traceback (most recent call last):
+  File "C:\Users\Ivy\.openclaw\workspace\Ad_Placement_Data_Crawler\facebook\debug_regions.py", line 24, in debug_ad_detail
+    driver.get(detail_url)
+    ~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\Ivy\AppData\Local\Programs\Python\Python314\Lib\site-packages\undetected_chromedriver\__init__.py", line 629, in get_wrapped
+    return orig_get(*args, **kwargs)
+  File "C:\Users\Ivy\AppData\Local\Programs\Python\Python314\Lib\site-packages\undetected_chromedriver\__init__.py", line 665, in get
+    return super().get(url)
+           ~~~~~~~~~~~^^^^^
+  File "C:\Users\Ivy\AppData\Local\Programs\Python\Python314\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 470, in get
+    self.execute(Command.GET, {"url": url})
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ivy\AppData\Local\Programs\Python\Python314\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 450, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Ivy\AppData\Local\Programs\Python\Python314\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_CLOSED
+  (Session info: chrome=147.0.7727.116)
+Stacktrace:
+	chromedriver!GetHandleVerifier [0x12ec733+10b73]
+	chromedriver!GetHandleVerifier [0x12ec864+10ca4]
+	chromedriver!(No symbol) [0x10c2100]
+	chromedriver!(No symbol) [0x10bf60e]
+	chromedriver!(No symbol) [0x10b2724]
+	chromedriver!(No symbol) [0x10b418c]
+	chromedriver!(No symbol) [0x10b2bc2]
+	chromedriver!(No symbol) [0x10b24f5]
+	chromedriver!(No symbol) [0x10b21f5]
+	chromedriver!(No symbol) [0x10b0308]
+	chromedriver!(No symbol) [0x10b0a1a]
+	chromedriver!(No symbol) [0x10c5b9e]
+	chromedriver!(No symbol) [0x114bd04]
+	chromedriver!(No symbol) [0x112dc1c]
+	chromedriver!(No symbol) [0x114b1f4]
+	chromedriver!(No symbol) [0x112d9b6]
+	chromedriver!(No symbol) [0x1100339]
+	chromedriver!(No symbol) [0x11010f4]
+	chromedriver!GetHandleVerifier [0x154fe04+274244]
+	chromedriver!GetHandleVerifier [0x154b459+26f899]
+	chromedriver!GetHandleVerifier [0x1569bd5+28e015]
+	chromedriver!GetHandleVerifier [0x1307188+2b5c8]
+	chromedriver!GetHandleVerifier [0x130f23d+3367d]
+	chromedriver!GetHandleVerifier [0x12f5138+19578]
+	chromedriver!GetHandleVerifier [0x12f5302+19742]
+	chromedriver!GetHandleVerifier [0x12de48f+28cf]
+	KERNEL32!BaseThreadInitThunk [0x74c75d49+19]
+	ntdll!RtlInitializeExceptionChain [0x771ed83b+6b]
+	ntdll!RtlGetAppContainerNamedObjectPath [0x771ed7c1+231]
+
+
+[Done]

@@ -1,0 +1,51 @@
+Region debug 2026-04-25 14:39:43
+
+============================================================
+DEBUGGING AD: 1242102094427110
+============================================================
+[OK] Clicked: 查看广告详情
+[OK] Dialog found: {'height': 945, 'width': 1873}
+[OK] Clicked section: 广告信息公示
+[OK] Clicked section: 关于广告主
+[OK] Clicked section: 广告主和付费方
+[OK] Clicked section: 广告信息公示
+[OK] Clicked section: 关于广告主
+[OK] Clicked section: 广告主和付费方
+[OK] Clicked section: 广告信息公示
+[OK] Clicked section: 关于广告主
+[OK] Clicked section: 广告主和付费方
+[OK] Clicked section: 广告信息公示
+[OK] Clicked section: 关于广告主
+[OK] Clicked section: 广告主和付费方
+[OK] Found disclosure header: 广告信息公示
+
+[DISCLOSURE CONTAINER] tag=div
+[CONTAINER] Total children: 13
+  [div] role= class=xw2csxc text='广告信息公示（按地区）'
+  [div] role= class=x1obq294 text='广告信息公示（按地区）'
+  [div] role= class=x78zum5 text='广告信息公示（按地区）'
+  [div] role=link class=x6s0dn4 text='广告信息公示（按地区）'
+  [div] role= class=x1iyjqo2 text='广告信息公示（按地区）'
+  [div] role=heading class=x8t9es0 text='广告信息公示（按地区）'
+
+[EXACT SEARCH for region tabs]
+
+--- Searching for '欧盟' ---
+  aria-label exact matches: 0
+  text() exact matches: 0
+  contains matches: 0
+
+--- Searching for '英国' ---
+  aria-label exact matches: 0
+  text() exact matches: 0
+  contains matches: 0
+
+[SEARCH INSIDE DISCLOSURE CONTAINER]
+Container HTML length: 1034
+'欧盟' NOT FOUND in container HTML
+First 2000 chars: '<div class="xw2csxc x1odjw0f xh8yej3 x18d9i69"><div class="xjm9jq1 xg01cxk x47corl xh8yej3 x1jyxor1"></div><div class="x1obq294 x5a5i1n xde0f50 x15x8krk x6ikm8r x10wlt62"><div class="x78zum5 xdt5ytf"><div class="x6s0dn4 x1ypdohk x78zum5 x1q0g3np x1p5oq8j x64bnmy xwxc41k x13jy36j" role="link" tabindex="0"><div class="x1iyjqo2"><div aria-level="2" class="x8t9es0 xm46was x1xlr1w8 x63nzvj x4hq6eo xq9mrsl x1yc453h x1h4wwuj xeuugli" role="heading">广告信息公示（按地区）</div></div><div class="xjp7ctv"><div class="x3nfvp2 x120ccyz x4hq6eo" role="presentation"><div class="xtwfq29" style="width: 24px; height: 24px; mask-image: url(&quot;https://static.xx.fbcdn.net/rsrc.php/yr/r/FPcys8kMmkz.webp&quot;); mask-position: -357px -495px;"></div></div></div></div></div></div><div class="xjm9jq1 xg01cxk x47corl xh8yej3 x1y332i5"></div></div><div class="x10wjd1d x47corl x10l6tqk x19991ni x13dflua xwji4o3 xh8yej3 xg01cxk x67dex8 x13vifvy"></div><div class="x10wjd1d x47corl x10l6tqk x19991ni x13dflua xwji4o3 xh8yej3 xg01cxk x1ta9b4f x1ey2m1c"></div>'
+
+[IFRAME CHECK]
+Total iframes: 0
+
+[DEBUG COMPLETE]

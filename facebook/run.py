@@ -45,8 +45,8 @@ KEYWORDS = [
 COUNTRY = "US"
 
 AUTO_DATE = True
-START_DATE = "2026-04-17"
-END_DATE = "2026-04-23"
+START_DATE = "2026-04-21"
+END_DATE = "2026-04-27"
 
 MODE = "fixed"
 MAX_ADS = 10
@@ -904,79 +904,57 @@ def scrape_ad_detail_via_modal(driver, library_id, wait_sec=8):
                 driver.execute_script("arguments[0].scrollIntoView({block:'center'});", disc_header)
                 time.sleep(1)
 
-                # REPLACEMENT: Pure JS region extraction via country dropdown menu
-                # 1. Click the dropdown button (role=button, aria-haspopup=menu) in the disclosure section
-                # 2. Wait for menu to open
-                # 3. Click each country/region option and extract targeting data
+                # REPLACEMENT: Pure JS region extraction via tab clicking
+                # Facebook uses [role="tab"] elements for switching between disclosure regions (欧盟/英国).
+                # We click each tab, read the targeting data, then switch back.
                 region_targeting = {}
                 try:
                     extract_js = r"""
                         var RA = ["\u6b27\u7f9f","\u6b27\u6d32","\u82f1\u56fd","\u5fb7\u56fd","\u6cd5\u56fd","\u610f\u5927\u5229","\u897f\u73b0\u4e16","\u8377\u5170","\u6ce2\u5170","\u745e\u5179","\u4e39\u9ea6","\u5965\u5730\u5229","\u6bd4\u5229\u65f6","EU","United Kingdom","Germany","France","Italy","Spain","Netherlands","Poland","Sweden","Austria","Belgium","United States","Brazil","India","Japan","Korea","Vietnam","\u7f8e\u56fd","\u65b0\u52a0\u5761"];
-                        // Step 1: Find and click the dropdown button in the disclosure section
-                        var dropdownBtn = null;
-                        var allButtons = document.querySelectorAll('[role="button"]');
-                        for (var btn of allButtons) {
-                            if (btn.getAttribute('aria-haspopup') === 'menu') {
-                                var inDialog = !!btn.closest("[role='dialog']");
-                                if (inDialog) {
-                                    dropdownBtn = btn;
-                                    break;
-                                }
-                            }
-                        }
-                        if (!dropdownBtn) {
-                            return JSON.stringify({error: 'dropdown not found'});
-                        }
-                        // Click to open the menu
-                        dropdownBtn.scrollIntoView({block: 'center'});
-                        dropdownBtn.click();
-                        // Wait for menu to open
-                        var waitStart = Date.now();
-                        while (Date.now() - waitStart < 2000) {
-                            if (dropdownBtn.getAttribute('aria-expanded') === 'true') break;
-                        }
-                        // Step 2: Find all menu items in the open menu
-                        var menuItems = document.querySelectorAll('[role="menuitem"]');
-                        var regionItems = [];
-                        for (var item of menuItems) {
-                            var al = (item.getAttribute('aria-label') || '').trim();
-                            var text = (item.textContent || '').trim();
-                            for (var rn of RA) {
-                                if (al === rn || text === rn) {
-                                    regionItems.push({el: item, name: rn, ariaLabel: al, text: text});
-                                    break;
-                                }
-                            }
-                        }
-                        // Step 3: Click each region and get targeting data
+                        var dialogs = document.querySelectorAll('[role="dialog"]');
+                        if (!dialogs.length) return JSON.stringify({error: 'no dialogs'});
+                        var dlg = dialogs[dialogs.length - 1];
+                        var tabs = dlg.querySelectorAll('[role="tab"]');
+                        if (!tabs.length) return JSON.stringify({error: 'no tabs found'});
                         var results = [];
-                        for (var ri of regionItems) {
-                            ri.el.scrollIntoView({block: 'center'});
-                            ri.el.click();
-                            // Wait for content to update
+                        // Click each tab that matches a known region name
+                        for (var i = 0; i < tabs.length; i++) {
+                            var tab = tabs[i];
+                            var txt = (tab.innerText || '').trim();
+                            var matchedRegion = null;
+                            for (var rn of RA) {
+                                if (txt === rn) { matchedRegion = rn; break; }
+                            }
+                            if (!matchedRegion) continue;
+                            tab.scrollIntoView({block: 'center'});
+                            tab.click();
                             var tStart = Date.now();
-                            while (Date.now() - tStart < 1500) {}
-                            // Get full text for this region
+                            while (Date.now() - tStart < 2000) {}
                             var fullText = document.body.innerText;
                             var age = '';
                             var ageMatch = fullText.match(/(\d{1,2})\s*[-~]\s*(\d+\+?)\s*[\u5c81|years?]/i);
                             if (ageMatch) {
                                 var lo = ageMatch[1], hi = ageMatch[2];
-                                age = hi === '+' ? lo + \u5c81+ : lo + '-' + hi + \u5c81;
+                                age = hi === '+' ? lo + '\u5c81+' : lo + '-' + hi + '\u5c81';
                             }
                             var gender = '';
-                            if (/\u6027\u522b\s*[:\u3001]?\s*\u4e0d\u9650|Gender\s*:\s*All/i.test(fullText)) gender = \u4e0d\u9650;
-                            else if (/\u6027\u522b\s*[:\u3001]?\s*\u7537\u6027|Gender\s*:\s*Male/i.test(fullText)) gender = \u7537\u6027;
-                            else if (/\u6027\u522b\s*[:\u3001]?\s*\u5973\u6027|Gender\s*:\s*Female/i.test(fullText)) gender = \u5973\u6027;
+                            if (/\u6027\u522b\s*[:\u3001]?\s*\u4e0d\u9650|Gender\s*:\s*All/i.test(fullText)) gender = '\u4e0d\u9650';
+                            else if (/\u6027\u522b\s*[:\u3001]?\s*\u7537\u6027|Gender\s*:\s*Male/i.test(fullText)) gender = '\u7537\u6027';
+                            else if (/\u6027\u522b\s*[:\u3001]?\s*\u5973\u6027|Gender\s*:\s*Female/i.test(fullText)) gender = '\u5973\u6027';
                             var reach = '';
-                            var reachMatch = fullText.match(/\u8986\u76d6[^\n]{0,50}?([\d,]+)\s*(?:\u4eba|people|users|impressions)/i);
+                            var reachMatch = fullText.match(/\u8986\u76d6[\s\S]{0,300}?([\d,]+)\s*(?:\u4eba|people|users|impressions)/i);
                             if (!reachMatch) reachMatch = fullText.match(/(?:Reach|Impressions)[^:]*:\s*([\d,]+)/i);
                             if (!reachMatch) reachMatch = fullText.match(/\u8986\u76d6\u4eba\u6570\s*[:\u3001]?\s*([\d,]+)/i);
                             if (reachMatch) {
                                 var raw = reachMatch[1].replace(/,/g, '').trim();
                                 if (/^\d+$/.test(raw) && raw.length >= 3) reach = raw;
                             }
-                            results.push([ri.name, age, gender, reach]);
+                            results.push([matchedRegion, age, gender, reach]);
+                        }
+                        // Switch back to first tab so the dialog shows the default region
+                        if (tabs.length > 0) {
+                            tabs[0].scrollIntoView({block: 'center'});
+                            tabs[0].click();
                         }
                         return JSON.stringify(results);
                     """
@@ -1030,59 +1008,76 @@ def scrape_ad_detail_via_modal(driver, library_id, wait_sec=8):
 
         print(f"[Modal] Text length: {len(full_text)} chars")
 
-        # (1) Disclosure regions
-        region_ptrn = (
-            "(?:"
-            "\u6b27\u7f9f|\u6b27\u6d32|\u5fb7\u56fd|\u6cd5\u56fd|"
-            "\u610f\u5927\u5229|\u897f\u73b0\u4e16|\u8377\u5170|"
-            "\u6ce2\u5170|\u745e\u5179|\u4e39\u9ea6|\u5965\u5730\u5229|"
-            "\u6bd4\u5229\u65f6|"
-            "EU|United Kingdom|Germany|France|Italy|Spain|Netherlands|Poland|"
-            "Sweden|Denmark|Austria|Belgium|United States|Brazil|India|Japan|"
-            "Korea|Vietnam|Thailand|"
-            "\u6b27\u7f9f\u5e7f\u544a\u6295\u653e|US\u5e7f\u544a\u6295\u653e|EU ad)"
-        )
-        regions_found = re.findall(region_ptrn, full_text)
-        # Deduplicate and filter
-        seen = set()
-        regions = []
-        for r in regions_found:
-            r = r.strip()
-            if len(r) <= 2 or r in seen:
-                continue
-            seen.add(r)
-            regions.append(r)
-        if regions:
-            result["ad_disclosure_regions"] = regions
+        # (1) Disclosure regions — use tab region names (e.g. 欧盟, 英国) not individual countries
+        # If JS tab extraction succeeded, use its keys; otherwise fall back to text regex
+        if region_targeting:
+            result["ad_disclosure_regions"] = list(region_targeting.keys())
+            print(f"[Modal] Regions from tabs: {result['ad_disclosure_regions']}")
+        else:
+            # Fallback: regex on full_text (may pick up individual countries, less accurate)
+            region_ptrn = (
+                "(?:"
+                "\u6b27\u7f9f|\u6b27\u6d32|\u5fb7\u56fd|\u6cd5\u56fd|"
+                "\u610f\u5927\u5229|\u897f\u73b0\u4e16|\u8377\u5170|"
+                "\u6ce2\u5170|\u745e\u5179|\u4e39\u9ea6|\u5965\u5730\u5229|"
+                "\u6bd4\u5229\u65f6|"
+                "EU|United Kingdom|Germany|France|Italy|Spain|Netherlands|Poland|"
+                "Sweden|Denmark|Austria|Belgium|United States|Brazil|India|Japan|"
+                "Korea|Vietnam|Thailand|"
+                "\u6b27\u7f9f\u5e7f\u544a\u6295\u653e|US\u5e7f\u544a\u6295\u653e|EU ad)"
+            )
+            regions_found = re.findall(region_ptrn, full_text)
+            seen = set()
+            regions = []
+            for r in regions_found:
+                r = r.strip()
+                if len(r) <= 2 or r in seen:
+                    continue
+                seen.add(r)
+                regions.append(r)
+            if regions:
+                result["ad_disclosure_regions"] = regions
 
-        # (2) Age range — match "21-65+岁" or "21-65岁" etc.
-        age_m = re.search(r"(\d{1,2})\s*[-~]\s*(\d+\+?)\s*\u5c81", full_text)
-        if not age_m:
-            age_m = re.search(r"\u5e74\u9f84\s*[-~]\s*(\d+\+?)", full_text)
-        if not age_m:
-            age_m = re.search(r"Age\s*:\s*(\d{1,2})\s*[-~]\s*(\d+\+?)", full_text, re.I)
-        if age_m:
-            lo, hi = age_m.group(1), age_m.group(2)
-            result["age_range"] = f"{lo}-{hi}\u5c81" if hi != "+" else f"{lo}\u5c81+"
+        # (2) Age range — if region_targeting exists, use first region's age; otherwise regex on full_text
+        if region_targeting:
+            first_region = list(region_targeting.keys())[0]
+            result["age_range"] = region_targeting[first_region].get('age_range', '')
+        else:
+            age_m = re.search(r"(\d{1,2})\s*[-~]\s*(\d+\+?)\s*\u5c81", full_text)
+            if not age_m:
+                age_m = re.search(r"\u5e74\u9f84\s*[-~]\s*(\d+\+?)", full_text)
+            if not age_m:
+                age_m = re.search(r"Age\s*:\s*(\d{1,2})\s*[-~]\s*(\d+\+?)", full_text, re.I)
+            if age_m:
+                lo, hi = age_m.group(1), age_m.group(2)
+                result["age_range"] = f"{lo}-{hi}\u5c81" if hi != "+" else f"{lo}\u5c81+"
 
-        # (3) Gender
-        if re.search(r"\u6027\u522b\s*[:\u3001]?\s*\u4e0d\u9650|Gender\s*:\s*All", full_text, re.I):
-            result["gender"] = "\u4e0d\u9650"
-        elif re.search(r"\u6027\u522b\s*[:\u3001]?\s*\u7537\u6027|Gender\s*:\s*Male", full_text, re.I):
-            result["gender"] = "\u7537\u6027"
-        elif re.search(r"\u6027\u522b\s*[:\u3001]?\s*\u5973\u6027|Gender\s*:\s*Female", full_text, re.I):
-            result["gender"] = "\u5973\u6027"
+        # (3) Gender — if region_targeting exists, use first region's gender; otherwise regex
+        if region_targeting:
+            first_region = list(region_targeting.keys())[0]
+            result["gender"] = region_targeting[first_region].get('gender', '')
+        else:
+            if re.search(r"\u6027\u522b\s*[:\u3001]?\s*\u4e0d\u9650|Gender\s*:\s*All", full_text, re.I):
+                result["gender"] = "\u4e0d\u9650"
+            elif re.search(r"\u6027\u522b\s*[:\u3001]?\s*\u7537\u6027|Gender\s*:\s*Male", full_text, re.I):
+                result["gender"] = "\u7537\u6027"
+            elif re.search(r"\u6027\u522b\s*[:\u3001]?\s*\u5973\u6027|Gender\s*:\s*Female", full_text, re.I):
+                result["gender"] = "\u5973\u6027"
 
-        # (4) Reach count
-        reach_m = re.search(r"\u8986\u76d6[^\n]{0,50}?([\d,]+)\s*(?:\u4eba|people|users|impressions)", full_text)
-        if not reach_m:
-            reach_m = re.search(r"(?:Reach|Impressions)[^:]*:\s*([\d,]+)", full_text, re.I)
-        if not reach_m:
-            reach_m = re.search(r"\u8986\u76d6\u4eba\u6570\s*[:\u3001]?\s*([\d,]+)", full_text)
-        if reach_m:
-            raw = reach_m.group(1).replace(",", "").replace("\u3000", "").strip()
-            if raw.isdigit() and len(raw) >= 3:
-                result["reach_count"] = raw
+        # (4) Reach count — if region_targeting exists, use first region's reach; otherwise regex
+        if region_targeting:
+            first_region = list(region_targeting.keys())[0]
+            result["reach_count"] = region_targeting[first_region].get('reach_count', '')
+        else:
+            reach_m = re.search(r"\u8986\u76d6[^\n]{0,50}?([\d,]+)\s*(?:\u4eba|people|users|impressions)", full_text)
+            if not reach_m:
+                reach_m = re.search(r"(?:Reach|Impressions)[^:]*:\s*([\d,]+)", full_text, re.I)
+            if not reach_m:
+                reach_m = re.search(r"\u8986\u76d6\u4eba\u6570\s*[:\u3001]?\s*([\d,]+)", full_text)
+            if reach_m:
+                raw = reach_m.group(1).replace(",", "").replace("\u3000", "").strip()
+                if raw.isdigit() and len(raw) >= 3:
+                    result["reach_count"] = raw
 
         # (5) Ad text - longest block excluding labels
         skip_labels = [

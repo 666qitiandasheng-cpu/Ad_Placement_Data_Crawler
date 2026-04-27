@@ -871,126 +871,98 @@ def scrape_ad_detail_via_modal(driver, library_id, wait_sec=8):
             dialog = dialogs[-1]
         except Exception:
             pass
-        driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", dialog)
-        time.sleep(2)
+        driver.execute_script("arguments[0].scrollTop = 0", dialog)
+        time.sleep(1)
 
-        # --- Per-region targeting: click each region tab in "广告信息公示" section ---
+        # --- Per-region targeting: extract EU/UK data by parsing modal text directly ---
+        # After expanding "广告信息公示（按地区）", the modal contains sub-headers like
+        # "欧盟广告投放" / "英国广告投放" with age/gender/reach for each region.
+        # We parse these directly from dialog text - no fragile tab-element lookup needed.
         region_targeting = {}
-        region_labels = [
-            "\u6b27\u7f9f", "\u6b27\u6d32", "\u82f1\u56fd", "\u5fb7\u56fd",
-            "\u6cd5\u56fd", "\u610f\u5927\u5229", "\u897f\u73b0\u4e16", "\u8377\u5170",
-            "\u6ce2\u5170", "\u745e\u5179", "\u4e39\u9ea6", "\u5965\u5730\u5229",
-            "\u6bd4\u5229\u65f6",
-            "EU", "United Kingdom", "Germany", "France", "Italy", "Spain",
-            "Netherlands", "Poland", "Sweden", "Austria", "Belgium",
-            "United States", "Brazil", "India", "Japan", "Korea", "Vietnam",
-            "\u7f8e\u56fd", "\u82f1\u56fd", "\u65b0\u52a0\u5761",
-        ]
         try:
-            # Find the disclosure section by header text
-            disc_header = None
-            for lbl in ["\u5e7f\u544a\u4fe1\u606f\u516c\u793a", "Ad Disclosure"]:
-                try:
-                    headers = dialog.find_elements(By.XPATH, ".//*[contains(text(),'" + lbl + "')]")
-                    for h in headers:
-                        if h.is_displayed():
-                            disc_header = h
-                            break
-                except Exception:
-                    pass
+            # Scroll to top so expanded disclosure section is in view
+            driver.execute_script("arguments[0].scrollTop = 0", dialog)
+            time.sleep(0.5)
+            dialog_text = driver.execute_script("return arguments[0].innerText", dialog)
+            print(f"[Modal] Dialog text length: {len(dialog_text)} chars")
 
-            if disc_header is not None:
-                # Scroll to the disclosure section
-                driver.execute_script("arguments[0].scrollIntoView({block:'center'});", disc_header)
-                time.sleep(1)
+            def parse_region_block(block_text):
+                """Extract age, gender, reach from a region block text."""
+                if not block_text:
+                    return None
+                age = ""
+                age_m = re.search(r'(\d{1,2})\s*[-~]\s*(\d+\+?)\s*岁', block_text)
+                if age_m:
+                    lo, hi = age_m.group(1), age_m.group(2)
+                    age = f"{lo}岁+" if hi == "+" else f"{lo}-{hi}岁"
+                gender = ""
+                if re.search(r'性别\s*[:、]?\s*不限', block_text):
+                    gender = "不限"
+                elif re.search(r'性别\s*[:、]?\s*男性', block_text):
+                    gender = "男性"
+                elif re.search(r'性别\s*[:、]?\s*女性', block_text):
+                    gender = "女性"
+                reach = ""
+                reach_m = re.search(r'覆盖[^\n]{0,100}?([\d,]{6,})', block_text)
+                if not reach_m:
+                    reach_m = re.search(r'([\d,]{6,})\s*(?:人|people)', block_text)
+                if reach_m:
+                    raw = reach_m.group(1).replace(",", "").strip()
+                    if raw.isdigit() and len(raw) >= 4:
+                        reach = raw
+                if age or gender or reach:
+                    return {"age_range": age, "gender": gender, "reach_count": reach}
+                return None
 
-                # REPLACEMENT: Pure JS region extraction via tab clicking
-                # Facebook uses [role="tab"] elements for switching between disclosure regions (欧盟/英国).
-                # We click each tab, read the targeting data, then switch back.
-                region_targeting = {}
-                try:
-                    extract_js = r"""
-                        var RA = ["\u6b27\u7f9f","\u6b27\u6d32","\u82f1\u56fd","\u5fb7\u56fd","\u6cd5\u56fd","\u610f\u5927\u5229","\u897f\u73b0\u4e16","\u8377\u5170","\u6ce2\u5170","\u745e\u5179","\u4e39\u9ea6","\u5965\u5730\u5229","\u6bd4\u5229\u65f6","EU","United Kingdom","Germany","France","Italy","Spain","Netherlands","Poland","Sweden","Austria","Belgium","United States","Brazil","India","Japan","Korea","Vietnam","\u7f8e\u56fd","\u65b0\u52a0\u5761"];
-                        var dialogs = document.querySelectorAll('[role="dialog"]');
-                        if (!dialogs.length) return JSON.stringify({error: 'no dialogs'});
-                        var dlg = dialogs[dialogs.length - 1];
-                        var tabs = dlg.querySelectorAll('[role="tab"]');
-                        if (!tabs.length) return JSON.stringify({error: 'no tabs found'});
-                        var results = [];
-                        // Click each tab that matches a known region name
-                        for (var i = 0; i < tabs.length; i++) {
-                            var tab = tabs[i];
-                            var txt = (tab.innerText || '').trim();
-                            var matchedRegion = null;
-                            for (var rn of RA) {
-                                if (txt === rn) { matchedRegion = rn; break; }
-                            }
-                            if (!matchedRegion) continue;
-                            tab.scrollIntoView({block: 'center'});
-                            tab.click();
-                            var tStart = Date.now();
-                            while (Date.now() - tStart < 2000) {}
-                            var fullText = document.body.innerText;
-                            var age = '';
-                            var ageMatch = fullText.match(/(\d{1,2})\s*[-~]\s*(\d+\+?)\s*[\u5c81|years?]/i);
-                            if (ageMatch) {
-                                var lo = ageMatch[1], hi = ageMatch[2];
-                                age = hi === '+' ? lo + '\u5c81+' : lo + '-' + hi + '\u5c81';
-                            }
-                            var gender = '';
-                            if (/\u6027\u522b\s*[:\u3001]?\s*\u4e0d\u9650|Gender\s*:\s*All/i.test(fullText)) gender = '\u4e0d\u9650';
-                            else if (/\u6027\u522b\s*[:\u3001]?\s*\u7537\u6027|Gender\s*:\s*Male/i.test(fullText)) gender = '\u7537\u6027';
-                            else if (/\u6027\u522b\s*[:\u3001]?\s*\u5973\u6027|Gender\s*:\s*Female/i.test(fullText)) gender = '\u5973\u6027';
-                            var reach = '';
-                            var reachMatch = fullText.match(/\u8986\u76d6[\s\S]{0,300}?([\d,]+)\s*(?:\u4eba|people|users|impressions)/i);
-                            if (!reachMatch) reachMatch = fullText.match(/(?:Reach|Impressions)[^:]*:\s*([\d,]+)/i);
-                            if (!reachMatch) reachMatch = fullText.match(/\u8986\u76d6\u4eba\u6570\s*[:\u3001]?\s*([\d,]+)/i);
-                            if (reachMatch) {
-                                var raw = reachMatch[1].replace(/,/g, '').trim();
-                                if (/^\d+$/.test(raw) && raw.length >= 3) reach = raw;
-                            }
-                            results.push([matchedRegion, age, gender, reach]);
-                        }
-                        // Switch back to first tab so the dialog shows the default region
-                        if (tabs.length > 0) {
-                            tabs[0].scrollIntoView({block: 'center'});
-                            tabs[0].click();
-                        }
-                        return JSON.stringify(results);
-                    """
-                    for attempt in range(2):
-                        try:
-                            js_result = driver.execute_script(extract_js)
-                            if js_result:
-                                import json as _json
-                                all_regions = _json.loads(js_result)
-                                if isinstance(all_regions, dict) and 'error' in all_regions:
-                                    print(f"[Modal] JS error: {all_regions['error']}")
-                                    break
-                                for r_data in all_regions:
-                                    if len(r_data) == 4:
-                                        rn, age, gender, reach = r_data
-                                        if rn and len(rn) <= 40 and (age or gender or reach):
-                                            region_targeting[rn] = {
-                                                'age_range': age,
-                                                'gender': gender,
-                                                'reach_count': reach,
-                                            }
-                                            print(f"[Modal] Region '{rn}': age={age}, gender={gender}, reach={reach}")
-                                if region_targeting:
-                                    break
-                        except Exception as e:
-                            print(f"[Modal] JS region extraction attempt {attempt+1} error: {e}")
-                            time.sleep(2)
-                except Exception as e:
-                    print(f"[Modal] JS region extraction error: {e}")
+            # Extract EU and UK blocks using split-based approach (more robust than lookahead regex)
+            # The section headers are: 欧盟广告投放 and 英国广告投放
+            # These appear in dialog_text when the "广告信息公示（按地区）" section is expanded
+            eu_hdr = "欧羟广告投放"   # 欧盟广告投放
+            uk_hdr = "英国广告投放"   # 英国广告投放
+            next_hdrs = ["关于广告赚新", "关于广告主", "关于广告赚方"]  # About sections
+            
+            def extract_region_block(text, hdr):
+                """Extract text block after header up to next header or end."""
+                idx = text.find(hdr)
+                if idx < 0:
+                    return None
+                block = text[idx + len(hdr):]
+                # Find next header
+                for nh in next_hdrs:
+                    nidx = block.find(nh)
+                    if nidx >= 0:
+                        block = block[:nidx]
+                        break
+                return block[:800] if block else None  # Cap at 800 chars
+            
+            eu_block = extract_region_block(dialog_text, eu_hdr)
+            uk_block = extract_region_block(dialog_text, uk_hdr)
 
+            if eu_block:
+                eu_data = parse_region_block(eu_block)
+                if eu_data:
+                    region_targeting["欧羟"] = eu_data
+                    print(f"[Modal] EU: {eu_data}")
+            if uk_block:
+                uk_data = parse_region_block(uk_block)
+                if uk_data:
+                    region_targeting["英国"] = uk_data
+                    print(f"[Modal] UK: {uk_data}")
+            if not region_targeting:
+                print(f"[Modal] No EU/UK data found (dialog text len={len(dialog_text)})")
+                # Check for EU/UK sub-headers in dialog text
+                eu_hdr = "欧羟广告投放"  # 欧盟广告投放
+                uk_hdr = "英国广告投放"  # 英国广告投放
+                eu_idx = dialog_text.find(eu_hdr)
+                uk_idx = dialog_text.find(uk_hdr)
+                cov_idx = dialog_text.find('覆盖')  # 覆盖
+                print(f"[Modal] EU header at={eu_idx}, UK header at={uk_idx}, 覆盖 at={cov_idx}")
+                if eu_idx >= 0:
+                    print(f"[Modal] EU block text (50 chars after header): {repr(dialog_text[eu_idx:eu_idx+50])}")
+                if cov_idx >= 0:
+                    print(f"[Modal] 覆盖 context: {repr(dialog_text[cov_idx:cov_idx+30])}")
         except Exception as e:
             print(f"[Modal] Region extraction error: {e}")
-
-        # Store per-region targeting in result
-        if region_targeting:
-            result["region_targeting"] = region_targeting
 
         # --- Get full text from ad detail modal (last dialog) ---
         try:
@@ -1008,35 +980,15 @@ def scrape_ad_detail_via_modal(driver, library_id, wait_sec=8):
 
         print(f"[Modal] Text length: {len(full_text)} chars")
 
-        # (1) Disclosure regions — use tab region names (e.g. 欧盟, 英国) not individual countries
-        # If JS tab extraction succeeded, use its keys; otherwise fall back to text regex
+        # (1) Disclosure regions — ONLY from region_targeting keys
+        # ad_disclosure_regions should ONLY contain region-level names (欧盟, 英国, EU, UK)
+        # NEVER individual countries. List-page disclaimer_label is NOT overwritten.
         if region_targeting:
             result["ad_disclosure_regions"] = list(region_targeting.keys())
-            print(f"[Modal] Regions from tabs: {result['ad_disclosure_regions']}")
+            print(f"[Modal] Regions from modal: {result['ad_disclosure_regions']}")
         else:
-            # Fallback: regex on full_text (may pick up individual countries, less accurate)
-            region_ptrn = (
-                "(?:"
-                "\u6b27\u7f9f|\u6b27\u6d32|\u5fb7\u56fd|\u6cd5\u56fd|"
-                "\u610f\u5927\u5229|\u897f\u73b0\u4e16|\u8377\u5170|"
-                "\u6ce2\u5170|\u745e\u5179|\u4e39\u9ea6|\u5965\u5730\u5229|"
-                "\u6bd4\u5229\u65f6|"
-                "EU|United Kingdom|Germany|France|Italy|Spain|Netherlands|Poland|"
-                "Sweden|Denmark|Austria|Belgium|United States|Brazil|India|Japan|"
-                "Korea|Vietnam|Thailand|"
-                "\u6b27\u7f9f\u5e7f\u544a\u6295\u653e|US\u5e7f\u544a\u6295\u653e|EU ad)"
-            )
-            regions_found = re.findall(region_ptrn, full_text)
-            seen = set()
-            regions = []
-            for r in regions_found:
-                r = r.strip()
-                if len(r) <= 2 or r in seen:
-                    continue
-                seen.add(r)
-                regions.append(r)
-            if regions:
-                result["ad_disclosure_regions"] = regions
+            # No EU/UK found in modal — keep whatever list page provided (may be individual countries)
+            print(f"[Modal] No EU/UK regions found in modal, keeping list-page value: {result.get('ad_disclosure_regions', [])}")
 
         # (2) Age range — if region_targeting exists, use first region's age; otherwise regex on full_text
         if region_targeting:

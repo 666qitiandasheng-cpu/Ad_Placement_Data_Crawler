@@ -49,7 +49,7 @@ START_DATE = "2026-04-21"
 END_DATE = "2026-04-27"
 
 MODE = "fixed"
-MAX_ADS = 10
+MAX_ADS = 5
 
 HEADLESS = False
 WAIT_SEC = 5
@@ -716,8 +716,224 @@ def _get_text_safe(page_or_elem):
         return ''
 
 
+
+def scrape_detail_via_cdp(library_id, cdp_url, wait_sec=8):
+    """
+    Use Playwright CDP to connect to OpenClaw Chrome and scrape ad detail modal.
+    EU/UK tabs are visible because CDP uses the real Chrome browser with US IP.
+    """
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.connect_over_cdp(cdp_url)
+            contexts = browser.contexts
+            if not contexts:
+                browser.close()
+                return None
+            ctx = contexts[0]
+            page = ctx.pages[0] if ctx.pages else ctx.new_page()
+
+            detail_url = (f"https://www.facebook.com/ads/library/?id={library_id}"
+                          "&active_status=active&ad_type=all&country=US"
+                          "&is_targeted_country=false&media_type=all")
+            page.goto(detail_url, wait_until="networkidle", timeout=30000)
+            time.sleep(3)
+
+            result = {
+                "library_id": library_id,
+                "ad_disclosure_regions": [],
+                "age_range": "",
+                "gender": "",
+                "reach_count": "",
+                "about_sponsor": "",
+                "advertiser_name": "",
+                "advertiser_description": "",
+                "payer_name": "",
+                "ad_text": "",
+                "region_targeting": {},
+            }
+
+            html = page.content()
+
+            m = re.search(r'"page_name":"((?:[^"\\]|\\.)*)"', html)
+            if m:
+                try:
+                    result["advertiser_name"] = m.group(1).encode().decode("unicode_escape")
+                except:
+                    result["advertiser_name"] = m.group(1)
+
+            m = re.search(r'"payer_name":"((?:[^"\\]|\\.)*)"', html)
+            if m:
+                try:
+                    result["payer_name"] = m.group(1).encode().decode("unicode_escape")
+                except:
+                    result["payer_name"] = m.group(1)
+
+            # Click the detail button using page.evaluate with proper label
+            detail_label = "\u67e5\u770b\u5e7f\u544a\u8be6\u60c5"  # 查看广告详情
+            detail_btn_js = (
+                "var btn = null; "
+                "var all = document.querySelectorAll('*'); "
+                "for (var b of all) { "
+                "  if (b.innerText && b.innerText.indexOf('" + detail_label + "') >= 0 && b.offsetParent !== null) { btn = b; break; } "
+                "} "
+                "if (btn) btn.click();"
+            )
+            try:
+                page.evaluate(detail_btn_js)
+                time.sleep(3)
+            except Exception as e:
+                print(f"[CDP-Detail] Button click error: {e}")
+                browser.close()
+                return None
+
+            # Wait for modal
+            modal = None
+            for _ in range(10):
+                dlg = page.query_selector('[role="dialog"]')
+                if dlg:
+                    modal = dlg
+                    break
+                time.sleep(1)
+
+            if not modal:
+                print(f"[CDP-Detail] No modal for {library_id}")
+                browser.close()
+                return None
+
+            # Expand sections - labels use unicode escapes
+            section_labels = [
+                "\u5e7f\u544a\u4fe1\u606f\u516c\u793a",  # 广告信息公示
+                "\u5173\u4e8e\u5e7f\u544a\u4e3b",           # 关于广告主
+                "\u5e7f\u544a\u4e3b\u548c\u4ed8\u8d39\u65b9",  # 广告主和付费方
+            ]
+            for _ in range(3):
+                for label in section_labels:
+                    click_js = (
+                        "var els = document.querySelectorAll('*'); "
+                        "for (var el of els) { "
+                        "  if (el.innerText && el.innerText.indexOf('" + label + "') >= 0 && el.offsetParent !== null) { el.click(); break; } "
+                        "}"
+                    )
+                    try:
+                        page.evaluate(click_js)
+                        time.sleep(0.8)
+                    except:
+                        pass
+                time.sleep(1)
+
+            page.evaluate("window.scrollTo(0, 0)")
+            time.sleep(0.5)
+
+            # Get full modal text
+            modal_js = "var ds = document.querySelectorAll('[role=dialog]'); if (!ds.length) return ''; return ds[ds.length - 1].innerText;"
+            modal_text = page.evaluate(modal_js)
+
+            if modal_text and len(modal_text) > 50:
+                eu_hdr = '\u6b27\u7f9f\u5e7f\u544a\u6295\u653e'   # 欧盟广告投放
+                uk_hdr = '\u82f1\u56fd\u5e7f\u544a\u6295\u653e'  # 英国广告投放
+
+                def parse_region(block_text):
+                    if not block_text:
+                        return None
+                    age = ""
+                    age_m = re.search(r'(\d{1,2})\s*[-~]\s*(\d+\+?)\s*\u5c81', block_text)
+                    if age_m:
+                        lo, hi = age_m.group(1), age_m.group(2)
+                        age = f"{lo}\u5c81+" if hi == "+" else f"{lo}-{hi}\u5c81"
+                    gender = ""
+                    if re.search(r'\u6027\u522b\s*[:\u3001]?\s*\u4e0d\u9650', block_text):
+                        gender = "\u4e0d\u9650"
+                    elif re.search(r'\u6027\u522b\s*[:\u3001]?\s*\u7537\u6027', block_text):
+                        gender = "\u7537\u6027"
+                    elif re.search(r'\u6027\u522b\s*[:\u3001]?\s*\u5973\u6027', block_text):
+                        gender = "\u5973\u6027"
+                    reach = ""
+                    reach_m = re.search(r'\u8986\u76d6[^\n]{{0,100}}?([\d,]{{6,}})', block_text)
+                    if not reach_m:
+                        reach_m = re.search(r'([\d,]{{6,}})\s*(?:\u4eba|people)', block_text)
+                    if reach_m:
+                        raw = reach_m.group(1).replace(",", "").strip()
+                        if raw.isdigit() and len(raw) >= 4:
+                            reach = raw
+                    if age or gender or reach:
+                        return {"age_range": age, "gender": gender, "reach_count": reach}
+                    return None
+
+                def extract_block(text, hdr):
+                    idx = text.find(hdr)
+                    if idx < 0:
+                        return None
+                    block = text[idx + len(hdr):]
+                    for nh in ["\u5173\u4e8e\u5e7f\u544a\u8d5a\u65b9", "\u5173\u4e8e\u5e7f\u544a\u4e3b"]:
+                        nidx = block.find(nh)
+                        if nidx >= 0:
+                            block = block[:nidx]
+                            break
+                    return block[:800] if block else None
+
+                eu_block = extract_block(modal_text, eu_hdr)
+                uk_block = extract_block(modal_text, uk_hdr)
+
+                if eu_block:
+                    eu_data = parse_region(eu_block)
+                    if eu_data:
+                        result["region_targeting"]["\u6b27\u7f9f"] = eu_data
+                if uk_block:
+                    uk_data = parse_region(uk_block)
+                    if uk_data:
+                        result["region_targeting"]["\u82f1\u56fd"] = uk_data
+
+                if result["region_targeting"]:
+                    first = list(result["region_targeting"].values())[0]
+                    result["age_range"] = first.get("age_range", "")
+                    result["gender"] = first.get("gender", "")
+                    result["reach_count"] = first.get("reach_count", "")
+
+                if not result["age_range"]:
+                    age_m = re.search(r'(\d{1,2})\s*[-~]\s*(\d+\+?)\s*\u5c81', modal_text)
+                    if age_m:
+                        lo, hi = age_m.group(1), age_m.group(2)
+                        result["age_range"] = f"{lo}\u5c81+" if hi == "+" else f"{lo}-{hi}\u5c81"
+
+                if not result["gender"]:
+                    if re.search(r'\u6027\u522b\s*[:\u3001]?\s*\u4e0d\u9650', modal_text):
+                        result["gender"] = "\u4e0d\u9650"
+                    elif re.search(r'\u6027\u522b\s*[:\u3001]?\s*\u7537\u6027', modal_text):
+                        result["gender"] = "\u7537\u6027"
+                    elif re.search(r'\u6027\u522b\s*[:\u3001]?\s*\u5973\u6027', modal_text):
+                        result["gender"] = "\u5973\u6027"
+
+                if not result["reach_count"]:
+                    reach_m = re.search(r'\u8986\u76d6[^\n]{{0,100}}?([\d,]{{6,}})', modal_text)
+                    if reach_m:
+                        raw = reach_m.group(1).replace(",", "").strip()
+                        if raw.isdigit() and len(raw) >= 4:
+                            result["reach_count"] = raw
+
+            if result["region_targeting"]:
+                result["ad_disclosure_regions"] = list(result["region_targeting"].keys())
+
+            browser.close()
+            return result
+    except Exception as e:
+        print(f"[CDP-Detail] Error for {library_id}: {e}")
+        try:
+            browser.close()
+        except:
+            pass
+        return None
+
+
+
 def scrape_ad_detail(driver, library_id, wait_sec=8):
-    """Wrapper: scrape detail using Selenium modal interaction."""
+    """Scrape ad detail: try CDP (OpenClaw Chrome) first, fall back to Selenium."""
+    # Try CDP first - it sees the real EU/UK tabs (Facebook doesn't detect it as bot)
+    cdp_result = scrape_detail_via_cdp(library_id, CDP_URL, wait_sec=wait_sec)
+    if cdp_result and cdp_result.get("library_id"):
+        print(f"[CDP-Detail] Got EU/UK data for {library_id}: {list(cdp_result.get('region_targeting', {}).keys())}")
+        return cdp_result
+    # Fall back to Selenium modal
+    print(f"[CDP-Detail] CDP failed for {library_id}, using Selenium")
     return scrape_ad_detail_via_modal(driver, library_id, wait_sec=wait_sec)
 
 
@@ -982,13 +1198,69 @@ def scrape_ad_detail_via_modal(driver, library_id, wait_sec=8):
 
         # (1) Disclosure regions — ONLY from region_targeting keys
         # ad_disclosure_regions should ONLY contain region-level names (欧盟, 英国, EU, UK)
-        # NEVER individual countries. List-page disclaimer_label is NOT overwritten.
+        # NEVER individual countries.
         if region_targeting:
             result["ad_disclosure_regions"] = list(region_targeting.keys())
             print(f"[Modal] Regions from modal: {result['ad_disclosure_regions']}")
         else:
-            # No EU/UK found in modal — keep whatever list page provided (may be individual countries)
-            print(f"[Modal] No EU/UK regions found in modal, keeping list-page value: {result.get('ad_disclosure_regions', [])}")
+            # Normalize: if list contains only EU individual countries, replace with 欧盟
+            EU_COUNTRIES = {
+                "\u5965\u5730\u5229",   # 奥地利
+                "\u610f\u5927\u5229",   # 意大利
+                "\u6bd4\u5229\u65f6",   # 比利时
+                "\u5fb7\u56fd",          # 德国
+                "\u6cd5\u56fd",          # 法国
+                "\u8377\u5170",          # 荷兰
+                "\u897f\u73ed\u7259",   # 西班牙
+                "\u8461\u8404\u7259",   # 葡萄牙
+                "\u5e0c\u814a",          # 希腊
+                "\u745e\u5178",          # 瑞典
+                "\u82ac\u5170",          # 芬兰
+                "\u4e39\u9ea6",          # 丹麦
+                "\u6ce2\u5170",          # 波兰
+                "\u6377\u514b",          # 捷克
+                "\u5308\u7259\u5229",   # 匈牙利
+                "\u7f57\u9a6c\u5c3a\u4e9a",  # 罗马尼亚
+                "\u4fdd\u52a0\u5229\u4e9a",  # 保加利亚
+                "\u514b\u7f57\u5730\u4e9a",  # 克罗地亚
+                "\u7231\u6c99\u5c3c\u4e9a",  # 爱沙尼亚
+                "\u62c9\u8138\u7ef4\u4e9a",  # 拉脱维亚
+                "\u7acb\u9676\u5b9b",          # 立陶宛
+                "\u65af\u6d1b\u4f10\u514b",   # 斯洛伐克
+                "\u65af\u6d1b\u6587\u5c3c\u4e9a",  # 斯洛文尼亚
+                "\u9a6c\u8036\u4ed6",          # 马耳他
+                "\u8d3a\u5e1d\u8def",          # 塞浦路斯
+                "\u5362\u68ee\u5821",          # 卢森堡
+                "\u7231\u5c14\u5170",          # 爱尔兰
+            }
+            raw_regions = result.get("ad_disclosure_regions", [])
+            if raw_regions:
+                # Check if ALL regions are EU individual countries
+                all_eu = all(r in EU_COUNTRIES for r in raw_regions)
+                all_uk = all(r == "\u82f1\u56fd" for r in raw_regions)  # 英国 alone
+                if all_eu and raw_regions:
+                    result["ad_disclosure_regions"] = ["\u6b27\u7f9f"]  # 欧盟
+                    print(f"[Modal] Normalized EU countries {raw_regions} -> [\u6b27\u7f9f]")
+                elif not all_uk:
+                    # Mix of EU countries + non-EU: keep EU as 欧盟, others as-is
+                    normalized = []
+                    has_eu = False
+                    for r in raw_regions:
+                        if r in EU_COUNTRIES:
+                            if not has_eu:
+                                normalized.append("\u6b27\u7f9f")
+                                has_eu = True
+                        else:
+                            normalized.append(r)
+                    if normalized != raw_regions:
+                        result["ad_disclosure_regions"] = normalized
+                        print(f"[Modal] Normalized regions {raw_regions} -> {normalized}")
+                    else:
+                        print(f"[Modal] Regions: {raw_regions}")
+                else:
+                    print(f"[Modal] Regions: {raw_regions}")
+            else:
+                print(f"[Modal] No regions (empty list)")
 
         # (2) Age range — if region_targeting exists, use first region's age; otherwise regex on full_text
         if region_targeting:

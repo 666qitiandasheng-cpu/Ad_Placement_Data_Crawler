@@ -1,0 +1,50 @@
+{
+  "635884215895703": {
+    "library_id": "635884215895703",
+    "ad_disclosure_regions": [
+      "欧羟"
+    ],
+    "age_range": "18岁-65岁+",
+    "gender": "不限",
+    "reach_count": "2114334",
+    "about_sponsor": "",
+    "advertiser_name": "Block Blast",
+    "advertiser_description": "Block Blast 编号：105422708937000 12.1 万位粉丝 • 电子游戏 更多信息 The classic hot Tetris game, shining fluorescent debut! Relive unforgettable childhood memories with cutting-edge visual enjoyment! This creative casual puzzle elimination game, block elimination iron powder can't be missed!",
+    "payer_name": "",
+    "ad_text": "广告详情",
+    "region_targeting": {
+      "欧羟": {
+        "age_range": "18岁-65岁+",
+        "gender": "不限",
+        "reach_count": "2114334"
+      }
+    }
+  },
+  "4284029755143955": {
+    "library_id": "4284029755143955",
+    "ad_disclosure_regions": [
+      "欧羟",
+      "英国"
+    ],
+    "age_range": "13岁-65岁+",
+    "gender": "不限",
+    "reach_count": "1221554",
+    "about_sponsor": "",
+    "advertiser_name": "Block Blast",
+    "advertiser_description": "Block Blast 编号：105422708937000 12.1 万位粉丝 • 电子游戏 更多信息 The classic hot Tetris game, shining fluorescent debut! Relive unforgettable childhood memories with cutting-edge visual enjoyment! This creative casual puzzle elimination game, block elimination iron powder can't be missed!",
+    "payer_name": "",
+    "ad_text": "广告详情",
+    "region_targeting": {
+      "欧羟": {
+        "age_range": "13岁-65岁+",
+        "gender": "不限",
+        "reach_count": "1221554"
+      },
+      "英国": {
+        "age_range": "13岁-65岁+",
+        "gender": "不限",
+        "reach_count": "1221554"
+      }
+    }
+  }
+}

@@ -1,4 +1,9 @@
-=== FULL MODAL TEXT AFTER DROPDOWN CLICKS ===
+EU header: 欧盟境内广告信息公示
+EU header hex: e6aca7e79b9fe5a283e58685e5b9bfe5918ae4bfa1e681afe585ace7a4ba
+EU header index: 80
+EU header index (bytes): 166
+
+=== FULL DIALOG TEXT ===
 广告链接
 关闭
 ​
@@ -6,8 +11,7 @@
 ​
 投放中
 资料库编号：1242102094427110
-2025年12月17日开始投放
-平台
+2025年12月17日开始投放平台
 ​
 ​
 ​
@@ -21,7 +25,7 @@
 Block Blast
 赞助内容
 Free To Play
-0:00 / 0:58
+0:00 / 0:00
 PLAY.GOOGLE.COM
 Block Blast
 立即安装

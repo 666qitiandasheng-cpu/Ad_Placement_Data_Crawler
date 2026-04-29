@@ -1,4 +1,10 @@
-=== FULL MODAL TEXT AFTER DROPDOWN CLICKS ===
+EU header bytes: e6aca7e79b9fe5b9bfe5918ae68a95e694be
+UK header bytes: e88bb1e59bbde5b9bfe5918ae68a95e694be
+EU header index in text: -1
+UK header index in text: -1
+覆盖 index: -1
+
+=== FULL DIALOG TEXT ===
 广告链接
 关闭
 ​
@@ -6,8 +12,7 @@
 ​
 投放中
 资料库编号：1242102094427110
-2025年12月17日开始投放
-平台
+2025年12月17日开始投放平台
 ​
 ​
 ​

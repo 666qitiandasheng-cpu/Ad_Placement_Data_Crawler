@@ -1,0 +1,698 @@
+"""
+Facebook Ad Library Scraper - Part 2: Detail Page
+==================================================
+读取 scrape_list.py 生成的 JSON，按 library_id 逐个抓详情页，
+展开"广告信息公示（按地区）"、"关于广告赞助方"、"关于广告主"、"广告主和付费方"，
+把所有字段写入同级的 detail_<keyword>_<date>.json。
+
+Usage:
+  python scrape_detail.py                                    # 处理今天的列表文件
+  python scrape_detail.py --date 2026-04-28                # 指定日期
+  python scrape_detail.py -i output/Block_Blast/ads_Block_Blast_2026-04-28.json
+"""
+
+import sys
+import os
+
+# Fix stdout encoding to UTF-8 so emoji/special chars don't crash print()
+if sys.platform == 'win32':
+    import io
+    if sys.stdout.encoding.lower() != 'utf-8':
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+import os
+import json
+import time
+import re
+import warnings
+from pathlib import Path
+from datetime import datetime
+
+# ====== CONFIG ======
+HEADLESS = False
+WAIT_SEC = 3
+DETAIL_WAIT = 8
+# ====================
+
+BASE_DIR = Path(__file__).parent
+OUTPUT_DIR = BASE_DIR / "output"
+CDP_URL = "http://127.0.0.1:9222"   # 你的 Chrome 调试端口
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+}
+warnings.filterwarnings('ignore')
+
+# ============================================================
+# SELENIUM DRIVER
+# ============================================================
+
+def make_driver(headless=False, max_retries=3):
+    from selenium import webdriver
+    from selenium.webdriver.chrome.options import Options
+    from selenium.webdriver.chrome.service import Service
+    from webdriver_manager.chrome import ChromeDriverManager
+
+    for attempt in range(max_retries):
+        opts = Options()
+        if headless:
+            opts.add_argument("--headless=new")
+        opts.add_argument("--no-sandbox")
+        opts.add_argument("--disable-dev-shm-usage")
+        opts.add_argument("--disable-blink-features=AutomationControlled")
+        opts.add_argument("--disable-gpu")
+        opts.add_argument("--window-size=1920,1080")
+        opts.add_argument(f"--user-agent={HEADERS['User-Agent']}")
+        try:
+            service = Service(ChromeDriverManager().install())
+            driver = webdriver.Chrome(service=service, options=opts)
+            driver.set_page_load_timeout(30)
+            driver.implicitly_wait(5)
+            return driver
+        except Exception as e:
+            print(f"[Driver] Attempt {attempt+1} failed: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(3)
+            else:
+                raise
+
+# ============================================================
+# CDP 详情抓取（优先，使用你的 Chrome via port 9222）
+# ============================================================
+
+def scrape_detail_via_cdp(library_id, cdp_url, wait_sec=8):
+    """通过 Chrome DevTools Protocol 抓详情页（复用已登录的 Chrome）。"""
+    import urllib.request
+
+    try:
+        payload = json.dumps({
+            "method": "Page.navigate",
+            "params": {"url": f"https://www.facebook.com/ads/library/?id={library_id}"}
+        }).encode()
+        urllib.request.urlopen(
+            urllib.request.Request(cdp_url + "/json", data=payload, headers={"Content-Type": "application/json"}),
+            timeout=5
+        )
+    except Exception:
+        pass
+
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        print("[CDP] playwright not installed")
+        return None
+
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.connect_over_cdp(cdp_url)
+            page = browser.new_page()
+            page.goto(f"https://www.facebook.com/ads/library/?id={library_id}", timeout=30000)
+            page.wait_for_load_state("networkidle", timeout=15000)
+            return _scrape_detail_page_cdp(page, library_id)
+    except Exception as e:
+        print(f"[CDP] Error: {e}")
+        return None
+
+
+def _scrape_detail_page_cdp(page, library_id):
+    """
+    CDP/Playwright 模式：
+    1. 点击"查看广告详情"打开弹窗
+    2. 点击所有"打开下拉菜单"展开欧盟/英国数据（force=True 绕过视频遮挡）
+    3. 用 inner_text() 获取完整弹窗文本
+    4. 提取所有字段
+    """
+    result = {
+        "library_id": library_id,
+        "ad_disclosure_regions": [],
+        "age_range": "",
+        "gender": "",
+        "reach_count": "",
+        "about_sponsor": "",
+        "advertiser_name": "",
+        "advertiser_description": "",
+        "payer_name": "",
+        "ad_text": "",
+        "region_targeting": {},
+    }
+
+    # Step 1: 点击"查看广告详情"按钮
+    for kw in ['\u67e5\u770b\u5e7f\u544a\u8be6\u60c5', 'View ad details', 'View Ad Details']:
+        try:
+            page.get_by_text(kw, exact=False).first.click(timeout=5000, force=True)
+            print(f"  [CDP] Clicked: {kw}")
+            break
+        except Exception:
+            pass
+
+    # Step 2: 等待弹窗出现
+    try:
+        page.wait_for_selector('[role="dialog"]', state='visible', timeout=10000)
+    except Exception:
+        pass
+    page.wait_for_timeout(3000)
+
+    # Step 3: 点击所有"打开下拉菜单"按钮（关键修复：需要 force=True 绕过视频遮挡）
+    dropdowns_clicked = 0
+    for _ in range(3):
+        try:
+            dropdowns = page.get_by_text('\u6253\u5f00\u4e0b\u62c9\u83dc\u5355').all()
+            for dd in dropdowns:
+                if dd.is_visible():
+                    try:
+                        dd.click(force=True)
+                        dropdowns_clicked += 1
+                        page.wait_for_timeout(800)
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+        page.wait_for_timeout(1000)
+
+    print(f"  [CDP] Dropdowns clicked: {dropdowns_clicked}")
+
+    # Step 4: 再点击各个 section header 本身
+    section_labels = [
+        '\u5e7f\u544a\u4fe1\u606f\u516c\u793a',
+        '\u6b27\u76df\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a',
+        '\u82f1\u56fd\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a',
+        '\u5173\u4e8e\u5e7f\u544a\u8d5a\u52a9\u65b9',
+        '\u5173\u4e8e\u5e7f\u544a\u4e3b',
+        '\u5e7f\u544a\u4e3b\u548c\u4ed8\u8d39\u65b9',
+    ]
+    for label in section_labels:
+        try:
+            for el in page.get_by_text(label, exact=False).all():
+                if el.is_visible():
+                    try:
+                        el.click(force=True)
+                        page.wait_for_timeout(500)
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
+    page.wait_for_timeout(2000)
+
+    # Step 5: Get dialog full text
+    try:
+        page.wait_for_selector('[role="dialog"]', state='visible', timeout=10000)
+        page.wait_for_timeout(3000)
+        dialogs = page.locator('[role="dialog"]').all()
+        if not dialogs:
+            print(f"  [CDP] Warning: no dialogs found!")
+            full_text = ""
+        else:
+            dialog = dialogs[-1]
+            # Try JS evaluate on the dialog locator
+            # Use page.evaluate to avoid locator staleness
+            raw = page.evaluate(
+                """() => {
+                    const allDialogs = document.querySelectorAll('[role=\"dialog\"]');
+                    if (!allDialogs.length) return '';
+                    const d = allDialogs[allDialogs.length - 1];
+                    const parts = [];
+                    const walker = document.createTreeWalker(d, NodeFilter.SHOW_TEXT, null, false);
+                    let n;
+                    while(n = walker.nextNode()) {
+                        const t = n.textContent.trim();
+                        if(t && t.length < 5000) parts.push(t);
+                    }
+                    return parts.join(' ');
+                }"""
+            )
+            full_text = raw if raw else dialog.inner_text()
+    except Exception as e:
+        print(f"  [CDP] Dialog error: {e}")
+        import traceback
+        traceback.print_exc()
+        full_text = ""
+
+    print(f"  [CDP] Dialog text length: {len(full_text)}")
+
+    if not full_text:
+        return result
+
+    # Step 6: Extract EU / UK region targeting
+    # The EU/UK header text can be split across elements:
+    # "欧盟" + "境内广告信息公示" instead of the full "欧盟境内广告信息公示"
+    # We look for "欧盟" and "英国" as region markers and extract the block from
+    # that position up to the next section header.
+    region_targeting = {}
+
+    # Try exact header first, then try split version
+    eu_hdrs = ['\u6b27\u76df\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a',  # 欧盟境内广告信息公示
+               '\u6b27\u76df\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a']  # 欧盟境内广告信息公示 (with extra char)
+    uk_hdrs = ['\u82f1\u56fd\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a',  # 英国境内广告信息公示
+               '\u82f1\u56fd\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a']
+    eu_marker = '\u6b27\u76df'   # 欧盟
+    uk_marker = '\u82f1\u56fd'   # 英国
+    next_hdrs = ['\u5173\u4e8e\u5e7f\u544a\u4e3b', '\u5173\u4e8e\u5e7f\u544a\u8d5a\u52a9\u65b9', '\u5173\u4e8e\u5e7f\u544a\u548c\u4ed8\u8d39\u65b9']
+
+    def extract_block(text, hdr):
+        idx = text.find(hdr)
+        if idx < 0:
+            return None
+        block = text[idx + len(hdr):]
+        for nh in next_hdrs:
+            nidx = block.find(nh)
+            if nidx >= 0:
+                block = block[:nidx]
+                break
+        return block if block else None
+
+    def parse_region(block_text):
+        if not block_text or len(block_text) < 5:
+            return None
+        # 年龄: 21-65+岁 / 18-65+岁 / 18-25岁
+        age = ""
+        age_m = re.search(r'(\d{1,2})\s*[-~\u2013]\s*(\d{1,2})(\+?)\s*\u5c81', block_text)
+        if age_m:
+            lo, hi, plus = age_m.group(1), age_m.group(2), age_m.group(3)
+            age = f"{lo}岁-{hi}岁+" if plus == "+" else f"{lo}岁-{hi}岁"
+        else:
+            age_m2 = re.search(r'(\d{1,2})\+(\u5c81)', block_text)
+            if age_m2:
+                age = f"{age_m2.group(1)}岁+"
+        # 性别: "不限" / "男性" / "女性"
+        gender = ""
+        if re.search(r'\u6027\u522b\s*[:\u3001\uff1a]?\s*\u4e0d\u9650', block_text):
+            gender = "\u4e0d\u9650"
+        elif re.search(r'\u6027\u522b\s*[:\u3001\uff1a]?\s*\u7537\u6027', block_text):
+            gender = "\u7537\u6027"
+        elif re.search(r'\u6027\u522b\s*[:\u3001\uff1a]?\s*\u5973\u6027', block_text):
+            gender = "\u5973\u6027"
+        # 覆盖人数: 6位以上数字（含逗号），如 "2,285,652"
+        reach = ""
+        reach_m = re.search(r'([\d,]{6,})', block_text)
+        if reach_m:
+            raw = reach_m.group(1).replace(",", "").strip()
+            if raw.isdigit() and len(raw) >= 4:
+                reach = raw
+        if age or gender or reach:
+            return {"age_range": age, "gender": gender, "reach_count": reach}
+        return None
+
+    # Try EU header detection - look for EU marker "欧盟" followed by region data block
+    eu_idx = full_text.find(eu_marker)
+    if eu_idx >= 0:
+        # Extract block from EU marker to next section header
+        eu_block = full_text[eu_idx:]
+        for nh in next_hdrs:
+            nidx = eu_block.find(nh)
+            if nidx >= 0:
+                eu_block = eu_block[:nidx]
+        if eu_block and len(eu_block) > 10:
+            eu_data = parse_region(eu_block)
+            if eu_data:
+                region_targeting['\u6b27\u7f9f'] = eu_data  # 欧盟
+                print(f"  [CDP] Found EU data: {eu_data}")
+
+    # Try UK header detection
+    uk_idx = full_text.find(uk_marker)
+    if uk_idx >= 0:
+        uk_block = full_text[uk_idx:]
+        for nh in next_hdrs:
+            nidx = uk_block.find(nh)
+            if nidx >= 0:
+                uk_block = uk_block[:nidx]
+        if uk_block and len(uk_block) > 10:
+            uk_data = parse_region(uk_block)
+            if uk_data:
+                region_targeting['\u82f1\u56fd'] = uk_data  # 英国
+                print(f"  [CDP] Found UK data: {uk_data}")
+
+    if region_targeting:
+        result["region_targeting"] = region_targeting
+        first = list(region_targeting.values())[0]
+        result["age_range"] = first.get("age_range", "")
+        result["gender"] = first.get("gender", "")
+        result["reach_count"] = first.get("reach_count", "")
+        result["ad_disclosure_regions"] = list(region_targeting.keys())
+
+    # Step 7: 提取其他字段
+    # 广告主
+    m = re.search(r'\u5e7f\u544a\u4e3b\s*[:\uff1a]?\s*([^\n]{2,80})', full_text)
+    if not m:
+        m = re.search(r'Advertiser\s*[:\uff1a]?\s*([^\n]{2,80})', full_text, re.I)
+    if m:
+        result["advertiser_name"] = m.group(1).strip()
+
+    # 付费方
+    m = re.search(r'\u4ed8\u8d39\u65b9\s*[:\uff1a]?\s*([^\n]{2,80})', full_text)
+    if not m:
+        m = re.search(r'Payer\s*[:\uff1a]?\s*([^\n]{2,80})', full_text, re.I)
+    if m:
+        result["payer_name"] = m.group(1).strip()
+
+    # 关于广告赞助方
+    m = re.search(r'\u5173\u4e8e\u5e7f\u544a\u8d5a\u52a9\u65b9\s*[:\uff1a]?\s*([\s\S]{5,800}?)(?=\n\u5e7f\u544a|\n\u5173\u4e8e|\Z)', full_text)
+    if m:
+        result["about_sponsor"] = m.group(1).strip()
+
+    # 广告内容/文本
+    m = re.search(r'\u5e7f\u544a\u5185\u5bb9\s*[:\uff1a]?\s*([\s\S]{10,1000}?)(?=\n\u5e7f\u544a|\n\u5173\u4e8e|\Z)', full_text)
+    if not m:
+        m = re.search(r'(Free To Play|Free to Play)[^\n]{0,500}', full_text)
+    if m:
+        result["ad_text"] = m.group(1).strip()
+
+    print(f"  [CDP] Done: regions={result['ad_disclosure_regions']} age={result['age_range']} "
+          f"advertiser={result['advertiser_name'][:40]}")
+    return result
+
+
+# ============================================================
+# SELENIUM 详情抓取（备选）
+# ============================================================
+
+from selenium.webdriver.common.by import By
+
+def scrape_ad_detail_via_modal(driver, library_id, wait_sec=8):
+    """Selenium 模式（CDP 不可用时的备选）。"""
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    from selenium.common.exceptions import TimeoutException
+
+    result = {
+        "library_id": library_id,
+        "ad_disclosure_regions": [],
+        "age_range": "",
+        "gender": "",
+        "reach_count": "",
+        "about_sponsor": "",
+        "advertiser_name": "",
+        "advertiser_description": "",
+        "payer_name": "",
+        "ad_text": "",
+        "region_targeting": {},
+    }
+
+    try:
+        detail_url = "https://www.facebook.com/ads/library/?id=" + library_id
+        driver.get(detail_url)
+        time.sleep(3)
+        try:
+            WebDriverWait(driver, 15).until(
+                lambda d: d.execute_script("return document.readyState") == "complete"
+            )
+        except Exception:
+            pass
+        time.sleep(wait_sec)
+
+        # 点击"查看广告详情"
+        for btn_text in ['\u67e5\u770b\u5e7f\u544a\u8be6\u60c5', 'View Ad Details', 'view ad details']:
+            try:
+                for btn in driver.find_elements(By.XPATH, "//*[contains(text(),'" + btn_text + "')]"):
+                    if btn.is_displayed():
+                        btn.click()
+                        break
+            except Exception:
+                pass
+
+        time.sleep(3)
+
+        # 等待弹窗
+        try:
+            WebDriverWait(driver, 15).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, '[role="dialog"]'))
+            )
+        except TimeoutException:
+            print(f"[Modal] No modal: {library_id}")
+            return result
+
+        dialogs = driver.find_elements(By.CSS_SELECTOR, '[role="dialog"]')
+        if not dialogs:
+            return result
+        dialog = dialogs[-1]
+
+        # 点击所有"打开下拉菜单"
+        dropdown_xpath = ".//*[contains(text(),'\u6253\u5f00\u4e0b\u62c9\u83dc\u5355')]"
+        for _ in range(3):
+            try:
+                dds = dialog.find_elements(By.XPATH, dropdown_xpath)
+                for dd in dds:
+                    if dd.is_displayed():
+                        try:
+                            driver.execute_script("arguments[0].click({force:true})", dd)
+                            time.sleep(800)
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+            time.sleep(1000)
+
+        # 点击各 section header
+        section_labels = [
+            '\u5e7f\u544a\u4fe1\u606f\u516c\u793a',
+            '\u6b27\u76df\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a',
+            '\u82f1\u56fd\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a',
+            '\u5173\u4e8e\u5e7f\u544a\u8d5a\u52a9\u65b9',
+            '\u5173\u4e8e\u5e7f\u544a\u4e3b',
+            '\u5e7f\u544a\u4e3b\u548c\u4ed8\u8d39\u65b9',
+        ]
+        for label in section_labels:
+            try:
+                for el in dialog.find_elements(By.XPATH, ".//*[contains(text(),'" + label + "')]"):
+                    if el.is_displayed():
+                        try:
+                            driver.execute_script("arguments[0].click({force:true})", el)
+                            time.sleep(500)
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+
+        time.sleep(2000)
+
+        # 获取弹窗文本
+        try:
+            full_text = driver.execute_script("return arguments[0].innerText", dialog)
+        except Exception:
+            full_text = ""
+
+        # 提取 EU/UK 地区定向
+        eu_hdr = '\u6b27\u76df\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a'
+        uk_hdr = '\u82f1\u56fd\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a'
+        next_hdrs = ['\u5173\u4e8e\u5e7f\u544a\u4e3b', '\u5173\u4e8e\u5e7f\u544a\u8d5a\u52a9\u65b9', '\u5173\u4e8e\u5e7f\u544a\u548c\u4ed8\u8d39\u65b9']
+
+        def extract_block(text, hdr):
+            idx = text.find(hdr)
+            if idx < 0:
+                return None
+            block = text[idx + len(hdr):]
+            for nh in next_hdrs:
+                nidx = block.find(nh)
+                if nidx >= 0:
+                    block = block[:nidx]
+                    break
+            return block if block else None
+
+        def parse_region(block_text):
+            if not block_text or len(block_text) < 5:
+                return None
+            age = ""
+            age_m = re.search(r'(\d{1,2})\s*[-~\u2013]\s*(\d{1,2})(\+?)(\u5c81)', block_text)
+            if age_m:
+                lo, hi, plus = age_m.group(1), age_m.group(2), age_m.group(3)
+                age = f"{lo}岁-{hi}岁+" if plus == "+" else f"{lo}岁-{hi}岁"
+            else:
+                age_m2 = re.search(r'(\d{1,2})\+(\u5c81)', block_text)
+                if age_m2:
+                    age = f"{age_m2.group(1)}岁+"
+            gender = ""
+            if re.search(r'\u6027\u522b\s*[:\u3001\uff1a]?\s*\u4e0d\u9650', block_text):
+                gender = "\u4e0d\u9650"
+            elif re.search(r'\u6027\u522b\s*[:\u3001\uff1a]?\s*\u7537\u6027', block_text):
+                gender = "\u7537\u6027"
+            elif re.search(r'\u6027\u522b\s*[:\u3001\uff1a]?\s*\u5973\u6027', block_text):
+                gender = "\u5973\u6027"
+            reach = ""
+            reach_m = re.search(r'([\d,]{6,})', block_text)
+            if reach_m:
+                raw = reach_m.group(1).replace(",", "").strip()
+                if raw.isdigit() and len(raw) >= 4:
+                    reach = raw
+            if age or gender or reach:
+                return {"age_range": age, "gender": gender, "reach_count": reach}
+            return None
+
+        region_targeting = {}
+        for hdr, region_key in [(eu_hdr, '\u6b27\u7f9f'), (uk_hdr, '\u82f1\u56fd')]:
+            block = extract_block(full_text, hdr)
+            if block:
+                data = parse_region(block)
+                if data:
+                    region_targeting[region_key] = data
+
+        if region_targeting:
+            result["region_targeting"] = region_targeting
+            first = list(region_targeting.values())[0]
+            result["age_range"] = first.get("age_range", "")
+            result["gender"] = first.get("gender", "")
+            result["reach_count"] = first.get("reach_count", "")
+            result["ad_disclosure_regions"] = list(region_targeting.keys())
+
+        # 广告主
+        m = re.search(r'\u5e7f\u544a\u4e3b\s*[:\uff1a]?\s*([^\n]{2,80})', full_text)
+        if not m:
+            m = re.search(r'Advertiser\s*[:\uff1a]?\s*([^\n]{2,80})', full_text, re.I)
+        if m:
+            result["advertiser_name"] = m.group(1).strip()
+
+        # 付费方
+        m = re.search(r'\u4ed8\u8d39\u65b9\s*[:\uff1a]?\s*([^\n]{2,80})', full_text)
+        if not m:
+            m = re.search(r'Payer\s*[:\uff1a]?\s*([^\n]{2,80})', full_text, re.I)
+        if m:
+            result["payer_name"] = m.group(1).strip()
+
+        # 关于广告赞助方
+        m = re.search(r'\u5173\u4e8e\u5e7f\u544a\u8d5a\u52a9\u65b9\s*[:\uff1a]?\s*([\s\S]{5,800}?)(?=\n\u5e7f\u544a|\n\u5173\u4e8e|\Z)', full_text)
+        if m:
+            result["about_sponsor"] = m.group(1).strip()
+
+        # 广告文本
+        m = re.search(r'\u5e7f\u544a\u5185\u5bb9\s*[:\uff1a]?\s*([\s\S]{10,1000}?)(?=\n\u5e7f\u544a|\n\u5173\u4e8e|\Z)', full_text)
+        if not m:
+            m = re.search(r'(Free To Play|Free to Play)[^\n]{0,500}', full_text)
+        if m:
+            result["ad_text"] = m.group(1).strip()
+
+        print(f"[Modal] {library_id} | regions={result['ad_disclosure_regions']} | "
+              f"age={result['age_range']} | advertiser={result['advertiser_name'][:40]}")
+        return result
+
+    except Exception as e:
+        import traceback
+        print(f"[Modal] Error {library_id}: {e}")
+        traceback.print_exc()
+        return result
+
+
+# ============================================================
+# 主逻辑
+# ============================================================
+
+def scrape_ad_detail(driver, library_id, wait_sec=8):
+    """优先 CDP，CDP 失败则用 Selenium。"""
+    cdp_result = scrape_detail_via_cdp(library_id, CDP_URL, wait_sec=wait_sec)
+    if cdp_result and cdp_result.get("library_id"):
+        print(f"[CDP] Got EU/UK data for {library_id}: {list(cdp_result.get('region_targeting', {}).keys())}")
+        return cdp_result
+    print(f"[CDP] CDP failed for {library_id}, falling back to Selenium")
+    return scrape_ad_detail_via_modal(driver, library_id, wait_sec=wait_sec)
+
+def load_json_file(path):
+    if path.exists():
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {"ads": []}
+
+def save_detail_json(detail_file, detail_data):
+    """保存详情 JSON，按 library_id 为 key，自动增量写入。"""
+    existing = {}
+    if detail_file.exists():
+        try:
+            with open(detail_file, 'r', encoding='utf-8') as f:
+                existing = json.load(f)
+        except Exception:
+            pass
+    if not isinstance(existing, dict):
+        existing = {}
+    for k, v in detail_data.items():
+        existing[k] = v
+    detail_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(detail_file, 'w', encoding='utf-8') as fp:
+        json.dump(existing, fp, ensure_ascii=False, indent=2)
+
+def find_list_file(date_str=None):
+    """
+    查找列表 JSON 文件：
+    1. 精确匹配 date_str 对应的日期文件
+    2. 找不到则用最新修改的文件
+    """
+    today = date_str or datetime.now().strftime("%Y-%m-%d")
+    candidates = list(BASE_DIR.glob(f"output/*/ads_*_{today}.json"))
+    if candidates:
+        return candidates[0]
+    all_files = sorted(BASE_DIR.glob("output/*/ads_*.json"), key=lambda p: p.stat().st_mtime, reverse=True)
+    if all_files:
+        print(f"[Warn] No file for {today}, using latest: {all_files[0].name}")
+        return all_files[0]
+    return None
+
+def main(input_file=None, date_str=None):
+    import argparse
+    parser = argparse.ArgumentParser(description="Facebook Ad Library - Detail Scraper")
+    parser.add_argument("--input", "-i", default=None, help="Input list JSON file (overrides date lookup)")
+    parser.add_argument("--date", "-d", default=None, help="Date of list file, e.g. 2026-04-28 (default: today)")
+    parser.add_argument("--max", "-m", type=int, default=0, help="Max ads to scrape (0=all)")
+    args = parser.parse_args()
+
+    if args.input:
+        input_path = Path(args.input)
+    else:
+        input_path = find_list_file(args.date)
+
+    if not input_path or not input_path.exists():
+        print(f"[Error] No list JSON found. Run scrape_list.py first.")
+        print(f"  date={args.date or datetime.now().strftime('%Y-%m-%d')}")
+        return
+
+    print(f"[Input] {input_path}")
+    data = load_json_file(input_path)
+    ads = data.get('ads', [])
+    print(f"[Load] {len(ads)} ads from list file")
+
+    detail_name = f"detail_{input_path.stem}.json"
+    detail_file = input_path.parent / detail_name
+
+    # 跳过已抓过的
+    done_ids = set()
+    if detail_file.exists():
+        try:
+            done = json.load(open(detail_file, 'r', encoding='utf-8'))
+            done_ids = set(done.keys())
+            print(f"[Resume] {len(done_ids)} already scraped")
+        except Exception:
+            pass
+
+    to_scrape = [a for a in ads if a['library_id'] not in done_ids]
+    if args.max > 0:
+        to_scrape = to_scrape[:args.max]
+
+    print(f"[To scrape] {len(to_scrape)} ads")
+    if not to_scrape:
+        print("All ads already scraped!")
+        return
+
+    driver = make_driver(headless=HEADLESS)
+    try:
+        for i, ad in enumerate(to_scrape, 1):
+            lid = ad['library_id']
+            print(f"[Detail] {i}/{len(to_scrape)}: {lid}")
+            try:
+                detail = scrape_ad_detail(driver, lid, wait_sec=DETAIL_WAIT)
+                save_detail_json(detail_file, {lid: detail})
+                print(f"  -> regions={detail.get('ad_disclosure_regions', [])} | "
+                      f"age={detail.get('age_range','')} | "
+                      f"advertiser={detail.get('advertiser_name','')[:40]}")
+            except Exception as e:
+                print(f"  -> Error: {e}")
+                save_detail_json(detail_file, {lid: {"library_id": lid, "error": str(e)}})
+    finally:
+        try:
+            driver.quit()
+        except Exception:
+            pass
+
+    print(f"\n[Saved] {detail_file}")
+    print("Done!")
+
+if __name__ == "__main__":
+    main()

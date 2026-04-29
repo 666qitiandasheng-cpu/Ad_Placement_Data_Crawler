@@ -771,12 +771,11 @@ def scrape_detail_via_cdp(library_id, cdp_url, wait_sec=8):
             # Click the detail button using page.evaluate with proper label
             detail_label = "\u67e5\u770b\u5e7f\u544a\u8be6\u60c5"  # 查看广告详情
             detail_btn_js = (
-                "var btn = null; "
                 "var all = document.querySelectorAll('*'); "
-                "for (var b of all) { "
-                "  if (b.innerText && b.innerText.indexOf('" + detail_label + "') >= 0 && b.offsetParent !== null) { btn = b; break; } "
-                "} "
-                "if (btn) btn.click();"
+                "for (var i = 0; i < all.length; i++) { "
+                "  var b = all[i]; "
+                "  if (b.innerText && b.innerText.indexOf('" + detail_label + "') >= 0 && b.offsetParent !== null) { b.click(); break; } "
+                "}"
             )
             try:
                 page.evaluate(detail_btn_js)
@@ -810,7 +809,8 @@ def scrape_detail_via_cdp(library_id, cdp_url, wait_sec=8):
                 for label in section_labels:
                     click_js = (
                         "var els = document.querySelectorAll('*'); "
-                        "for (var el of els) { "
+                        "for (var i = 0; i < els.length; i++) { "
+                        "  var el = els[i]; "
                         "  if (el.innerText && el.innerText.indexOf('" + label + "') >= 0 && el.offsetParent !== null) { el.click(); break; } "
                         "}"
                     )
@@ -829,8 +829,8 @@ def scrape_detail_via_cdp(library_id, cdp_url, wait_sec=8):
             modal_text = page.evaluate(modal_js)
 
             if modal_text and len(modal_text) > 50:
-                eu_hdr = '\u6b27\u7f9f\u5e7f\u544a\u6295\u653e'   # 欧盟广告投放
-                uk_hdr = '\u82f1\u56fd\u5e7f\u544a\u6295\u653e'  # 英国广告投放
+                eu_hdr = '\u6b27\u76df\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a'   # 欧盟境内广告信息公示
+                uk_hdr = '\u82f1\u56fd\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a'  # 英国境内广告信息公示
 
                 def parse_region(block_text):
                     if not block_text:
@@ -1030,6 +1030,10 @@ def scrape_ad_detail_via_modal(driver, library_id, wait_sec=8):
             print(f"[Modal] No modal dialog found: {library_id}")
             return result
 
+        # FIRST: capture collapsed dialog text for EU/UK header lookup
+        # The EU/UK headers are only visible in the collapsed state
+        collapsed_text = driver.execute_script("return arguments[0].innerText", dialog)
+        
         # Scroll modal to bottom so section headers are in view
         driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", dialog)
         time.sleep(1)
@@ -1092,7 +1096,7 @@ def scrape_ad_detail_via_modal(driver, library_id, wait_sec=8):
 
         # --- Per-region targeting: extract EU/UK data by parsing modal text directly ---
         # After expanding "广告信息公示（按地区）", the modal contains sub-headers like
-        # "欧盟广告投放" / "英国广告投放" with age/gender/reach for each region.
+        # "欧盟境内广告信息公示" / "英国境内广告信息公示" with age/gender/reach for each region.
         # We parse these directly from dialog text - no fragile tab-element lookup needed.
         region_targeting = {}
         try:
@@ -1130,55 +1134,83 @@ def scrape_ad_detail_via_modal(driver, library_id, wait_sec=8):
                     return {"age_range": age, "gender": gender, "reach_count": reach}
                 return None
 
-            # Extract EU and UK blocks using split-based approach (more robust than lookahead regex)
-            # The section headers are: 欧盟广告投放 and 英国广告投放
-            # These appear in dialog_text when the "广告信息公示（按地区）" section is expanded
-            eu_hdr = "欧羟广告投放"   # 欧盟广告投放
-            uk_hdr = "英国广告投放"   # 英国广告投放
-            next_hdrs = ["关于广告赚新", "关于广告主", "关于广告赚方"]  # About sections
-            
+            eu_hdr = "\u6b27\u76df\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a"   # 欧盟境内广告信息公示
+            uk_hdr = "\u82f1\u56fd\u5883\u5185\u5e7f\u544a\u4fe1\u606f\u516c\u793a"  # 英国境内广告信息公示
+            next_hdrs = ["关于广告主和付费方", "关于广告赞助方", "关于广告主"]
+
             def extract_region_block(text, hdr):
                 """Extract text block after header up to next header or end."""
                 idx = text.find(hdr)
                 if idx < 0:
                     return None
                 block = text[idx + len(hdr):]
-                # Find next header
                 for nh in next_hdrs:
                     nidx = block.find(nh)
                     if nidx >= 0:
                         block = block[:nidx]
                         break
-                return block[:800] if block else None  # Cap at 800 chars
-            
+                return block[:800] if block else None
+
+            collapsed_eu_idx = collapsed_text.find(eu_hdr) if collapsed_text else -1
+            collapsed_uk_idx = collapsed_text.find(uk_hdr) if collapsed_text else -1
+
             eu_block = extract_region_block(dialog_text, eu_hdr)
             uk_block = extract_region_block(dialog_text, uk_hdr)
 
             if eu_block:
                 eu_data = parse_region_block(eu_block)
                 if eu_data:
-                    region_targeting["欧羟"] = eu_data
+                    region_targeting["欧盟"] = eu_data
                     print(f"[Modal] EU: {eu_data}")
             if uk_block:
                 uk_data = parse_region_block(uk_block)
                 if uk_data:
                     region_targeting["英国"] = uk_data
                     print(f"[Modal] UK: {uk_data}")
+
+            if not region_targeting and collapsed_text:
+                if collapsed_eu_idx >= 0:
+                    print(f"[Modal] EU header found in collapsed text at {collapsed_eu_idx}")
+                if collapsed_uk_idx >= 0:
+                    print(f"[Modal] UK header found in collapsed text at {collapsed_uk_idx}")
+
             if not region_targeting:
-                print(f"[Modal] No EU/UK data found (dialog text len={len(dialog_text)})")
-                # Check for EU/UK sub-headers in dialog text
-                eu_hdr = "欧羟广告投放"  # 欧盟广告投放
-                uk_hdr = "英国广告投放"  # 英国广告投放
-                eu_idx = dialog_text.find(eu_hdr)
-                uk_idx = dialog_text.find(uk_hdr)
-                cov_idx = dialog_text.find('覆盖')  # 覆盖
-                print(f"[Modal] EU header at={eu_idx}, UK header at={uk_idx}, 覆盖 at={cov_idx}")
-                if eu_idx >= 0:
-                    print(f"[Modal] EU block text (50 chars after header): {repr(dialog_text[eu_idx:eu_idx+50])}")
-                if cov_idx >= 0:
-                    print(f"[Modal] 覆盖 context: {repr(dialog_text[cov_idx:cov_idx+30])}")
-        except Exception as e:
-            print(f"[Modal] Region extraction error: {e}")
+                print(f"[Modal] No EU/UK data found (dialog text len={len(dialog_text)}, collapsed len={len(collapsed_text) if collapsed_text else 0})")
+                if collapsed_eu_idx >= 0:
+                    print(f"[Modal] EU header in COLLAPSED text at={collapsed_eu_idx}, EU section EXISTS")
+                    eu_data_found = False
+                    for test_enc in ['utf-8', 'big5', 'gbk', 'gb2312', 'cp1252']:
+                        try:
+                            eu_hdr_idx = -1
+                            try:
+                                test_text = dialog_text.encode(test_enc, errors='ignore').decode('utf-8', errors='ignore')
+                                eu_hdr_idx = test_text.find('欧盟境内广告信息公示')
+                                if eu_hdr_idx < 0:
+                                    eu_hdr_idx = test_text.find('惖憇葵')  # Big5/GBK fallback for 欧盟...
+                            except Exception:
+                                pass
+                            if eu_hdr_idx >= 0:
+                                block = test_text[eu_hdr_idx:eu_hdr_idx+500]
+                                eu_data = parse_region_block(block)
+                                if eu_data:
+                                    region_targeting["欧盟"] = eu_data
+                                    print(f"[Modal] EU (via {test_enc}): {eu_data}")
+                                    eu_data_found = True
+                                break
+                        except Exception:
+                            pass
+                    if not eu_data_found:
+                        eu_countries = re.findall(
+                            r'德国|法国|意大利|西班牙|波兰|荷兰|比利时|奥地利|瑞士|'
+                            r'葡萄牙|希腊|瑞典|丹麦|爱尔兰|挪威|芬兰|匈牙利|捷克|罗马尼亚|',
+                            dialog_text
+                        )
+                        if eu_countries:
+                            print(f"[Modal] EU countries found: {eu_countries[:5]}")
+                if collapsed_uk_idx >= 0:
+                    print(f"[Modal] UK header in COLLAPSED text at={collapsed_uk_idx}, UK section EXISTS")
+        except Exception:
+            pass
 
         # --- Get full text from ad detail modal (last dialog) ---
         try:

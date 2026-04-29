@@ -36,6 +36,8 @@ import time
 import re
 from pathlib import Path
 from datetime import datetime
+# ====== 代理配置（根据你的梯子端口修改）====================
+PROXY_SERVER = "http://127.0.0.1:7890"   # ← 改成你的代理地址，7890 是 Clash 默认端口
 
 # ====== CONFIG ======
 HEADLESS = False
@@ -117,7 +119,7 @@ def scrape_detail_cdp(library_id, wait_sec=8, cdp_url=None):
     result_data = None
     with sync_playwright() as p:
         browser = p.chromium.connect_over_cdp(cdp_url)
-        page = browser.new_page()
+        page = browser.new_page(proxy={"server": PROXY_SERVER})
         page.goto(f"https://www.facebook.com/ads/library/?id={library_id}", timeout=30000)
         page.wait_for_load_state("networkidle", timeout=15000)
         page.wait_for_timeout(wait_sec * 1000)
@@ -204,6 +206,7 @@ def make_driver(headless=False, max_retries=3):
         opts.add_argument("--no-sandbox")
         opts.add_argument("--disable-dev-shm-usage")
         opts.add_argument("--disable-blink-features=AutomationControlled")
+        opts.add_argument(f"--proxy-server={PROXY_SERVER}")
         opts.add_argument("--disable-gpu")
         opts.add_argument("--window-size=1920,1080")
         opts.add_argument(

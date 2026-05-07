@@ -80,8 +80,8 @@ from selenium.common.exceptions import NoSuchElementException
 
 SCRIPT_DIR = Path(__file__).parent
 OUTPUT_DIR = SCRIPT_DIR / "output"
-CHROME_PATH = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-CHROMEDRIVER_PATH = r"C:\Users\Ivy\.wdm\drivers\chromedriver\win64\147.0.7727.56\chromedriver-win32\chromedriver.exe"
+CHROME_PATH = r"C:\Program Files\Chrome\chrome.exe"
+CHROMEDRIVER_PATH = r"C:\Program Files\Chrome\chromedriver.exe"
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',

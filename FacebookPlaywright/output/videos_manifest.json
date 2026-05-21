@@ -1,0 +1,2549 @@
+{
+  "total": 424,
+  "videos": [
+    {
+      "library_id": "1000007222450755",
+      "filename": "1000007222450755.mp4",
+      "size_mb": 1.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1000007222450755.mp4"
+    },
+    {
+      "library_id": "1017311134808166",
+      "filename": "1017311134808166.mp4",
+      "size_mb": 20.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1017311134808166.mp4"
+    },
+    {
+      "library_id": "1018186767203073",
+      "filename": "1018186767203073.mp4",
+      "size_mb": 8.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1018186767203073.mp4"
+    },
+    {
+      "library_id": "1028057172357118",
+      "filename": "1028057172357118.mp4",
+      "size_mb": 2.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1028057172357118.mp4"
+    },
+    {
+      "library_id": "1054058450198207",
+      "filename": "1054058450198207.mp4",
+      "size_mb": 2.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1054058450198207.mp4"
+    },
+    {
+      "library_id": "1060170932377758",
+      "filename": "1060170932377758.mp4",
+      "size_mb": 0.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1060170932377758.mp4"
+    },
+    {
+      "library_id": "1074635754174963",
+      "filename": "1074635754174963.mp4",
+      "size_mb": 2.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1074635754174963.mp4"
+    },
+    {
+      "library_id": "1081396233745568",
+      "filename": "1081396233745568.mp4",
+      "size_mb": 1.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1081396233745568.mp4"
+    },
+    {
+      "library_id": "1088857999902840",
+      "filename": "1088857999902840.mp4",
+      "size_mb": 75.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1088857999902840.mp4"
+    },
+    {
+      "library_id": "1097630478667736",
+      "filename": "1097630478667736.mp4",
+      "size_mb": 20.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1097630478667736.mp4"
+    },
+    {
+      "library_id": "1103652505220618",
+      "filename": "1103652505220618.mp4",
+      "size_mb": 4.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1103652505220618.mp4"
+    },
+    {
+      "library_id": "1105228378168315",
+      "filename": "1105228378168315.mp4",
+      "size_mb": 3.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1105228378168315.mp4"
+    },
+    {
+      "library_id": "1113707757588811",
+      "filename": "1113707757588811.mp4",
+      "size_mb": 3.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1113707757588811.mp4"
+    },
+    {
+      "library_id": "1115327274053099",
+      "filename": "1115327274053099.mp4",
+      "size_mb": 0.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1115327274053099.mp4"
+    },
+    {
+      "library_id": "1120479140284057",
+      "filename": "1120479140284057.mp4",
+      "size_mb": 844.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1120479140284057.mp4"
+    },
+    {
+      "library_id": "1128594842693190",
+      "filename": "1128594842693190.mp4",
+      "size_mb": 8.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1128594842693190.mp4"
+    },
+    {
+      "library_id": "1135284202068605",
+      "filename": "1135284202068605.mp4",
+      "size_mb": 10.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1135284202068605.mp4"
+    },
+    {
+      "library_id": "1139271934947953",
+      "filename": "1139271934947953.mp4",
+      "size_mb": 13.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1139271934947953.mp4"
+    },
+    {
+      "library_id": "1147170020509058",
+      "filename": "1147170020509058.mp4",
+      "size_mb": 5.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1147170020509058.mp4"
+    },
+    {
+      "library_id": "1156571826195867",
+      "filename": "1156571826195867.mp4",
+      "size_mb": 2.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1156571826195867.mp4"
+    },
+    {
+      "library_id": "1161413422715260",
+      "filename": "1161413422715260.mp4",
+      "size_mb": 12.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1161413422715260.mp4"
+    },
+    {
+      "library_id": "1163410689301387",
+      "filename": "1163410689301387.mp4",
+      "size_mb": 5.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1163410689301387.mp4"
+    },
+    {
+      "library_id": "1163778009061360",
+      "filename": "1163778009061360.mp4",
+      "size_mb": 2.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1163778009061360.mp4"
+    },
+    {
+      "library_id": "1167779058485167",
+      "filename": "1167779058485167.mp4",
+      "size_mb": 2.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1167779058485167.mp4"
+    },
+    {
+      "library_id": "1180244217469814",
+      "filename": "1180244217469814.mp4",
+      "size_mb": 21.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1180244217469814.mp4"
+    },
+    {
+      "library_id": "1184670437019440",
+      "filename": "1184670437019440.mp4",
+      "size_mb": 8.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1184670437019440.mp4"
+    },
+    {
+      "library_id": "1188375656745477",
+      "filename": "1188375656745477.mp4",
+      "size_mb": 2.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1188375656745477.mp4"
+    },
+    {
+      "library_id": "1190081103272595",
+      "filename": "1190081103272595.mp4",
+      "size_mb": 1.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1190081103272595.mp4"
+    },
+    {
+      "library_id": "1196918525963006",
+      "filename": "1196918525963006.mp4",
+      "size_mb": 14.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1196918525963006.mp4"
+    },
+    {
+      "library_id": "1199758375584524",
+      "filename": "1199758375584524.mp4",
+      "size_mb": 2.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1199758375584524.mp4"
+    },
+    {
+      "library_id": "1204099521327775",
+      "filename": "1204099521327775.mp4",
+      "size_mb": 1.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1204099521327775.mp4"
+    },
+    {
+      "library_id": "1205448945107226",
+      "filename": "1205448945107226.mp4",
+      "size_mb": 12.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1205448945107226.mp4"
+    },
+    {
+      "library_id": "1211474760825554",
+      "filename": "1211474760825554.mp4",
+      "size_mb": 13.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1211474760825554.mp4"
+    },
+    {
+      "library_id": "1215893006981574",
+      "filename": "1215893006981574.mp4",
+      "size_mb": 11.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1215893006981574.mp4"
+    },
+    {
+      "library_id": "1221905593391418",
+      "filename": "1221905593391418.mp4",
+      "size_mb": 3.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1221905593391418.mp4"
+    },
+    {
+      "library_id": "1223515033089886",
+      "filename": "1223515033089886.mp4",
+      "size_mb": 8.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1223515033089886.mp4"
+    },
+    {
+      "library_id": "1225120572685872",
+      "filename": "1225120572685872.mp4",
+      "size_mb": 2.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1225120572685872.mp4"
+    },
+    {
+      "library_id": "1226993095978291",
+      "filename": "1226993095978291.mp4",
+      "size_mb": 23.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1226993095978291.mp4"
+    },
+    {
+      "library_id": "1228916671833489",
+      "filename": "1228916671833489.mp4",
+      "size_mb": 2.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1228916671833489.mp4"
+    },
+    {
+      "library_id": "1239455811318834",
+      "filename": "1239455811318834.mp4",
+      "size_mb": 17.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1239455811318834.mp4"
+    },
+    {
+      "library_id": "1239779934993722",
+      "filename": "1239779934993722.mp4",
+      "size_mb": 7.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1239779934993722.mp4"
+    },
+    {
+      "library_id": "1242102094427110",
+      "filename": "1242102094427110.mp4",
+      "size_mb": 8.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1242102094427110.mp4"
+    },
+    {
+      "library_id": "1244952527598201",
+      "filename": "1244952527598201.mp4",
+      "size_mb": 4.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1244952527598201.mp4"
+    },
+    {
+      "library_id": "1246121400508239",
+      "filename": "1246121400508239.mp4",
+      "size_mb": 5.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1246121400508239.mp4"
+    },
+    {
+      "library_id": "1246614450302979",
+      "filename": "1246614450302979.mp4",
+      "size_mb": 11.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1246614450302979.mp4"
+    },
+    {
+      "library_id": "1247051557418105",
+      "filename": "1247051557418105.mp4",
+      "size_mb": 9.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1247051557418105.mp4"
+    },
+    {
+      "library_id": "1248834366644953",
+      "filename": "1248834366644953.mp4",
+      "size_mb": 4.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1248834366644953.mp4"
+    },
+    {
+      "library_id": "1249822650015529",
+      "filename": "1249822650015529.mp4",
+      "size_mb": 13.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1249822650015529.mp4"
+    },
+    {
+      "library_id": "1250019859829000",
+      "filename": "1250019859829000.mp4",
+      "size_mb": 9.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1250019859829000.mp4"
+    },
+    {
+      "library_id": "1250241857239121",
+      "filename": "1250241857239121.mp4",
+      "size_mb": 12.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1250241857239121.mp4"
+    },
+    {
+      "library_id": "1256357913104701",
+      "filename": "1256357913104701.mp4",
+      "size_mb": 1.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1256357913104701.mp4"
+    },
+    {
+      "library_id": "1261888508171229",
+      "filename": "1261888508171229.mp4",
+      "size_mb": 3.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1261888508171229.mp4"
+    },
+    {
+      "library_id": "1262013796093113",
+      "filename": "1262013796093113.mp4",
+      "size_mb": 4.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1262013796093113.mp4"
+    },
+    {
+      "library_id": "1265033239095960",
+      "filename": "1265033239095960.mp4",
+      "size_mb": 10.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1265033239095960.mp4"
+    },
+    {
+      "library_id": "1269328835359404",
+      "filename": "1269328835359404.mp4",
+      "size_mb": 12.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1269328835359404.mp4"
+    },
+    {
+      "library_id": "1270951411060472",
+      "filename": "1270951411060472.mp4",
+      "size_mb": 23.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1270951411060472.mp4"
+    },
+    {
+      "library_id": "1272831828321130",
+      "filename": "1272831828321130.mp4",
+      "size_mb": 8.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1272831828321130.mp4"
+    },
+    {
+      "library_id": "1275140414231012",
+      "filename": "1275140414231012.mp4",
+      "size_mb": 1.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1275140414231012.mp4"
+    },
+    {
+      "library_id": "1277313520543503",
+      "filename": "1277313520543503.mp4",
+      "size_mb": 19.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1277313520543503.mp4"
+    },
+    {
+      "library_id": "1277662527130720",
+      "filename": "1277662527130720.mp4",
+      "size_mb": 3.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1277662527130720.mp4"
+    },
+    {
+      "library_id": "1281378607264710",
+      "filename": "1281378607264710.mp4",
+      "size_mb": 11.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1281378607264710.mp4"
+    },
+    {
+      "library_id": "1282423710645154",
+      "filename": "1282423710645154.mp4",
+      "size_mb": 13.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1282423710645154.mp4"
+    },
+    {
+      "library_id": "1283203283345502",
+      "filename": "1283203283345502.mp4",
+      "size_mb": 1.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1283203283345502.mp4"
+    },
+    {
+      "library_id": "1284681496560011",
+      "filename": "1284681496560011.mp4",
+      "size_mb": 8.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1284681496560011.mp4"
+    },
+    {
+      "library_id": "1284821256843575",
+      "filename": "1284821256843575.mp4",
+      "size_mb": 4.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1284821256843575.mp4"
+    },
+    {
+      "library_id": "1291240176278788",
+      "filename": "1291240176278788.mp4",
+      "size_mb": 9.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1291240176278788.mp4"
+    },
+    {
+      "library_id": "1293069286311425",
+      "filename": "1293069286311425.mp4",
+      "size_mb": 8.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1293069286311425.mp4"
+    },
+    {
+      "library_id": "1293402915988706",
+      "filename": "1293402915988706.mp4",
+      "size_mb": 4.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1293402915988706.mp4"
+    },
+    {
+      "library_id": "1293771759476082",
+      "filename": "1293771759476082.mp4",
+      "size_mb": 6.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1293771759476082.mp4"
+    },
+    {
+      "library_id": "1305318504985516",
+      "filename": "1305318504985516.mp4",
+      "size_mb": 12.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1305318504985516.mp4"
+    },
+    {
+      "library_id": "1316258270351064",
+      "filename": "1316258270351064.mp4",
+      "size_mb": 3.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1316258270351064.mp4"
+    },
+    {
+      "library_id": "1318433276762116",
+      "filename": "1318433276762116.mp4",
+      "size_mb": 4.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1318433276762116.mp4"
+    },
+    {
+      "library_id": "1322275116586665",
+      "filename": "1322275116586665.mp4",
+      "size_mb": 1.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1322275116586665.mp4"
+    },
+    {
+      "library_id": "1332086158723865",
+      "filename": "1332086158723865.mp4",
+      "size_mb": 36.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1332086158723865.mp4"
+    },
+    {
+      "library_id": "1332285138649985",
+      "filename": "1332285138649985.mp4",
+      "size_mb": 8.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1332285138649985.mp4"
+    },
+    {
+      "library_id": "1334395465403300",
+      "filename": "1334395465403300.mp4",
+      "size_mb": 5.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1334395465403300.mp4"
+    },
+    {
+      "library_id": "1345660613680022",
+      "filename": "1345660613680022.mp4",
+      "size_mb": 5.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1345660613680022.mp4"
+    },
+    {
+      "library_id": "1356033269887174",
+      "filename": "1356033269887174.mp4",
+      "size_mb": 2.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1356033269887174.mp4"
+    },
+    {
+      "library_id": "1361209988233302",
+      "filename": "1361209988233302.mp4",
+      "size_mb": 5.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1361209988233302.mp4"
+    },
+    {
+      "library_id": "1375065554444245",
+      "filename": "1375065554444245.mp4",
+      "size_mb": 10.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1375065554444245.mp4"
+    },
+    {
+      "library_id": "1386821309867687",
+      "filename": "1386821309867687.mp4",
+      "size_mb": 3.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1386821309867687.mp4"
+    },
+    {
+      "library_id": "1388008512734192",
+      "filename": "1388008512734192.mp4",
+      "size_mb": 9.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1388008512734192.mp4"
+    },
+    {
+      "library_id": "1392249042240427",
+      "filename": "1392249042240427.mp4",
+      "size_mb": 8.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1392249042240427.mp4"
+    },
+    {
+      "library_id": "1392527922159368",
+      "filename": "1392527922159368.mp4",
+      "size_mb": 1.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1392527922159368.mp4"
+    },
+    {
+      "library_id": "1395188098850156",
+      "filename": "1395188098850156.mp4",
+      "size_mb": 2.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1395188098850156.mp4"
+    },
+    {
+      "library_id": "1398239442103910",
+      "filename": "1398239442103910.mp4",
+      "size_mb": 12.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1398239442103910.mp4"
+    },
+    {
+      "library_id": "1399746178145896",
+      "filename": "1399746178145896.mp4",
+      "size_mb": 2.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1399746178145896.mp4"
+    },
+    {
+      "library_id": "1401892724733159",
+      "filename": "1401892724733159.mp4",
+      "size_mb": 2.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1401892724733159.mp4"
+    },
+    {
+      "library_id": "1405203054081806",
+      "filename": "1405203054081806.mp4",
+      "size_mb": 3.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1405203054081806.mp4"
+    },
+    {
+      "library_id": "1410749743948474",
+      "filename": "1410749743948474.mp4",
+      "size_mb": 3.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1410749743948474.mp4"
+    },
+    {
+      "library_id": "1413162733061139",
+      "filename": "1413162733061139.mp4",
+      "size_mb": 7.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1413162733061139.mp4"
+    },
+    {
+      "library_id": "1414321944053423",
+      "filename": "1414321944053423.mp4",
+      "size_mb": 11.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1414321944053423.mp4"
+    },
+    {
+      "library_id": "1415838159700069",
+      "filename": "1415838159700069.mp4",
+      "size_mb": 2.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1415838159700069.mp4"
+    },
+    {
+      "library_id": "1416130026711917",
+      "filename": "1416130026711917.mp4",
+      "size_mb": 3.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1416130026711917.mp4"
+    },
+    {
+      "library_id": "1422368832908913",
+      "filename": "1422368832908913.mp4",
+      "size_mb": 7.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1422368832908913.mp4"
+    },
+    {
+      "library_id": "1424485078908337",
+      "filename": "1424485078908337.mp4",
+      "size_mb": 18.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1424485078908337.mp4"
+    },
+    {
+      "library_id": "1426003735317641",
+      "filename": "1426003735317641.mp4",
+      "size_mb": 17.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1426003735317641.mp4"
+    },
+    {
+      "library_id": "1431700648527229",
+      "filename": "1431700648527229.mp4",
+      "size_mb": 2.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1431700648527229.mp4"
+    },
+    {
+      "library_id": "1432764204462168",
+      "filename": "1432764204462168.mp4",
+      "size_mb": 3.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1432764204462168.mp4"
+    },
+    {
+      "library_id": "1433534861695622",
+      "filename": "1433534861695622.mp4",
+      "size_mb": 174.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1433534861695622.mp4"
+    },
+    {
+      "library_id": "1434235537915133",
+      "filename": "1434235537915133.mp4",
+      "size_mb": 5.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1434235537915133.mp4"
+    },
+    {
+      "library_id": "1437346581083321",
+      "filename": "1437346581083321.mp4",
+      "size_mb": 14.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1437346581083321.mp4"
+    },
+    {
+      "library_id": "1437882041449581",
+      "filename": "1437882041449581.mp4",
+      "size_mb": 16.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1437882041449581.mp4"
+    },
+    {
+      "library_id": "1439398008198923",
+      "filename": "1439398008198923.mp4",
+      "size_mb": 2.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1439398008198923.mp4"
+    },
+    {
+      "library_id": "1441309834016804",
+      "filename": "1441309834016804.mp4",
+      "size_mb": 3.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1441309834016804.mp4"
+    },
+    {
+      "library_id": "1443205407472198",
+      "filename": "1443205407472198.mp4",
+      "size_mb": 5.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1443205407472198.mp4"
+    },
+    {
+      "library_id": "1449693583288204",
+      "filename": "1449693583288204.mp4",
+      "size_mb": 7.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1449693583288204.mp4"
+    },
+    {
+      "library_id": "1452072626284117",
+      "filename": "1452072626284117.mp4",
+      "size_mb": 3.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1452072626284117.mp4"
+    },
+    {
+      "library_id": "1452584573271758",
+      "filename": "1452584573271758.mp4",
+      "size_mb": 4.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1452584573271758.mp4"
+    },
+    {
+      "library_id": "1453642133165550",
+      "filename": "1453642133165550.mp4",
+      "size_mb": 8.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1453642133165550.mp4"
+    },
+    {
+      "library_id": "1454520873133243",
+      "filename": "1454520873133243.mp4",
+      "size_mb": 13.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1454520873133243.mp4"
+    },
+    {
+      "library_id": "1454529139404600",
+      "filename": "1454529139404600.mp4",
+      "size_mb": 24.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1454529139404600.mp4"
+    },
+    {
+      "library_id": "1456701386187690",
+      "filename": "1456701386187690.mp4",
+      "size_mb": 0.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1456701386187690.mp4"
+    },
+    {
+      "library_id": "1461250021958636",
+      "filename": "1461250021958636.mp4",
+      "size_mb": 8.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1461250021958636.mp4"
+    },
+    {
+      "library_id": "1461968051555113",
+      "filename": "1461968051555113.mp4",
+      "size_mb": 11.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1461968051555113.mp4"
+    },
+    {
+      "library_id": "1462990708190074",
+      "filename": "1462990708190074.mp4",
+      "size_mb": 11.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1462990708190074.mp4"
+    },
+    {
+      "library_id": "1466149278278849",
+      "filename": "1466149278278849.mp4",
+      "size_mb": 2.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1466149278278849.mp4"
+    },
+    {
+      "library_id": "1474301794404247",
+      "filename": "1474301794404247.mp4",
+      "size_mb": 14.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1474301794404247.mp4"
+    },
+    {
+      "library_id": "1476059637578891",
+      "filename": "1476059637578891.mp4",
+      "size_mb": 9.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1476059637578891.mp4"
+    },
+    {
+      "library_id": "1482969743498660",
+      "filename": "1482969743498660.mp4",
+      "size_mb": 6.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1482969743498660.mp4"
+    },
+    {
+      "library_id": "1483318683188220",
+      "filename": "1483318683188220.mp4",
+      "size_mb": 3.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1483318683188220.mp4"
+    },
+    {
+      "library_id": "1483568143205166",
+      "filename": "1483568143205166.mp4",
+      "size_mb": 12.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1483568143205166.mp4"
+    },
+    {
+      "library_id": "1485346126336161",
+      "filename": "1485346126336161.mp4",
+      "size_mb": 13.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1485346126336161.mp4"
+    },
+    {
+      "library_id": "1487489566058010",
+      "filename": "1487489566058010.mp4",
+      "size_mb": 13.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1487489566058010.mp4"
+    },
+    {
+      "library_id": "1488593342618549",
+      "filename": "1488593342618549.mp4",
+      "size_mb": 3.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1488593342618549.mp4"
+    },
+    {
+      "library_id": "1494210524896892",
+      "filename": "1494210524896892.mp4",
+      "size_mb": 39.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1494210524896892.mp4"
+    },
+    {
+      "library_id": "1494349602053703",
+      "filename": "1494349602053703.mp4",
+      "size_mb": 11.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1494349602053703.mp4"
+    },
+    {
+      "library_id": "1497717351753173",
+      "filename": "1497717351753173.mp4",
+      "size_mb": 6.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1497717351753173.mp4"
+    },
+    {
+      "library_id": "1500984851189136",
+      "filename": "1500984851189136.mp4",
+      "size_mb": 15.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1500984851189136.mp4"
+    },
+    {
+      "library_id": "1506771828001272",
+      "filename": "1506771828001272.mp4",
+      "size_mb": 11.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1506771828001272.mp4"
+    },
+    {
+      "library_id": "1509699584047334",
+      "filename": "1509699584047334.mp4",
+      "size_mb": 1.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1509699584047334.mp4"
+    },
+    {
+      "library_id": "1515328556605738",
+      "filename": "1515328556605738.mp4",
+      "size_mb": 9.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1515328556605738.mp4"
+    },
+    {
+      "library_id": "1519029459315068",
+      "filename": "1519029459315068.mp4",
+      "size_mb": 8.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1519029459315068.mp4"
+    },
+    {
+      "library_id": "1528483371584646",
+      "filename": "1528483371584646.mp4",
+      "size_mb": 2.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1528483371584646.mp4"
+    },
+    {
+      "library_id": "1535947904183509",
+      "filename": "1535947904183509.mp4",
+      "size_mb": 10.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1535947904183509.mp4"
+    },
+    {
+      "library_id": "1540128673949496",
+      "filename": "1540128673949496.mp4",
+      "size_mb": 3.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1540128673949496.mp4"
+    },
+    {
+      "library_id": "1544249836678315",
+      "filename": "1544249836678315.mp4",
+      "size_mb": 5.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1544249836678315.mp4"
+    },
+    {
+      "library_id": "1548846847249536",
+      "filename": "1548846847249536.mp4",
+      "size_mb": 1.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1548846847249536.mp4"
+    },
+    {
+      "library_id": "1551012136106007",
+      "filename": "1551012136106007.mp4",
+      "size_mb": 14.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1551012136106007.mp4"
+    },
+    {
+      "library_id": "1555842688838941",
+      "filename": "1555842688838941.mp4",
+      "size_mb": 0.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1555842688838941.mp4"
+    },
+    {
+      "library_id": "1556060951999521",
+      "filename": "1556060951999521.mp4",
+      "size_mb": 15.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1556060951999521.mp4"
+    },
+    {
+      "library_id": "1557940715745454",
+      "filename": "1557940715745454.mp4",
+      "size_mb": 17.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1557940715745454.mp4"
+    },
+    {
+      "library_id": "1567149621099463",
+      "filename": "1567149621099463.mp4",
+      "size_mb": 14.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1567149621099463.mp4"
+    },
+    {
+      "library_id": "1570425697372988",
+      "filename": "1570425697372988.mp4",
+      "size_mb": 1.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1570425697372988.mp4"
+    },
+    {
+      "library_id": "1579047626727104",
+      "filename": "1579047626727104.mp4",
+      "size_mb": 3.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1579047626727104.mp4"
+    },
+    {
+      "library_id": "1584497722609598",
+      "filename": "1584497722609598.mp4",
+      "size_mb": 4.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1584497722609598.mp4"
+    },
+    {
+      "library_id": "1585093279412031",
+      "filename": "1585093279412031.mp4",
+      "size_mb": 3.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1585093279412031.mp4"
+    },
+    {
+      "library_id": "1587506968981895",
+      "filename": "1587506968981895.mp4",
+      "size_mb": 8.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1587506968981895.mp4"
+    },
+    {
+      "library_id": "1590729722069607",
+      "filename": "1590729722069607.mp4",
+      "size_mb": 1.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1590729722069607.mp4"
+    },
+    {
+      "library_id": "1591604195290815",
+      "filename": "1591604195290815.mp4",
+      "size_mb": 1.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1591604195290815.mp4"
+    },
+    {
+      "library_id": "1596903808211060",
+      "filename": "1596903808211060.mp4",
+      "size_mb": 35.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1596903808211060.mp4"
+    },
+    {
+      "library_id": "1597344371436939",
+      "filename": "1597344371436939.mp4",
+      "size_mb": 9.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1597344371436939.mp4"
+    },
+    {
+      "library_id": "1606537070357097",
+      "filename": "1606537070357097.mp4",
+      "size_mb": 4.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1606537070357097.mp4"
+    },
+    {
+      "library_id": "1608690560360741",
+      "filename": "1608690560360741.mp4",
+      "size_mb": 7.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1608690560360741.mp4"
+    },
+    {
+      "library_id": "1611691316815029",
+      "filename": "1611691316815029.mp4",
+      "size_mb": 3.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1611691316815029.mp4"
+    },
+    {
+      "library_id": "1614850542966810",
+      "filename": "1614850542966810.mp4",
+      "size_mb": 2.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1614850542966810.mp4"
+    },
+    {
+      "library_id": "1617603976211880",
+      "filename": "1617603976211880.mp4",
+      "size_mb": 3.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1617603976211880.mp4"
+    },
+    {
+      "library_id": "1618008819158992",
+      "filename": "1618008819158992.mp4",
+      "size_mb": 6.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1618008819158992.mp4"
+    },
+    {
+      "library_id": "1619425309274881",
+      "filename": "1619425309274881.mp4",
+      "size_mb": 7.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1619425309274881.mp4"
+    },
+    {
+      "library_id": "1619892112365960",
+      "filename": "1619892112365960.mp4",
+      "size_mb": 12.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1619892112365960.mp4"
+    },
+    {
+      "library_id": "1621838838871344",
+      "filename": "1621838838871344.mp4",
+      "size_mb": 2.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1621838838871344.mp4"
+    },
+    {
+      "library_id": "1624106989010094",
+      "filename": "1624106989010094.mp4",
+      "size_mb": 2.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1624106989010094.mp4"
+    },
+    {
+      "library_id": "1635854174391634",
+      "filename": "1635854174391634.mp4",
+      "size_mb": 14.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1635854174391634.mp4"
+    },
+    {
+      "library_id": "1640560220458916",
+      "filename": "1640560220458916.mp4",
+      "size_mb": 16.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1640560220458916.mp4"
+    },
+    {
+      "library_id": "1647160556437298",
+      "filename": "1647160556437298.mp4",
+      "size_mb": 3.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1647160556437298.mp4"
+    },
+    {
+      "library_id": "1652529009229464",
+      "filename": "1652529009229464.mp4",
+      "size_mb": 12.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1652529009229464.mp4"
+    },
+    {
+      "library_id": "1653077962384380",
+      "filename": "1653077962384380.mp4",
+      "size_mb": 9.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1653077962384380.mp4"
+    },
+    {
+      "library_id": "1657430379045806",
+      "filename": "1657430379045806.mp4",
+      "size_mb": 8.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1657430379045806.mp4"
+    },
+    {
+      "library_id": "1658051151852497",
+      "filename": "1658051151852497.mp4",
+      "size_mb": 9.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1658051151852497.mp4"
+    },
+    {
+      "library_id": "1660107942026070",
+      "filename": "1660107942026070.mp4",
+      "size_mb": 5.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1660107942026070.mp4"
+    },
+    {
+      "library_id": "1660261364994950",
+      "filename": "1660261364994950.mp4",
+      "size_mb": 11.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1660261364994950.mp4"
+    },
+    {
+      "library_id": "1661929245170074",
+      "filename": "1661929245170074.mp4",
+      "size_mb": 1.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1661929245170074.mp4"
+    },
+    {
+      "library_id": "1665520467816432",
+      "filename": "1665520467816432.mp4",
+      "size_mb": 9.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1665520467816432.mp4"
+    },
+    {
+      "library_id": "1665531064581257",
+      "filename": "1665531064581257.mp4",
+      "size_mb": 2.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1665531064581257.mp4"
+    },
+    {
+      "library_id": "1679952530091630",
+      "filename": "1679952530091630.mp4",
+      "size_mb": 17.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1679952530091630.mp4"
+    },
+    {
+      "library_id": "1681229973229088",
+      "filename": "1681229973229088.mp4",
+      "size_mb": 7.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1681229973229088.mp4"
+    },
+    {
+      "library_id": "1681666153023570",
+      "filename": "1681666153023570.mp4",
+      "size_mb": 0.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1681666153023570.mp4"
+    },
+    {
+      "library_id": "1695764765198950",
+      "filename": "1695764765198950.mp4",
+      "size_mb": 1.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1695764765198950.mp4"
+    },
+    {
+      "library_id": "1705978880097871",
+      "filename": "1705978880097871.mp4",
+      "size_mb": 1.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1705978880097871.mp4"
+    },
+    {
+      "library_id": "1709359466408983",
+      "filename": "1709359466408983.mp4",
+      "size_mb": 1.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1709359466408983.mp4"
+    },
+    {
+      "library_id": "1709630946866588",
+      "filename": "1709630946866588.mp4",
+      "size_mb": 14.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1709630946866588.mp4"
+    },
+    {
+      "library_id": "1730796214955039",
+      "filename": "1730796214955039.mp4",
+      "size_mb": 11.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1730796214955039.mp4"
+    },
+    {
+      "library_id": "1761941011878626",
+      "filename": "1761941011878626.mp4",
+      "size_mb": 6.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1761941011878626.mp4"
+    },
+    {
+      "library_id": "1763179497615326",
+      "filename": "1763179497615326.mp4",
+      "size_mb": 2.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1763179497615326.mp4"
+    },
+    {
+      "library_id": "1764915430768508",
+      "filename": "1764915430768508.mp4",
+      "size_mb": 2.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1764915430768508.mp4"
+    },
+    {
+      "library_id": "1792898868330142",
+      "filename": "1792898868330142.mp4",
+      "size_mb": 9.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1792898868330142.mp4"
+    },
+    {
+      "library_id": "1792951821673898",
+      "filename": "1792951821673898.mp4",
+      "size_mb": 1.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1792951821673898.mp4"
+    },
+    {
+      "library_id": "1801652300760532",
+      "filename": "1801652300760532.mp4",
+      "size_mb": 9.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1801652300760532.mp4"
+    },
+    {
+      "library_id": "1821852128774613",
+      "filename": "1821852128774613.mp4",
+      "size_mb": 2.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1821852128774613.mp4"
+    },
+    {
+      "library_id": "1833742643893968",
+      "filename": "1833742643893968.mp4",
+      "size_mb": 4.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1833742643893968.mp4"
+    },
+    {
+      "library_id": "1834243373952801",
+      "filename": "1834243373952801.mp4",
+      "size_mb": 4.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1834243373952801.mp4"
+    },
+    {
+      "library_id": "1842662793264558",
+      "filename": "1842662793264558.mp4",
+      "size_mb": 1.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1842662793264558.mp4"
+    },
+    {
+      "library_id": "1843893112965864",
+      "filename": "1843893112965864.mp4",
+      "size_mb": 10.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1843893112965864.mp4"
+    },
+    {
+      "library_id": "1852087325748101",
+      "filename": "1852087325748101.mp4",
+      "size_mb": 13.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1852087325748101.mp4"
+    },
+    {
+      "library_id": "1853939048550230",
+      "filename": "1853939048550230.mp4",
+      "size_mb": 3.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1853939048550230.mp4"
+    },
+    {
+      "library_id": "1854420805255118",
+      "filename": "1854420805255118.mp4",
+      "size_mb": 7.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1854420805255118.mp4"
+    },
+    {
+      "library_id": "1854699545481147",
+      "filename": "1854699545481147.mp4",
+      "size_mb": 2.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1854699545481147.mp4"
+    },
+    {
+      "library_id": "1868380037054500",
+      "filename": "1868380037054500.mp4",
+      "size_mb": 2.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1868380037054500.mp4"
+    },
+    {
+      "library_id": "1886588911987564",
+      "filename": "1886588911987564.mp4",
+      "size_mb": 3.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1886588911987564.mp4"
+    },
+    {
+      "library_id": "1890912155148037",
+      "filename": "1890912155148037.mp4",
+      "size_mb": 8.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1890912155148037.mp4"
+    },
+    {
+      "library_id": "1912314509557846",
+      "filename": "1912314509557846.mp4",
+      "size_mb": 5.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1912314509557846.mp4"
+    },
+    {
+      "library_id": "1920326892011141",
+      "filename": "1920326892011141.mp4",
+      "size_mb": 11.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1920326892011141.mp4"
+    },
+    {
+      "library_id": "1920707911993332",
+      "filename": "1920707911993332.mp4",
+      "size_mb": 1.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1920707911993332.mp4"
+    },
+    {
+      "library_id": "1922551405017257",
+      "filename": "1922551405017257.mp4",
+      "size_mb": 3.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1922551405017257.mp4"
+    },
+    {
+      "library_id": "1924382471501671",
+      "filename": "1924382471501671.mp4",
+      "size_mb": 12.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1924382471501671.mp4"
+    },
+    {
+      "library_id": "1925922082143230",
+      "filename": "1925922082143230.mp4",
+      "size_mb": 2.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1925922082143230.mp4"
+    },
+    {
+      "library_id": "1929264971161129",
+      "filename": "1929264971161129.mp4",
+      "size_mb": 2.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1929264971161129.mp4"
+    },
+    {
+      "library_id": "1933165287332154",
+      "filename": "1933165287332154.mp4",
+      "size_mb": 2.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1933165287332154.mp4"
+    },
+    {
+      "library_id": "1934285217179144",
+      "filename": "1934285217179144.mp4",
+      "size_mb": 174.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1934285217179144.mp4"
+    },
+    {
+      "library_id": "1945615789607554",
+      "filename": "1945615789607554.mp4",
+      "size_mb": 1.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1945615789607554.mp4"
+    },
+    {
+      "library_id": "1976117536327145",
+      "filename": "1976117536327145.mp4",
+      "size_mb": 18.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1976117536327145.mp4"
+    },
+    {
+      "library_id": "1980383479540100",
+      "filename": "1980383479540100.mp4",
+      "size_mb": 1.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1980383479540100.mp4"
+    },
+    {
+      "library_id": "1995499591403943",
+      "filename": "1995499591403943.mp4",
+      "size_mb": 8.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1995499591403943.mp4"
+    },
+    {
+      "library_id": "1997272467852466",
+      "filename": "1997272467852466.mp4",
+      "size_mb": 1.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1997272467852466.mp4"
+    },
+    {
+      "library_id": "1998718754042385",
+      "filename": "1998718754042385.mp4",
+      "size_mb": 0.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\1998718754042385.mp4"
+    },
+    {
+      "library_id": "2003003103966552",
+      "filename": "2003003103966552.mp4",
+      "size_mb": 11.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2003003103966552.mp4"
+    },
+    {
+      "library_id": "2003312233646592",
+      "filename": "2003312233646592.mp4",
+      "size_mb": 11.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2003312233646592.mp4"
+    },
+    {
+      "library_id": "2003426907189283",
+      "filename": "2003426907189283.mp4",
+      "size_mb": 3.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2003426907189283.mp4"
+    },
+    {
+      "library_id": "2008912950003072",
+      "filename": "2008912950003072.mp4",
+      "size_mb": 9.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2008912950003072.mp4"
+    },
+    {
+      "library_id": "2016036282311295",
+      "filename": "2016036282311295.mp4",
+      "size_mb": 8.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2016036282311295.mp4"
+    },
+    {
+      "library_id": "2016110698942160",
+      "filename": "2016110698942160.mp4",
+      "size_mb": 4.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2016110698942160.mp4"
+    },
+    {
+      "library_id": "2024367655091827",
+      "filename": "2024367655091827.mp4",
+      "size_mb": 22.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2024367655091827.mp4"
+    },
+    {
+      "library_id": "2031686437783182",
+      "filename": "2031686437783182.mp4",
+      "size_mb": 2.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2031686437783182.mp4"
+    },
+    {
+      "library_id": "2043002263289138",
+      "filename": "2043002263289138.mp4",
+      "size_mb": 12.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2043002263289138.mp4"
+    },
+    {
+      "library_id": "2064551641141296",
+      "filename": "2064551641141296.mp4",
+      "size_mb": 12.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2064551641141296.mp4"
+    },
+    {
+      "library_id": "2073371323206573",
+      "filename": "2073371323206573.mp4",
+      "size_mb": 8.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2073371323206573.mp4"
+    },
+    {
+      "library_id": "2084903245644568",
+      "filename": "2084903245644568.mp4",
+      "size_mb": 11.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2084903245644568.mp4"
+    },
+    {
+      "library_id": "2091566008260592",
+      "filename": "2091566008260592.mp4",
+      "size_mb": 1.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2091566008260592.mp4"
+    },
+    {
+      "library_id": "2096076037922214",
+      "filename": "2096076037922214.mp4",
+      "size_mb": 12.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2096076037922214.mp4"
+    },
+    {
+      "library_id": "2101084870436772",
+      "filename": "2101084870436772.mp4",
+      "size_mb": 15.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2101084870436772.mp4"
+    },
+    {
+      "library_id": "2101172894064328",
+      "filename": "2101172894064328.mp4",
+      "size_mb": 4.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2101172894064328.mp4"
+    },
+    {
+      "library_id": "2103240230499866",
+      "filename": "2103240230499866.mp4",
+      "size_mb": 3.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2103240230499866.mp4"
+    },
+    {
+      "library_id": "2103515887177566",
+      "filename": "2103515887177566.mp4",
+      "size_mb": 8.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2103515887177566.mp4"
+    },
+    {
+      "library_id": "2117433235408969",
+      "filename": "2117433235408969.mp4",
+      "size_mb": 20.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2117433235408969.mp4"
+    },
+    {
+      "library_id": "2128712404593522",
+      "filename": "2128712404593522.mp4",
+      "size_mb": 4.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2128712404593522.mp4"
+    },
+    {
+      "library_id": "2154587118645217",
+      "filename": "2154587118645217.mp4",
+      "size_mb": 8.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2154587118645217.mp4"
+    },
+    {
+      "library_id": "2201130174036001",
+      "filename": "2201130174036001.mp4",
+      "size_mb": 24.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2201130174036001.mp4"
+    },
+    {
+      "library_id": "2222662761802737",
+      "filename": "2222662761802737.mp4",
+      "size_mb": 13.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2222662761802737.mp4"
+    },
+    {
+      "library_id": "2259556381066943",
+      "filename": "2259556381066943.mp4",
+      "size_mb": 2.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2259556381066943.mp4"
+    },
+    {
+      "library_id": "2259938904490925",
+      "filename": "2259938904490925.mp4",
+      "size_mb": 1.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2259938904490925.mp4"
+    },
+    {
+      "library_id": "2297675947308923",
+      "filename": "2297675947308923.mp4",
+      "size_mb": 8.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2297675947308923.mp4"
+    },
+    {
+      "library_id": "2303714730152889",
+      "filename": "2303714730152889.mp4",
+      "size_mb": 39.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2303714730152889.mp4"
+    },
+    {
+      "library_id": "2319962258428863",
+      "filename": "2319962258428863.mp4",
+      "size_mb": 12.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2319962258428863.mp4"
+    },
+    {
+      "library_id": "2321590771638566",
+      "filename": "2321590771638566.mp4",
+      "size_mb": 2.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2321590771638566.mp4"
+    },
+    {
+      "library_id": "2336773603385196",
+      "filename": "2336773603385196.mp4",
+      "size_mb": 2.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2336773603385196.mp4"
+    },
+    {
+      "library_id": "2343427359413230",
+      "filename": "2343427359413230.mp4",
+      "size_mb": 9.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2343427359413230.mp4"
+    },
+    {
+      "library_id": "2380897112336568",
+      "filename": "2380897112336568.mp4",
+      "size_mb": 21.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2380897112336568.mp4"
+    },
+    {
+      "library_id": "2389927888189146",
+      "filename": "2389927888189146.mp4",
+      "size_mb": 1.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2389927888189146.mp4"
+    },
+    {
+      "library_id": "2395462587541315",
+      "filename": "2395462587541315.mp4",
+      "size_mb": 4.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2395462587541315.mp4"
+    },
+    {
+      "library_id": "2409017379610146",
+      "filename": "2409017379610146.mp4",
+      "size_mb": 3.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2409017379610146.mp4"
+    },
+    {
+      "library_id": "2418598001986165",
+      "filename": "2418598001986165.mp4",
+      "size_mb": 2.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2418598001986165.mp4"
+    },
+    {
+      "library_id": "2427035461092888",
+      "filename": "2427035461092888.mp4",
+      "size_mb": 3.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2427035461092888.mp4"
+    },
+    {
+      "library_id": "2451850488340819",
+      "filename": "2451850488340819.mp4",
+      "size_mb": 7.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2451850488340819.mp4"
+    },
+    {
+      "library_id": "2486214018416364",
+      "filename": "2486214018416364.mp4",
+      "size_mb": 2.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2486214018416364.mp4"
+    },
+    {
+      "library_id": "2495420814223449",
+      "filename": "2495420814223449.mp4",
+      "size_mb": 14.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2495420814223449.mp4"
+    },
+    {
+      "library_id": "2500072190423114",
+      "filename": "2500072190423114.mp4",
+      "size_mb": 3.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2500072190423114.mp4"
+    },
+    {
+      "library_id": "2513935659026263",
+      "filename": "2513935659026263.mp4",
+      "size_mb": 8.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2513935659026263.mp4"
+    },
+    {
+      "library_id": "25212000328410905",
+      "filename": "25212000328410905.mp4",
+      "size_mb": 9.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\25212000328410905.mp4"
+    },
+    {
+      "library_id": "2529322447432634",
+      "filename": "2529322447432634.mp4",
+      "size_mb": 2.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2529322447432634.mp4"
+    },
+    {
+      "library_id": "2535771920149611",
+      "filename": "2535771920149611.mp4",
+      "size_mb": 11.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2535771920149611.mp4"
+    },
+    {
+      "library_id": "2559065274490219",
+      "filename": "2559065274490219.mp4",
+      "size_mb": 5.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2559065274490219.mp4"
+    },
+    {
+      "library_id": "25615297744816703",
+      "filename": "25615297744816703.mp4",
+      "size_mb": 3.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\25615297744816703.mp4"
+    },
+    {
+      "library_id": "25763115839960996",
+      "filename": "25763115839960996.mp4",
+      "size_mb": 7.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\25763115839960996.mp4"
+    },
+    {
+      "library_id": "25941937958839078",
+      "filename": "25941937958839078.mp4",
+      "size_mb": 12.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\25941937958839078.mp4"
+    },
+    {
+      "library_id": "26227210146906956",
+      "filename": "26227210146906956.mp4",
+      "size_mb": 12.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\26227210146906956.mp4"
+    },
+    {
+      "library_id": "26283181421383499",
+      "filename": "26283181421383499.mp4",
+      "size_mb": 3.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\26283181421383499.mp4"
+    },
+    {
+      "library_id": "26412426801715352",
+      "filename": "26412426801715352.mp4",
+      "size_mb": 13.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\26412426801715352.mp4"
+    },
+    {
+      "library_id": "26493457486946133",
+      "filename": "26493457486946133.mp4",
+      "size_mb": 11.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\26493457486946133.mp4"
+    },
+    {
+      "library_id": "2666877873683836",
+      "filename": "2666877873683836.mp4",
+      "size_mb": 8.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2666877873683836.mp4"
+    },
+    {
+      "library_id": "2667377286961539",
+      "filename": "2667377286961539.mp4",
+      "size_mb": 13.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2667377286961539.mp4"
+    },
+    {
+      "library_id": "26801463089442218",
+      "filename": "26801463089442218.mp4",
+      "size_mb": 2.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\26801463089442218.mp4"
+    },
+    {
+      "library_id": "2683747088625625",
+      "filename": "2683747088625625.mp4",
+      "size_mb": 2.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2683747088625625.mp4"
+    },
+    {
+      "library_id": "27039462939075849",
+      "filename": "27039462939075849.mp4",
+      "size_mb": 10.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\27039462939075849.mp4"
+    },
+    {
+      "library_id": "2780637192275577",
+      "filename": "2780637192275577.mp4",
+      "size_mb": 13.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2780637192275577.mp4"
+    },
+    {
+      "library_id": "2812630725752972",
+      "filename": "2812630725752972.mp4",
+      "size_mb": 10.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2812630725752972.mp4"
+    },
+    {
+      "library_id": "2836306266568119",
+      "filename": "2836306266568119.mp4",
+      "size_mb": 4.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2836306266568119.mp4"
+    },
+    {
+      "library_id": "2987591704784955",
+      "filename": "2987591704784955.mp4",
+      "size_mb": 4.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\2987591704784955.mp4"
+    },
+    {
+      "library_id": "3049204345264260",
+      "filename": "3049204345264260.mp4",
+      "size_mb": 9.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3049204345264260.mp4"
+    },
+    {
+      "library_id": "3107334756323825",
+      "filename": "3107334756323825.mp4",
+      "size_mb": 1.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3107334756323825.mp4"
+    },
+    {
+      "library_id": "3138161549680937",
+      "filename": "3138161549680937.mp4",
+      "size_mb": 4.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3138161549680937.mp4"
+    },
+    {
+      "library_id": "3165564753600256",
+      "filename": "3165564753600256.mp4",
+      "size_mb": 1.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3165564753600256.mp4"
+    },
+    {
+      "library_id": "3212034185635452",
+      "filename": "3212034185635452.mp4",
+      "size_mb": 2.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3212034185635452.mp4"
+    },
+    {
+      "library_id": "3294912830680062",
+      "filename": "3294912830680062.mp4",
+      "size_mb": 9.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3294912830680062.mp4"
+    },
+    {
+      "library_id": "3335954626577905",
+      "filename": "3335954626577905.mp4",
+      "size_mb": 2.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3335954626577905.mp4"
+    },
+    {
+      "library_id": "33479751648335671",
+      "filename": "33479751648335671.mp4",
+      "size_mb": 3.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\33479751648335671.mp4"
+    },
+    {
+      "library_id": "3375620089255706",
+      "filename": "3375620089255706.mp4",
+      "size_mb": 20.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3375620089255706.mp4"
+    },
+    {
+      "library_id": "3472859893023254",
+      "filename": "3472859893023254.mp4",
+      "size_mb": 9.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3472859893023254.mp4"
+    },
+    {
+      "library_id": "3552340194903820",
+      "filename": "3552340194903820.mp4",
+      "size_mb": 4.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3552340194903820.mp4"
+    },
+    {
+      "library_id": "3561515744003437",
+      "filename": "3561515744003437.mp4",
+      "size_mb": 11.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3561515744003437.mp4"
+    },
+    {
+      "library_id": "3636482699824131",
+      "filename": "3636482699824131.mp4",
+      "size_mb": 3.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3636482699824131.mp4"
+    },
+    {
+      "library_id": "3734344256869393",
+      "filename": "3734344256869393.mp4",
+      "size_mb": 1.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3734344256869393.mp4"
+    },
+    {
+      "library_id": "3827884934010911",
+      "filename": "3827884934010911.mp4",
+      "size_mb": 13.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3827884934010911.mp4"
+    },
+    {
+      "library_id": "3863228417142057",
+      "filename": "3863228417142057.mp4",
+      "size_mb": 4.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3863228417142057.mp4"
+    },
+    {
+      "library_id": "3879894458807252",
+      "filename": "3879894458807252.mp4",
+      "size_mb": 15.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3879894458807252.mp4"
+    },
+    {
+      "library_id": "3889091661392747",
+      "filename": "3889091661392747.mp4",
+      "size_mb": 3.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3889091661392747.mp4"
+    },
+    {
+      "library_id": "3924957551053298",
+      "filename": "3924957551053298.mp4",
+      "size_mb": 1.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3924957551053298.mp4"
+    },
+    {
+      "library_id": "3964909623725805",
+      "filename": "3964909623725805.mp4",
+      "size_mb": 2.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\3964909623725805.mp4"
+    },
+    {
+      "library_id": "4159132447682909",
+      "filename": "4159132447682909.mp4",
+      "size_mb": 13.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\4159132447682909.mp4"
+    },
+    {
+      "library_id": "4194578364147079",
+      "filename": "4194578364147079.mp4",
+      "size_mb": 5.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\4194578364147079.mp4"
+    },
+    {
+      "library_id": "4209691016008541",
+      "filename": "4209691016008541.mp4",
+      "size_mb": 12.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\4209691016008541.mp4"
+    },
+    {
+      "library_id": "4229151574006219",
+      "filename": "4229151574006219.mp4",
+      "size_mb": 8.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\4229151574006219.mp4"
+    },
+    {
+      "library_id": "4282234745322791",
+      "filename": "4282234745322791.mp4",
+      "size_mb": 8.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\4282234745322791.mp4"
+    },
+    {
+      "library_id": "4329271604005457",
+      "filename": "4329271604005457.mp4",
+      "size_mb": 20.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\4329271604005457.mp4"
+    },
+    {
+      "library_id": "4339489019710930",
+      "filename": "4339489019710930.mp4",
+      "size_mb": 3.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\4339489019710930.mp4"
+    },
+    {
+      "library_id": "4354051308156151",
+      "filename": "4354051308156151.mp4",
+      "size_mb": 2.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\4354051308156151.mp4"
+    },
+    {
+      "library_id": "4366631033616237",
+      "filename": "4366631033616237.mp4",
+      "size_mb": 2.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\4366631033616237.mp4"
+    },
+    {
+      "library_id": "4386169708320774",
+      "filename": "4386169708320774.mp4",
+      "size_mb": 10.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\4386169708320774.mp4"
+    },
+    {
+      "library_id": "4407178669598660",
+      "filename": "4407178669598660.mp4",
+      "size_mb": 3.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\4407178669598660.mp4"
+    },
+    {
+      "library_id": "4501560900120198",
+      "filename": "4501560900120198.mp4",
+      "size_mb": 8.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\4501560900120198.mp4"
+    },
+    {
+      "library_id": "4538148289752342",
+      "filename": "4538148289752342.mp4",
+      "size_mb": 9.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\4538148289752342.mp4"
+    },
+    {
+      "library_id": "469033382533854",
+      "filename": "469033382533854.mp4",
+      "size_mb": 1.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\469033382533854.mp4"
+    },
+    {
+      "library_id": "469515435925042",
+      "filename": "469515435925042.mp4",
+      "size_mb": 2.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\469515435925042.mp4"
+    },
+    {
+      "library_id": "471718925790089",
+      "filename": "471718925790089.mp4",
+      "size_mb": 3.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\471718925790089.mp4"
+    },
+    {
+      "library_id": "471758955554479",
+      "filename": "471758955554479.mp4",
+      "size_mb": 7.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\471758955554479.mp4"
+    },
+    {
+      "library_id": "490047023575092",
+      "filename": "490047023575092.mp4",
+      "size_mb": 12.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\490047023575092.mp4"
+    },
+    {
+      "library_id": "521349747070379",
+      "filename": "521349747070379.mp4",
+      "size_mb": 3.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\521349747070379.mp4"
+    },
+    {
+      "library_id": "540823728373736",
+      "filename": "540823728373736.mp4",
+      "size_mb": 4.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\540823728373736.mp4"
+    },
+    {
+      "library_id": "550749148032040",
+      "filename": "550749148032040.mp4",
+      "size_mb": 2.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\550749148032040.mp4"
+    },
+    {
+      "library_id": "560899130293868",
+      "filename": "560899130293868.mp4",
+      "size_mb": 3.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\560899130293868.mp4"
+    },
+    {
+      "library_id": "617140057998258",
+      "filename": "617140057998258.mp4",
+      "size_mb": 25.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\617140057998258.mp4"
+    },
+    {
+      "library_id": "632179009283557",
+      "filename": "632179009283557.mp4",
+      "size_mb": 10.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\632179009283557.mp4"
+    },
+    {
+      "library_id": "676100978881929",
+      "filename": "676100978881929.mp4",
+      "size_mb": 1.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\676100978881929.mp4"
+    },
+    {
+      "library_id": "676148995451341",
+      "filename": "676148995451341.mp4",
+      "size_mb": 5.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\676148995451341.mp4"
+    },
+    {
+      "library_id": "687179361008595",
+      "filename": "687179361008595.mp4",
+      "size_mb": 3.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\687179361008595.mp4"
+    },
+    {
+      "library_id": "716710604524778",
+      "filename": "716710604524778.mp4",
+      "size_mb": 1.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\716710604524778.mp4"
+    },
+    {
+      "library_id": "717935240911101",
+      "filename": "717935240911101.mp4",
+      "size_mb": 1.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\717935240911101.mp4"
+    },
+    {
+      "library_id": "719463974547998",
+      "filename": "719463974547998.mp4",
+      "size_mb": 1.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\719463974547998.mp4"
+    },
+    {
+      "library_id": "726616773543672",
+      "filename": "726616773543672.mp4",
+      "size_mb": 14.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\726616773543672.mp4"
+    },
+    {
+      "library_id": "735556589521924",
+      "filename": "735556589521924.mp4",
+      "size_mb": 4.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\735556589521924.mp4"
+    },
+    {
+      "library_id": "736701019051595",
+      "filename": "736701019051595.mp4",
+      "size_mb": 7.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\736701019051595.mp4"
+    },
+    {
+      "library_id": "738150852322126",
+      "filename": "738150852322126.mp4",
+      "size_mb": 4.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\738150852322126.mp4"
+    },
+    {
+      "library_id": "754667057683002",
+      "filename": "754667057683002.mp4",
+      "size_mb": 2.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\754667057683002.mp4"
+    },
+    {
+      "library_id": "754762600281511",
+      "filename": "754762600281511.mp4",
+      "size_mb": 4.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\754762600281511.mp4"
+    },
+    {
+      "library_id": "768744682189202",
+      "filename": "768744682189202.mp4",
+      "size_mb": 14.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\768744682189202.mp4"
+    },
+    {
+      "library_id": "775330631919041",
+      "filename": "775330631919041.mp4",
+      "size_mb": 2.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\775330631919041.mp4"
+    },
+    {
+      "library_id": "778759495284855",
+      "filename": "778759495284855.mp4",
+      "size_mb": 12.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\778759495284855.mp4"
+    },
+    {
+      "library_id": "778842348218953",
+      "filename": "778842348218953.mp4",
+      "size_mb": 11.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\778842348218953.mp4"
+    },
+    {
+      "library_id": "782833704421849",
+      "filename": "782833704421849.mp4",
+      "size_mb": 12.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\782833704421849.mp4"
+    },
+    {
+      "library_id": "789743834181885",
+      "filename": "789743834181885.mp4",
+      "size_mb": 14.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\789743834181885.mp4"
+    },
+    {
+      "library_id": "794333136876667",
+      "filename": "794333136876667.mp4",
+      "size_mb": 5.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\794333136876667.mp4"
+    },
+    {
+      "library_id": "794743686510698",
+      "filename": "794743686510698.mp4",
+      "size_mb": 1.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\794743686510698.mp4"
+    },
+    {
+      "library_id": "803023082610179",
+      "filename": "803023082610179.mp4",
+      "size_mb": 8.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\803023082610179.mp4"
+    },
+    {
+      "library_id": "804053529378293",
+      "filename": "804053529378293.mp4",
+      "size_mb": 12.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\804053529378293.mp4"
+    },
+    {
+      "library_id": "809444311517919",
+      "filename": "809444311517919.mp4",
+      "size_mb": 2.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\809444311517919.mp4"
+    },
+    {
+      "library_id": "821621977044110",
+      "filename": "821621977044110.mp4",
+      "size_mb": 3.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\821621977044110.mp4"
+    },
+    {
+      "library_id": "823139307075740",
+      "filename": "823139307075740.mp4",
+      "size_mb": 8.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\823139307075740.mp4"
+    },
+    {
+      "library_id": "826328047152904",
+      "filename": "826328047152904.mp4",
+      "size_mb": 6.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\826328047152904.mp4"
+    },
+    {
+      "library_id": "846589535156025",
+      "filename": "846589535156025.mp4",
+      "size_mb": 2.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\846589535156025.mp4"
+    },
+    {
+      "library_id": "848431681599826",
+      "filename": "848431681599826.mp4",
+      "size_mb": 13.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\848431681599826.mp4"
+    },
+    {
+      "library_id": "849003754261325",
+      "filename": "849003754261325.mp4",
+      "size_mb": 20.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\849003754261325.mp4"
+    },
+    {
+      "library_id": "853224820837771",
+      "filename": "853224820837771.mp4",
+      "size_mb": 3.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\853224820837771.mp4"
+    },
+    {
+      "library_id": "859051070275314",
+      "filename": "859051070275314.mp4",
+      "size_mb": 3.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\859051070275314.mp4"
+    },
+    {
+      "library_id": "866192795962636",
+      "filename": "866192795962636.mp4",
+      "size_mb": 18.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\866192795962636.mp4"
+    },
+    {
+      "library_id": "873596762395445",
+      "filename": "873596762395445.mp4",
+      "size_mb": 40.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\873596762395445.mp4"
+    },
+    {
+      "library_id": "875904951699980",
+      "filename": "875904951699980.mp4",
+      "size_mb": 13.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\875904951699980.mp4"
+    },
+    {
+      "library_id": "879205484927939",
+      "filename": "879205484927939.mp4",
+      "size_mb": 8.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\879205484927939.mp4"
+    },
+    {
+      "library_id": "880489250595889",
+      "filename": "880489250595889.mp4",
+      "size_mb": 9.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\880489250595889.mp4"
+    },
+    {
+      "library_id": "890827137311704",
+      "filename": "890827137311704.mp4",
+      "size_mb": 7.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\890827137311704.mp4"
+    },
+    {
+      "library_id": "893382687077306",
+      "filename": "893382687077306.mp4",
+      "size_mb": 10.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\893382687077306.mp4"
+    },
+    {
+      "library_id": "893735256935252",
+      "filename": "893735256935252.mp4",
+      "size_mb": 19.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\893735256935252.mp4"
+    },
+    {
+      "library_id": "895057989810970",
+      "filename": "895057989810970.mp4",
+      "size_mb": 12.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\895057989810970.mp4"
+    },
+    {
+      "library_id": "895059393472755",
+      "filename": "895059393472755.mp4",
+      "size_mb": 2.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\895059393472755.mp4"
+    },
+    {
+      "library_id": "895457883425209",
+      "filename": "895457883425209.mp4",
+      "size_mb": 1.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\895457883425209.mp4"
+    },
+    {
+      "library_id": "896759483113001",
+      "filename": "896759483113001.mp4",
+      "size_mb": 2.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\896759483113001.mp4"
+    },
+    {
+      "library_id": "899718765849508",
+      "filename": "899718765849508.mp4",
+      "size_mb": 1.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\899718765849508.mp4"
+    },
+    {
+      "library_id": "900023666244372",
+      "filename": "900023666244372.mp4",
+      "size_mb": 12.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\900023666244372.mp4"
+    },
+    {
+      "library_id": "900995132418436",
+      "filename": "900995132418436.mp4",
+      "size_mb": 2.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\900995132418436.mp4"
+    },
+    {
+      "library_id": "903931562548134",
+      "filename": "903931562548134.mp4",
+      "size_mb": 16.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\903931562548134.mp4"
+    },
+    {
+      "library_id": "905113512403581",
+      "filename": "905113512403581.mp4",
+      "size_mb": 2.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\905113512403581.mp4"
+    },
+    {
+      "library_id": "907315285541943",
+      "filename": "907315285541943.mp4",
+      "size_mb": 3.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\907315285541943.mp4"
+    },
+    {
+      "library_id": "907833638537625",
+      "filename": "907833638537625.mp4",
+      "size_mb": 1.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\907833638537625.mp4"
+    },
+    {
+      "library_id": "908050845325021",
+      "filename": "908050845325021.mp4",
+      "size_mb": 6.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\908050845325021.mp4"
+    },
+    {
+      "library_id": "908854531483849",
+      "filename": "908854531483849.mp4",
+      "size_mb": 0.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\908854531483849.mp4"
+    },
+    {
+      "library_id": "911186961477817",
+      "filename": "911186961477817.mp4",
+      "size_mb": 6.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\911186961477817.mp4"
+    },
+    {
+      "library_id": "911803931227136",
+      "filename": "911803931227136.mp4",
+      "size_mb": 12.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\911803931227136.mp4"
+    },
+    {
+      "library_id": "914242608109350",
+      "filename": "914242608109350.mp4",
+      "size_mb": 1.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\914242608109350.mp4"
+    },
+    {
+      "library_id": "916044850830447",
+      "filename": "916044850830447.mp4",
+      "size_mb": 17.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\916044850830447.mp4"
+    },
+    {
+      "library_id": "917376491143691",
+      "filename": "917376491143691.mp4",
+      "size_mb": 4.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\917376491143691.mp4"
+    },
+    {
+      "library_id": "919916850770768",
+      "filename": "919916850770768.mp4",
+      "size_mb": 14.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\919916850770768.mp4"
+    },
+    {
+      "library_id": "923196404044441",
+      "filename": "923196404044441.mp4",
+      "size_mb": 10.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\923196404044441.mp4"
+    },
+    {
+      "library_id": "927297986461993",
+      "filename": "927297986461993.mp4",
+      "size_mb": 13.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\927297986461993.mp4"
+    },
+    {
+      "library_id": "927299346709624",
+      "filename": "927299346709624.mp4",
+      "size_mb": 4.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\927299346709624.mp4"
+    },
+    {
+      "library_id": "928018612966924",
+      "filename": "928018612966924.mp4",
+      "size_mb": 19.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\928018612966924.mp4"
+    },
+    {
+      "library_id": "928284723534619",
+      "filename": "928284723534619.mp4",
+      "size_mb": 9.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\928284723534619.mp4"
+    },
+    {
+      "library_id": "930470149835413",
+      "filename": "930470149835413.mp4",
+      "size_mb": 0.4,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\930470149835413.mp4"
+    },
+    {
+      "library_id": "930516599813022",
+      "filename": "930516599813022.mp4",
+      "size_mb": 4.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\930516599813022.mp4"
+    },
+    {
+      "library_id": "931182866387180",
+      "filename": "931182866387180.mp4",
+      "size_mb": 2.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\931182866387180.mp4"
+    },
+    {
+      "library_id": "931657589468406",
+      "filename": "931657589468406.mp4",
+      "size_mb": 12.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\931657589468406.mp4"
+    },
+    {
+      "library_id": "932721846287281",
+      "filename": "932721846287281.mp4",
+      "size_mb": 14.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\932721846287281.mp4"
+    },
+    {
+      "library_id": "933302739516902",
+      "filename": "933302739516902.mp4",
+      "size_mb": 2.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\933302739516902.mp4"
+    },
+    {
+      "library_id": "933626602519130",
+      "filename": "933626602519130.mp4",
+      "size_mb": 11.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\933626602519130.mp4"
+    },
+    {
+      "library_id": "937318565331754",
+      "filename": "937318565331754.mp4",
+      "size_mb": 3.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\937318565331754.mp4"
+    },
+    {
+      "library_id": "937981085566073",
+      "filename": "937981085566073.mp4",
+      "size_mb": 14.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\937981085566073.mp4"
+    },
+    {
+      "library_id": "938837942035599",
+      "filename": "938837942035599.mp4",
+      "size_mb": 12.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\938837942035599.mp4"
+    },
+    {
+      "library_id": "940468938479533",
+      "filename": "940468938479533.mp4",
+      "size_mb": 13.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\940468938479533.mp4"
+    },
+    {
+      "library_id": "942067835113518",
+      "filename": "942067835113518.mp4",
+      "size_mb": 39.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\942067835113518.mp4"
+    },
+    {
+      "library_id": "942242112080111",
+      "filename": "942242112080111.mp4",
+      "size_mb": 3.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\942242112080111.mp4"
+    },
+    {
+      "library_id": "944123795201389",
+      "filename": "944123795201389.mp4",
+      "size_mb": 4.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\944123795201389.mp4"
+    },
+    {
+      "library_id": "946528828158280",
+      "filename": "946528828158280.mp4",
+      "size_mb": 4.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\946528828158280.mp4"
+    },
+    {
+      "library_id": "947088101153525",
+      "filename": "947088101153525.mp4",
+      "size_mb": 9.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\947088101153525.mp4"
+    },
+    {
+      "library_id": "949838094337665",
+      "filename": "949838094337665.mp4",
+      "size_mb": 15.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\949838094337665.mp4"
+    },
+    {
+      "library_id": "952075020484093",
+      "filename": "952075020484093.mp4",
+      "size_mb": 7.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\952075020484093.mp4"
+    },
+    {
+      "library_id": "952138571076245",
+      "filename": "952138571076245.mp4",
+      "size_mb": 11.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\952138571076245.mp4"
+    },
+    {
+      "library_id": "953781577575383",
+      "filename": "953781577575383.mp4",
+      "size_mb": 20.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\953781577575383.mp4"
+    },
+    {
+      "library_id": "953890867455732",
+      "filename": "953890867455732.mp4",
+      "size_mb": 20.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\953890867455732.mp4"
+    },
+    {
+      "library_id": "955327177143566",
+      "filename": "955327177143566.mp4",
+      "size_mb": 7.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\955327177143566.mp4"
+    },
+    {
+      "library_id": "959757133111268",
+      "filename": "959757133111268.mp4",
+      "size_mb": 9.2,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\959757133111268.mp4"
+    },
+    {
+      "library_id": "962333492979520",
+      "filename": "962333492979520.mp4",
+      "size_mb": 3.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\962333492979520.mp4"
+    },
+    {
+      "library_id": "963043462745476",
+      "filename": "963043462745476.mp4",
+      "size_mb": 9.6,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\963043462745476.mp4"
+    },
+    {
+      "library_id": "964154472691920",
+      "filename": "964154472691920.mp4",
+      "size_mb": 11.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\964154472691920.mp4"
+    },
+    {
+      "library_id": "965600982684288",
+      "filename": "965600982684288.mp4",
+      "size_mb": 9.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\965600982684288.mp4"
+    },
+    {
+      "library_id": "967668742311721",
+      "filename": "967668742311721.mp4",
+      "size_mb": 12.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\967668742311721.mp4"
+    },
+    {
+      "library_id": "968465168982927",
+      "filename": "968465168982927.mp4",
+      "size_mb": 10.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\968465168982927.mp4"
+    },
+    {
+      "library_id": "972946705682269",
+      "filename": "972946705682269.mp4",
+      "size_mb": 1.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\972946705682269.mp4"
+    },
+    {
+      "library_id": "973918428825441",
+      "filename": "973918428825441.mp4",
+      "size_mb": 47.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\973918428825441.mp4"
+    },
+    {
+      "library_id": "974840415080637",
+      "filename": "974840415080637.mp4",
+      "size_mb": 14.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\974840415080637.mp4"
+    },
+    {
+      "library_id": "983052091078565",
+      "filename": "983052091078565.mp4",
+      "size_mb": 4.8,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\983052091078565.mp4"
+    },
+    {
+      "library_id": "983446444205335",
+      "filename": "983446444205335.mp4",
+      "size_mb": 13.3,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\983446444205335.mp4"
+    },
+    {
+      "library_id": "985718647337419",
+      "filename": "985718647337419.mp4",
+      "size_mb": 20.0,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\985718647337419.mp4"
+    },
+    {
+      "library_id": "987160910449501",
+      "filename": "987160910449501.mp4",
+      "size_mb": 5.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\987160910449501.mp4"
+    },
+    {
+      "library_id": "987326992862177",
+      "filename": "987326992862177.mp4",
+      "size_mb": 1.1,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\987326992862177.mp4"
+    },
+    {
+      "library_id": "993632909786886",
+      "filename": "993632909786886.mp4",
+      "size_mb": 20.7,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\993632909786886.mp4"
+    },
+    {
+      "library_id": "994942492377577",
+      "filename": "994942492377577.mp4",
+      "size_mb": 2.9,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\994942492377577.mp4"
+    },
+    {
+      "library_id": "999465955766581",
+      "filename": "999465955766581.mp4",
+      "size_mb": 9.5,
+      "local_path": "C:\\Users\\Ivy\\.openclaw\\workspace\\Ad_Placement_Data_Crawler\\FacebookPlaywright\\output\\videos\\999465955766581.mp4"
+    }
+  ]
+}

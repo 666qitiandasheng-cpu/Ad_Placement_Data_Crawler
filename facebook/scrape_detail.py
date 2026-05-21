@@ -121,42 +121,162 @@ def scrape_detail_cdp(library_id, wait_sec=8, cdp_url=None):
         browser = p.chromium.connect_over_cdp(cdp_url)
         page = browser.new_page(proxy={"server": PROXY_SERVER})
         page.goto(f"https://www.facebook.com/ads/library/?id={library_id}", timeout=30000)
-        page.wait_for_load_state("networkidle", timeout=15000)
+        page.wait_for_load_state("load", timeout=15000)
         page.wait_for_timeout(wait_sec * 1000)
 
+        # 强制切换语言到简体中文
+        try:
+            page.evaluate("""
+                (function() {
+                    var d = new Date();
+                    d.setTime(d.getTime() + (7*24*60*60*1000));
+                    var expires = "expires=" + d.toUTCString();
+                    document.cookie = "locale=zh_CN; path=/; domain=.facebook.com; " + expires;
+                })()
+            """)
+            page.reload(timeout=15000)
+            page.wait_for_load_state("load", timeout=15000)
+            try:
+                page.wait_for_selector('button:has-text("\u67e5\u770b\u5e7f\u544a\u8be6\u60c5"), [role="button"]:has-text("\u67e5\u770b\u5e7f\u544a\u8be6\u60c5"), a:has-text("\u67e5\u770b\u5e7f\u544a\u8be6\u60c5")', timeout=15000)
+                print("  [CDP] 已切换 Facebook 语言到简体中文")
+            except Exception:
+                print("  [CDP] 按钮加载超时，继续")
+            page.wait_for_timeout(3000)
+        except Exception as e:
+            print(f"  [CDP] 语言切换失败: {e}")
+
+        # ---- 强制切换 Facebook 语言到简体中文 ----
+        # Facebook 根据用户账号的 locale cookie 显示语言，直接改 cookie 后刷新
+        try:
+            page.evaluate("""
+                (function() {
+                    // 写 Facebook locale cookie
+                    var d = new Date();
+                    d.setTime(d.getTime() + (7*24*60*60*1000));
+                    var expires = "expires=" + d.toUTCString();
+                    document.cookie = "locale=zh_CN; path=/; domain=.facebook.com; " + expires;
+                })()
+            """)
+            # 刷新让 cookie 生效
+            page.reload(timeout=15000)
+            page.wait_for_load_state("load", timeout=15000)
+            page.wait_for_timeout(2000)
+            print("  [CDP] 已切换 Facebook 语言到简体中文")
+        except Exception as e:
+            print(f"  [CDP] 语言切换跳过: {e}")
+
         # ---- 步骤1: 点击"查看广告详情" ----
+        # 简繁中文 + 英文
+        btn_keywords = [
+            '\u67e5\u770b\u5e7f\u544a\u8be6\u60c5',              # 查看广告详情（简体）
+            '\u67e5\u770b\u5e7f\u544a\u8be6\u60c5\uff08\u539f\u59cb\u7248\uff09',  # 查看广告详情（原始版）
+            '\u67e5\u770b\u5e7f\u544a\u8be6\u60c5',              # 查看廣吿詳情（正体）
+            'View ad details',
+            'View Ad Details',
+            'Ad Details',
+        ]
         clicked = False
-        for kw in ['\u67e5\u770b\u5e7f\u544a\u8be6\u60c5', 'View ad details', 'View Ad Details']:
+        # 策略1: get_by_text
+        for kw in btn_keywords:
             try:
                 page.get_by_text(kw, exact=False).first.click(timeout=5000, force=True)
-                print(f"  [CDP] 点击按钮: {kw}")
+                print(f"  [CDP] 点击按钮(策略1): {kw}")
                 clicked = True
                 break
             except Exception:
                 pass
 
+        # 策略2: locator in dialog
+        if not clicked:
+            for dialog in page.locator('[role="dialog"]').all():
+                for kw in btn_keywords:
+                    try:
+                        dialog.locator(f'button, [role="button"]').filter(has_text=kw).first.click(timeout=5000, force=True)
+                        print(f"  [CDP] 点击按钮(策略2): {kw}")
+                        clicked = True
+                        break
+                    except Exception:
+                        pass
+                if clicked:
+                    break
+
         if not clicked:
             print(f"  [CDP] 未找到'查看广告详情'按钮")
             return None
 
-        # ---- 步骤2: 等待弹窗出现 ----
+        # ---- 步骤2: 等待弹窗出现，并在弹窗内再次点击"查看广告详情" ----
         try:
             page.wait_for_selector('[role="dialog"]', state='visible', timeout=10000)
         except Exception:
             pass
         page.wait_for_timeout(3000)
 
-        # ---- 步骤3: 依次点击4个标签页，展开内容 ----
+        # 弹窗内再点一次（第二层），用同样的策略
+        btn_in_dialog = False
+        for dialog in page.locator('[role="dialog"]').all():
+            for kw in btn_keywords:
+                try:
+                    dialog.locator(f'button, [role="button"]').filter(has_text=kw).first.click(timeout=5000, force=True)
+                    print(f"  [CDP] 弹窗内点击(dialog策略): {kw}")
+                    btn_in_dialog = True
+                    break
+                except Exception:
+                    pass
+            if btn_in_dialog:
+                break
+        if not btn_in_dialog:
+            for kw in btn_keywords:
+                try:
+                    page.get_by_text(kw, exact=False).first.click(timeout=5000, force=True)
+                    print(f"  [CDP] 弹窗内点击(全局策略): {kw}")
+                    break
+                except Exception:
+                    pass
+
+        page.wait_for_timeout(3000)
+
+        # ---- 步骤3: 找详情弹窗（文本最长的 dialog）----
+        all_dialogs = page.locator('[role="dialog"]').all()
+        detail_dialog = None
+        max_len = 0
+        for d in all_dialogs:
+            try:
+                if not d.is_visible():
+                    continue
+                txt = d.inner_text()
+                if len(txt) > max_len:
+                    max_len = len(txt)
+                    detail_dialog = d
+            except Exception:
+                pass
+
+        if not detail_dialog:
+            print(f"  [CDP] 未找到广告详情弹窗")
+            return {"library_id": library_id, "error": "detail dialog not found"}
+
+        print(f"  [CDP] 找到详情弹窗（最长文本={max_len}字符）")
+
+        # ---- 步骤4: 在 detail_dialog 内依次点击4个标签页 ----
+        # 简繁中文 + 英文
         tab_labels = [
+            # 简体
             '\u5e7f\u544a\u4fe1\u606f\u516c\u793a\uff08\u6309\u5730\u533a\uff09',  # 广告信息公示（按地区）
-            '\u5173\u4e8e\u5e7f\u544a\u8d5a\u52a9\u65b9',                           # 关于广告赞助方
-            '\u5173\u4e8e\u5e7f\u544a\u4e3b',                                        # 关于广告主
+            '\u5173\u4e8e\u5e7f\u544a\u8d5a\u52a9\u65b9',                              # 关于广告赞助方
+            '\u5173\u4e8e\u5e7f\u544a\u4e3b',                                          # 关于广告主
             '\u5e7f\u544a\u4e3b\u548c\u4ed8\u8d39\u65b9',                             # 广告主和付费方
+            # 繁体
+            '\u5e7f\u544a\u8cc7\u8a0a\u516c\u4f48\uff08\u6309\u5730\u5340\uff09',  # 廣吿資訊公示（按地區）
+            '\u95dc\u65bc\u5e7f\u544a\u8d0a\u52a9\u65b9',                             # 關於廣告贊助方
+            '\u95dc\u65bc\u5e7f\u544a\u4e3b',                                          # 關於廣告主
+            '\u5e7f\u544a\u4e3b\u548c\u4ed8\u8d39\u65b9',                             # 廣吿主和付費方（常見變體）
+            # 英文
+            'Ad details by location', 'About the advertiser', ' advertiser and payer',
+            'Advertiser Info', 'About the sponsor',
         ]
 
         for tab in tab_labels:
             try:
-                els = page.get_by_text(tab, exact=False).all()
+                els = detail_dialog.get_by_text(tab, exact=False).all()
                 for el in els:
                     if el.is_visible():
                         el.click(force=True)
@@ -167,13 +287,11 @@ def scrape_detail_cdp(library_id, wait_sec=8, cdp_url=None):
 
         page.wait_for_timeout(2000)
 
-        # ---- 步骤4: 获取弹窗完整文本 ----
+        # ---- 步骤5: 获取详情弹窗完整文本 ----
         full_text = ""
         try:
-            dialogs = page.locator('[role="dialog"]').all()
-            if dialogs:
-                full_text = dialogs[-1].inner_text()
-                print(f"  [CDP] 弹窗文本长度: {len(full_text)}")
+            full_text = detail_dialog.inner_text()
+            print(f"  [CDP] 弹窗文本长度: {len(full_text)}")
         except Exception as e:
             print(f"  [CDP] 获取弹窗文本失败: {e}")
 
@@ -705,7 +823,17 @@ def main():
         print(f"\n[Detail] {i}/{len(to_scrape)}: {lid}")
 
         if use_cdp:
-            detail = scrape_detail_cdp(lid, wait_sec=8, cdp_url=cdp_url)
+            try:
+                detail = scrape_detail_cdp(lid, wait_sec=8, cdp_url=cdp_url)
+            except Exception as e:
+                err_str = str(e)
+                if "ERR_CONNECTION_CLOSED" in err_str or "net::" in err_str:
+                    print(f"  [CDP] Facebook 断连，跳过（等待 {60}s 后继续）")
+                    time.sleep(60)
+                    detail = None
+                else:
+                    print(f"  [CDP] 异常: {e}")
+                    detail = None
         else:
             detail = scrape_detail_selenium(driver, lid, wait_sec=8)
 
@@ -718,6 +846,10 @@ def main():
             print(f"  -> regions={regions} age={age} advertiser={advertiser}")
             if detail.get('library_id'):
                 success_count += 1
+
+        # 每个广告之间随机等 15-30 秒（防止 Facebook 频率限制）
+        import random as _r
+        time.sleep(_r.uniform(15.0, 30.0))
 
     # ---- 关闭 Selenium 会话级 driver ----
     if driver:

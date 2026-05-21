@@ -69,7 +69,7 @@ KEYWORDS = [
     "Block Puzzle Jewel",
     "Block Puzzle：Bloom Journey",#手动搜索是这个无广告素材
     "Block Puzzle Wood",
-    "Block Sudoku - Wood Puzzle"
+    "Block Sudoku - Wood Puzzle",
     "Puzzle Game",
     "Wood Block Puzzle",
     "Blockanza: Block Puzzle",#手动搜索是这个无广告素材
@@ -83,7 +83,7 @@ KEYWORDS = [
     "BT Block Puzzle: Block Blast",#手动搜索是这个无广告素材
     "Block Puzzle: Block Smash Game",#全是赞助广告
     "Block Crush: Wood Block Puzzle",
-    "Block Puzzle - Jewel Blast"#手动搜索是这个无广告素材
+    "Block Puzzle - Jewel Blast",#手动搜索是这个无广告素材
     "Block Puzzle Sudoku",
     "Cube Block - Woody Puzzle Game",
     "Emoji Blast: Block Puzzle",

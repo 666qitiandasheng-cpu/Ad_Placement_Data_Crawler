@@ -91,38 +91,150 @@ def scrape_detail_playwright(library_id, wait_sec=8):
         )
         context = browser.new_context(
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            locale="en-US",
+            locale="zh-CN",
         )
         page = context.new_page()
 
         # ---- 打开详情页，等待网络空闲 ----
-        page.goto(f"https://www.facebook.com/ads/library/?id={library_id}", timeout=30000)
-        page.wait_for_load_state("networkidle", timeout=15000)
+        # 处理偶发的网络中断错误，重试最多3次
+        # ---- 打开详情页，等待加载完成 ----
+        # 严格模式：检测页面是否真正加载成功（出现广告卡片弹窗）
+        # 如果页面被Facebook屏蔽（登录墙/错误/no results），直接跳过不继续
+        try:
+            page.goto(f"https://www.facebook.com/ads/library/?id={library_id}", timeout=30000)
+        except Exception as e:
+            err_str = str(e)
+            print(f"  [Playwright] 页面加载异常: {err_str[:80]}")
+            browser.close()
+            return {"library_id": library_id, "error": "goto failed"}
+
+        # 等待网络空闲（最重要的步骤），不要用固定 sleep
+        try:
+            page.wait_for_load_state("networkidle", timeout=20000)
+        except Exception:
+            pass
+
+        # 加载后再固定等待，让 JS 动态内容完全渲染
         page.wait_for_timeout(wait_sec * 1000)
 
-        # ---- 步骤1: 点击"查看广告详情" ----
-        # Facebook 页面有多语言版本，中英文按钮文本都需要尝试
+        # ---- 严格检测：页面是否真正加载了广告内容 ----
+        # 检查"这条广告来自一个网址链接"是否出现在 DOM 中
+        # 如果不存在，说明页面没有广告卡片（被Facebook屏蔽或加载失败），跳过
+        page_is_blocked = False
+        try:
+            has_ad_card = page.evaluate('''
+() => {
+    return Array.from(document.querySelectorAll('div'))
+        .some(el => el.innerText.includes('\u8fd9\u6761\u5e7f\u544a\u6765\u81ea\u4e00\u4e2a\u7f51\u5740\u94fe\u63a5'));
+}
+''')
+            if not has_ad_card:
+                page_is_blocked = True
+        except Exception:
+            page_is_blocked = True
+
+        if page_is_blocked:
+            print(f"  [Playwright] 页面未加载广告内容（可能被Facebook屏蔽），跳过")
+            browser.close()
+            return {"library_id": library_id, "error": "page blocked or not loaded"}
+
+
+        # ---- 步骤2: 点击"查看广告详情" ----
+        # 可靠策略：JS直接在DOM中定位弹窗内的按钮
+        # 1. 找到包含"这条广告来自一个网址链接"的弹窗div
+        # 2. 在该弹窗内找 role=button 且 innerText === "查看广告详情" 的按钮
+        # 3. scrollIntoView + click
         clicked = False
-        for kw in ['\u67e5\u770b\u5e7f\u544a\u8be6\u60c5', 'View ad details', 'View Ad Details']:
-            try:
-                page.get_by_text(kw, exact=False).first.click(timeout=5000, force=True)
-                print(f"  [Playwright] 点击按钮: {kw}")
+        try:
+            js_result = page.evaluate('''
+() => {
+    const container = Array.from(document.querySelectorAll('div'))
+        .find(el => el.innerText.includes('\u8fd9\u6761\u5e7f\u544a\u6765\u81ea\u4e00\u4e2a\u7f51\u5740\u94fe\u63a5'));
+    if (!container) return {error: 'container not found'};
+    const btn = Array.from(container.querySelectorAll('[role="button"]'))
+        .find(el => el.innerText === '\u67e5\u770b\u5e7f\u544a\u8be6\u60c5');
+    if (!btn) return {error: 'button not found'};
+    btn.scrollIntoView({block: 'center'});
+    return {ok: true};
+}
+''')
+            if js_result.get('ok'):
+                page.wait_for_timeout(500)
+                # 直接在页面执行JS点击所有匹配按钮（确保是弹窗内的那个）
+                page.evaluate('''
+() => {
+    const container = Array.from(document.querySelectorAll('div'))
+        .find(el => el.innerText.includes('\u8fd9\u6761\u5e7f\u544a\u6765\u81ea\u4e00\u4e2a\u7f51\u5740\u94fe\u63a5'));
+    if (!container) return;
+    const btn = Array.from(container.querySelectorAll('[role="button"]'))
+        .find(el => el.innerText === '\u67e5\u770b\u5e7f\u544a\u8be6\u60c5');
+    if (btn) btn.click();
+}
+''')
+                print(f"  [Playwright] 点击按钮: 查看广告详情 (JS click)")
                 clicked = True
-                break
-            except Exception:
-                pass
+        except Exception as e:
+            pass
+
+        # 回退：旧策略（y值最小）
+        if not clicked:
+            for kw in ['\u67e5\u770b\u5e7f\u544a\u8be6\u60c5', 'View ad details', 'View Ad Details']:
+                try:
+                    loc = page.get_by_text(kw, exact=False)
+                    min_y_btn = None
+                    min_y = float('inf')
+                    total = loc.count()
+                    for i in range(total):
+                        box = loc.nth(i).bounding_box()
+                        if box and box['y'] < min_y:
+                            min_y = box['y']
+                            min_y_btn = i
+                    if min_y_btn is not None:
+                        target = loc.nth(min_y_btn)
+                        target.scroll_into_view_if_needed()
+                        page.wait_for_timeout(500)
+                        target.click(timeout=5000, force=True)
+                        print(f"  [Playwright] 点击按钮: {kw} (index={min_y_btn}, y={min_y:.1f})")
+                        clicked = True
+                        break
+                except Exception:
+                    pass
 
         if not clicked:
             print(f"  [Playwright] 未找到'查看广告详情'按钮")
             browser.close()
             return {"library_id": library_id, "error": "button not found"}
 
-        # ---- 步骤2: 等待弹窗出现 ----
+        # ---- 步骤3: 等待弹窗出现 ----
+        # 页面可能有多个 dialog（侧边栏、详情弹窗等），详情弹窗内容最丰富
+        # 等待足够长时间让内容渲染（标签页展开+滚动加载）
         try:
             page.wait_for_selector('[role="dialog"]', state='visible', timeout=10000)
         except Exception:
             pass
-        page.wait_for_timeout(3000)
+        page.wait_for_timeout(5000)  # 等待动态内容完全渲染
+
+        # 从所有 dialog 中找文本最长的那个（用 evaluate 获取完整文本，包括隐藏内容）
+        all_dialogs = page.locator('[role="dialog"]').all()
+        detail_dialog = None
+        max_len = 0
+        for d in all_dialogs:
+            try:
+                if not d.is_visible():
+                    continue
+                # 用 d.evaluate 获取完整 innerText（含隐藏内容）
+                txt = d.evaluate('el => el.innerText')
+                if len(txt) > max_len:
+                    max_len = len(txt)
+                    detail_dialog = d
+            except Exception as e:
+                pass
+        if detail_dialog:
+            print(f"  [Playwright] 找到详情弹窗（最长文本={max_len}字符）")
+        else:
+            print(f"  [Playwright] 未找到广告详情弹窗")
+            browser.close()
+            return {"library_id": library_id, "error": "detail dialog not found"}
 
         # ---- 步骤3: 依次点击4个标签页，展开内容 ----
         # 4 个标签页文本（Unicode 转义对照）：
@@ -137,9 +249,10 @@ def scrape_detail_playwright(library_id, wait_sec=8):
             '\u5e7f\u544a\u4e3b\u548c\u4ed8\u8d39\u65b9',                             # 广告主和付费方
         ]
 
+        # ---- 步骤4（修正）: 在 detail_dialog 内依次点击4个标签页，展开内容 ----
         for tab in tab_labels:
             try:
-                els = page.get_by_text(tab, exact=False).all()
+                els = detail_dialog.get_by_text(tab, exact=False).all()
                 for el in els:
                     if el.is_visible():
                         el.click(force=True)
@@ -150,20 +263,20 @@ def scrape_detail_playwright(library_id, wait_sec=8):
 
         page.wait_for_timeout(2000)
 
-        # ---- 步骤4: 获取弹窗完整文本 ----
-        # Facebook 页面可能有多个 [role="dialog"]，最后一个是详情弹窗
+        # ---- 步骤5（修正）: 获取详情弹窗完整文本 ----
         full_text = ""
         try:
-            dialogs = page.locator('[role="dialog"]').all()
-            if dialogs:
-                full_text = dialogs[-1].inner_text()
-                print(f"  [Playwright] 弹窗文本长度: {len(full_text)}")
+            # 用 evaluate 获取完整 innerText（含隐藏内容），不用 inner_text()
+            full_text = d.evaluate('el => el.innerText')
+            print(f"  [Playwright] 弹窗文本长度: {len(full_text)}")
         except Exception as e:
             print(f"  [Playwright] 获取弹窗文本失败: {e}")
 
         if not full_text:
             browser.close()
             return {"library_id": library_id, "error": "no dialog text"}
+
+
 
         # ---- 步骤5: 解析4个区块的数据 ----
         result_data = parse_detail_text(full_text, library_id)
@@ -496,12 +609,16 @@ def parse_region_block(block_text):
         gender = "\u5973\u6027"     # 女性
 
     reach = ""
-    # 覆盖人数：6位以上数字（去逗号）
-    reach_m = re.search(r'([\d,]{6,})', block_text)
+    # 覆盖人数：1-6位数字（去逗号），但过滤掉年份和ID类数字
+    reach_m = re.search(r'([\d,]{1,6})', block_text)
     if reach_m:
         raw = reach_m.group(1).replace(",", "").strip()
-        if raw.isdigit() and len(raw) >= 4:
-            reach = raw
+        if raw.isdigit() and len(raw) <= 6:
+            # 过滤：排除年份（2024/2025/2026）和广告ID（10+位）
+            if len(raw) >= 4 and int(raw) >= 2020 and int(raw) <= 2030:
+                pass  # 是年份，跳过
+            else:
+                reach = raw
 
     if age or gender or reach:
         return {"age_range": age, "gender": gender, "reach_count": reach}
@@ -551,13 +668,27 @@ def find_list_file(date_str=None):
       - 完全没有则返回 None
     """
     today = date_str or datetime.now().strftime("%Y-%m-%d")
+
+    # 1. 优先找 output/ads_<date>.json（新统一格式，无子目录）
+    unified = BASE_DIR / "output" / f"ads_{today}.json"
+    if unified.exists():
+        return unified
+
+    # 2. 回退：旧格式 output/<keyword>/ads_<keyword>_<date>.json
     candidates = list(BASE_DIR.glob(f"output/*/ads_*_{today}.json"))
     if candidates:
         return candidates[0]
+
+    # 3. 找不到就选最新的文件
     all_files = sorted(
         BASE_DIR.glob("output/*/ads_*.json"),
         key=lambda p: p.stat().st_mtime, reverse=True
     )
+    direct_files = sorted(
+        BASE_DIR.glob("output/ads_*.json"),
+        key=lambda p: p.stat().st_mtime, reverse=True
+    )
+    all_files = direct_files + all_files
     if all_files:
         print(f"[Warn] No file for {today}, using: {all_files[0].name}")
         return all_files[0]
@@ -643,6 +774,10 @@ def main():
             print(f"  -> regions={regions} age={age} advertiser={advertiser}")
             if detail.get('library_id'):
                 success_count += 1
+
+        # ---- 限速：每个广告之间等待，防止 Facebook 风控 ----
+        import time as time_module
+        time_module.sleep(5)
 
     print(f"\n[Saved] {detail_file}")
     print(f"Done! {success_count}/{len(to_scrape)} ads scraped.")

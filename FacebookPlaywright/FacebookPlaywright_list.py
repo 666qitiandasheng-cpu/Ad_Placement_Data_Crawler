@@ -69,7 +69,7 @@ KEYWORDS = [
     "Block Puzzle Jewel",
     "Block Puzzle：Bloom Journey",#手动搜索是这个无广告素材
     "Block Puzzle Wood",
-    "Block Sudoku - Wood Puzzle"
+    "Block Sudoku - Wood Puzzle",
     "Puzzle Game",
     "Wood Block Puzzle",
     "Blockanza: Block Puzzle",#手动搜索是这个无广告素材
@@ -83,7 +83,7 @@ KEYWORDS = [
     "BT Block Puzzle: Block Blast",#手动搜索是这个无广告素材
     "Block Puzzle: Block Smash Game",#全是赞助广告
     "Block Crush: Wood Block Puzzle",
-    "Block Puzzle - Jewel Blast"#手动搜索是这个无广告素材
+    "Block Puzzle - Jewel Blast",#手动搜索是这个无广告素材
     "Block Puzzle Sudoku",
     "Cube Block - Woody Puzzle Game",
     "Emoji Blast: Block Puzzle",
@@ -147,7 +147,7 @@ KEYWORDS = [
     "Fill Wooden Block Puzzle 8x8"
 ]
 
-MAX_SCROLLS = 999               # 【核心配置】列表页最大滚动次数
+MAX_SCROLLS = 999          # 【核心配置】列表页最大滚动次数
 #   = 1      : 只滚一次（默认，测试用，速度快）
 #   = N      : 最多滚 N 次后停止
 #   = 999    : 滚动很多次，配合 CHECK_BOTTOM=True 可近似"滚动到到底部"
@@ -207,16 +207,10 @@ def log_print(msg):
         f.write(line + "\n")
 
 
-def keyword_to_folder(keyword):
-    """把关键词转成安全的文件夹名（去空格/特殊字符）。"""
-    return re.sub(r'[^\w]', '_', keyword.strip())
-
-def get_output_paths(keyword, date_str):
-    """根据关键词和日期生成输出路径：output/<keyword>/ads_<keyword>_<date>.json"""
-    folder_name = keyword_to_folder(keyword)
-    folder = OUTPUT_DIR / folder_name
-    daily_file = folder / f"ads_{folder_name}_{date_str}.json"
-    return folder, daily_file
+# ---- 统一每日文件路径（所有关键词存到同一个 JSON） ----
+def get_unified_daily_file(date_str):
+    """所有关键词的当日广告合并到一个文件：output/ads_<date>.json"""
+    return OUTPUT_DIR / f"ads_{date_str}.json"
 
 # ---- Playwright 浏览器启动 ----
 def make_browser(headless=False):
@@ -797,17 +791,17 @@ def scrape_keyword(keyword):
     抓取单个关键词的完整流程：
     
     1. 计算日期范围，构建搜索 URL
-    2. 加载总表，去重今日文件里已有的广告
+    2. 加载今日文件，过滤掉历史旧广告，只保留今日新增的
     3. 启动 Playwright 浏览器，滚动收集广告
-    4. 与今日文件合并，保存
+    4. 与今日文件合并，保存（只含今日新增ID）
     5. 追加新 library_id 到总表
     6. 下载新广告的视频
     
-    返回本次新增的广告列表（去重后）。
+    返回本次新增的广告列表 ads_to_save（去重后）。
     """
     end_date = datetime.now().strftime("%Y-%m-%d")
-    folder, daily_file = get_output_paths(keyword, end_date)
-    folder.mkdir(parents=True, exist_ok=True)
+    # 统一文件路径，所有关键词往同一个 JSON 里写
+    daily_file = get_unified_daily_file(end_date)
 
     log_print(f"========== 开始抓取: {keyword} | 日期: {end_date} ==========")
 
@@ -815,17 +809,19 @@ def scrape_keyword(keyword):
     master_ids = load_master_ids()
     log_print(f"[Master] 已有 {len(master_ids)} 个 library_id")
 
-    # ---- 读取今日文件，把已存在于总表的删掉 ----
+    # ---- 读取统一今日文件（只保留今日新增的，去掉历史旧数据）----
     existing_data = load_json_file(daily_file)
     existing_ads = existing_data.get('ads', [])
 
-    # 过滤：只保留 library_id 不在总表里的
-    new_ads = [ad for ad in existing_ads if ad['library_id'] not in master_ids]
-    removed_count = len(existing_ads) - len(new_ads)
-    if removed_count > 0:
-        log_print(f"[Dedup] 今日文件中已有 {removed_count} 条在总表，去掉这些")
+    # 关键修复：每日文件只存"今日新增的"广告
+    # 用 first_seen_date 字段过滤掉"之前某天抓的"旧广告
+    today_str = end_date
+    existing_ads = [ad for ad in existing_ads if ad.get('first_seen_date') == today_str]
+    historical_count = len(existing_data.get('ads', [])) - len(existing_ads)
+    if historical_count > 0:
+        log_print(f"[Dedup] 今日文件中过滤掉 {historical_count} 条历史旧广告，保留 {len(existing_ads)} 条今日新增")
 
-    log_print(f"[Load] 今日文件原有 {len(existing_ads)} 条，去重后剩 {len(new_ads)} 条")
+    log_print(f"[Load] 今日文件本次关键词处理前有 {len(existing_ads)} 条今日新增广告")
 
     # ---- 启动 Playwright，滚动收集 ----
     from playwright.sync_api import sync_playwright
@@ -880,16 +876,31 @@ def scrape_keyword(keyword):
     duplicate_count = len(ads) - len(ads_to_save)
     log_print(f"[Dedup] 去除重复 {duplicate_count} 条，剩 {len(ads_to_save)} 条新广告")
 
-    # ---- 合并到今日文件（只加新的） ----
-    existing_map = {ad['library_id']: ad for ad in new_ads}   # new_ads 里没有总表存在的id
+    # ---- 为每条广告标注来源关键词 ----
+    for ad in ads_to_save:
+        ad['keyword'] = keyword
+
+    # ---- 合并到统一今日文件（只包含今日新增，不包含历史） ----
+    # existing_map 从"今日文件里今日新增的广告"出发
+    existing_map = {ad['library_id']: ad for ad in existing_ads}
     for ad in ads_to_save:
         existing_map[ad['library_id']] = ad
 
     all_ads = list(existing_map.values())
+
+    # 为每条广告标记首次抓取日期（用于次日去重过滤）
+    for ad in all_ads:
+        if 'first_seen_date' not in ad:
+            ad['first_seen_date'] = today_str
+
+    # 收集已抓过的关键词（保留历史）
+    existing_keywords = set(existing_data.get('keywords', []))
+    existing_keywords.add(keyword)
+
     result_data = {
-        "keyword": keyword,
-        "date_range": end_date,
+        "date": end_date,
         "last_updated": datetime.now().isoformat(),
+        "keywords": sorted(list(existing_keywords)),
         "ads": all_ads,
     }
 
@@ -907,12 +918,13 @@ def scrape_keyword(keyword):
 
     log_print(f"[Saved] {daily_file} | 今日文件共 {len(all_ads)} 条 | 本次新增 {len(ads_to_save)} 条")
 
-    # ---- 下载视频 ----
-    video_dir = folder / "videos"
+    # ---- 下载视频（统一目录，不分关键词） ----
+    # ads_to_save 包含今日所有关键词合并后的新广告，都需要下载视频
+    video_dir = OUTPUT_DIR / "videos"
     log_print(f"[Video] Checking videos for {keyword}...")
-    download_videos(new_ads, video_dir, keyword)
+    download_videos(ads_to_save, video_dir, keyword)
 
-    return new_ads
+    return ads_to_save
 
 def main():
     """主入口：遍历所有关键词执行抓取。"""

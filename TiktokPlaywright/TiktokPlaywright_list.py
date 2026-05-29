@@ -35,25 +35,25 @@ KEYWORDS = [
     "Block Puzzle Wood Blast",
     "Block Puzzles",
     "Block Puzzle: Diamond Star",
-    "Blockanza: Block Puzzle"
-    # "Block Puzzle - Fun Games",
-    # "Block Puzzle Jewel :Gem Legend",
-    # "Block Puzzle - Brain Games",
-    # "Block Puzzle - Brain Test Game",
-    # "Block Puzzle Jewel Legend",
-    # "Woody Block Puzzle Brain Game",
-    # "Block Puzzle",
-    # "Block Puzzle - Woody 99 2024",
-    # "Block Puzzle - Wood Games",
-    # "Block Blast Master:Puzzle Game"
-    # "Block Puzzle Wood"
-    # "Block Puzzle Jewel World",
-    # "Block Puzzle Gem",
-    # "Block Puzzle - Jewel Quest",
-    # "Block Puzzle Blast",
-    # "Jewel Blitz: Block Puzzle",
-    # "Block Puzzle: Wood Brain Games",
-    # "Wood Cube Puzzle"
+    "Blockanza: Block Puzzle",
+    "Block Puzzle - Fun Games",
+    "Block Puzzle Jewel :Gem Legend",
+    "Block Puzzle - Brain Games",
+    "Block Puzzle - Brain Test Game",
+    "Block Puzzle Jewel Legend",
+    "Woody Block Puzzle Brain Game",
+    "Block Puzzle",
+    "Block Puzzle - Woody 99 2024",
+    "Block Puzzle - Wood Games",
+    "Block Blast Master:Puzzle Game"
+    "Block Puzzle Wood",
+    "Block Puzzle Jewel World",
+    "Block Puzzle Gem",
+    "Block Puzzle - Jewel Quest",
+    "Block Puzzle Blast",
+    "Jewel Blitz: Block Puzzle",
+    "Block Puzzle: Wood Brain Games",
+    "Wood Cube Puzzle"
     ]
 
 AUTO_DATE = True
